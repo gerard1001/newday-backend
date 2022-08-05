@@ -20,5 +20,4 @@ router.use("/users", userRoutes);
 
 router.use("/roles", roleRoutes);
 
-
 export default router;
