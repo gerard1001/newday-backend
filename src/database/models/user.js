@@ -7,15 +7,27 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
 
       this.belongsTo(models.Category, {
-        foreignKey: 'userId', 
-        as: 'Categories', 
-        onDelete: 'SET NULL' 
+        foreignKey: {
+          name: 'categoryId', 
+          allowNull: true
+        }, 
+        onDelete: 'SET NULL', 
+        as: 'Categories' 
       })
 
       this.belongsTo(models.Role, {
-        foreignKey: 'roleId', 
-        as: 'Roles', 
-        onDelete: 'SET DEFAULT',
+        foreignKey: {
+          name: 'roleId', 
+          allowNull: true
+        }, 
+        onDelete: 'SET DEFAULT', 
+        as: 'Roles' 
+      })
+
+      this.hasOne(models.Profile, {
+        foreignKey: 'userId', 
+        as: 'Profiles', 
+        onDelete: 'CASCADE' 
       })
       
     }

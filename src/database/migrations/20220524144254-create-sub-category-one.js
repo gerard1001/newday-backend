@@ -1,35 +1,35 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('subCategoryOnes', {
+    await queryInterface.createTable("subCategoryOnes", {
       catOneId: {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        allowNull: false
+        allowNull: false,
       },
       categoryId: {
         allowNull: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
         references: {
-          model: 'Categories', 
-          key: 'categoryId'
-        }
+          model: "Categories",
+          key: "categoryId",
+        },
       },
       catOneName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

@@ -1,24 +1,25 @@
-import multer from 'multer';
+import multer from "multer";
 
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(
       null,
-      `${new Date().toISOString().replace(/:/g, '-')}-${file.originalname}`,
+      `${new Date().toISOString().replace(/:/g, "-")}-${file.originalname}`
     );
   },
 });
 
 const fileFilter = (req, file, cb) => {
+  console.log("`````````````````MUTER```````````````````", req.body);
   if (
-    file.mimetype === 'image/jpeg'
-    || file.mimetype === 'image/png'
-    || file.mimetype === 'image/jpg'
-    || file.mimetype === 'image/webp'
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/webp"
   ) {
     cb(null, true);
   } else {
-    cb({ message: 'unsupported file format' }, false);
+    cb({ message: "unsupported file format" }, false);
   }
 };
 

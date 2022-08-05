@@ -19,6 +19,6 @@ app.use('/api/v2/', routes);
 
 db.sequelize.sync().then(() => {
   app.listen(port, () => {
-    console.log(`listening on: http://localhost:${port}`);
+    console.log(`listening on: http://localhost:${port} 🚀🚀🚀`);
   });
 });

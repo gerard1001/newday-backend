@@ -47,10 +47,10 @@ db.Sequelize = Sequelize;
 sequelize
     .authenticate()
     .then(() => {
-        console.log('Connected! Database Status : ON 🔥.');
+        console.log('DATABASE CONNECTED SUCCESSFULLY! 👍');
     })
     .catch((err) => {
-        console.error('Failed to connect! Database Status : OFF:', err);
+        console.error('DATABASE  FAILED TO CONNECT! 🚨', err);
     });
 
 export default db;

@@ -3,8 +3,8 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Role extends Model {
     static associate(models) {
-      // define association here
-      Role.hasMany(models.User, {
+
+      this.hasMany(models.User, {
         foreignKey: 'roleId',
         as: 'Users', 
         onDelete: 'SET DEFAULT'
@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        // defaultValue: 1,
         allowNull: false
       },
       role: {

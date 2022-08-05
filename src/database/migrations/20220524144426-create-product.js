@@ -1,44 +1,45 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Products', {
+    await queryInterface.createTable("Products", {
       productId: {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        allowNull: false
+        allowNull: false,
       },
       catTwoId: {
         allowNull: true,
         type: Sequelize.UUID,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
         references: {
-          model: 'subCategoryTwos', 
-          key: 'catTwoId'
-        }
+          model: "subCategoryTwos",
+          key: "catTwoId",
+        },
       },
       productName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       price: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       productImage: {
         type: Sequelize.STRING,
-        defaultValue: 'https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png'
+        defaultValue:
+          "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png",
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Products');
-  }
+    await queryInterface.dropTable("Products");
+  },
 };
