@@ -5,6 +5,7 @@ import classOneRoutes from "./api/classOneRoutes";
 import classTwoRoutes from "./api/classTwoRoutes";
 import userRoutes from "./api/userRoutes";
 import roleRoutes from "./api/roleRoutes";
+import user_categoryRoutes from "./api/assignUserToCategory";
 
 const router = express.Router();
 
@@ -19,5 +20,7 @@ router.use("/products", productRoutes);
 router.use("/users", userRoutes);
 
 router.use("/roles", roleRoutes);
+
+router.use("/user_category", user_categoryRoutes);
 
 export default router;

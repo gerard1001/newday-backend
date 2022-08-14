@@ -22,16 +22,6 @@ module.exports = {
           key: "roleId",
         },
       },
-      categoryId: {
-        allowNull: true,
-        type: Sequelize.UUID,
-        onDelete: "SET NULL",
-        onUpdate: "CASCADE",
-        references: {
-          model: "Categories",
-          key: "categoryId",
-        },
-      },
       firstName: {
         type: Sequelize.STRING,
       },
@@ -50,6 +40,10 @@ module.exports = {
         validate: {
           min: 8,
         },
+      },
+      userVerified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

@@ -1,10 +1,10 @@
 import model from "../database/models";
 
-const roleRoutes = model.Role;
+const roleModel = model.Role;
 
 const createRole = async (req, res) => {
 
-    await roleRoutes.findOrCreate({
+    await roleModel.findOrCreate({
         role: req.body.role,
         where: {
             role: req.body.role
@@ -33,7 +33,7 @@ const createRole = async (req, res) => {
 
 const getRole = async (req, res) => {
 
-    await roleRoutes.findAll({
+    await roleModel.findAll({
         order: [["role", "ASC"]],
     })
     .then((data) => {
@@ -48,7 +48,7 @@ const getOneRole = async (req, res) => {
 
     const id = req.params.id;
 
-    await roleRoutes.findOne({
+    await roleModel.findOne({
         attributes: ['role'],
         order: [["role", "ASC"]],
         include: [{
@@ -74,7 +74,7 @@ const updateRole = async (req, res) => {
 
     const id = req.params.id;
 
-    await roleRoutes.update(req.body,
+    await roleModel.update(req.body,
         {
         where: {
             roleId: id
@@ -96,7 +96,7 @@ const updateRole = async (req, res) => {
 
 const deleteRole = async (req, res) => {
 
-    await roleRoutes.destroy({
+    await roleModel.destroy({
         where: { },
         truncate: false
     })

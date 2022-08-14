@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Addresses', {
+    await queryInterface.createTable("Addresses", {
       addressId: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -10,30 +10,36 @@ module.exports = {
       profileId: {
         allowNull: true,
         type: Sequelize.UUID,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
         references: {
-          model: 'Profiles', 
-          key: 'profileId'
-        }
+          model: "Profiles",
+          key: "profileId",
+        },
       },
-      firstName: {
-        type: Sequelize.STRING
+      country: {
+        type: Sequelize.STRING,
       },
-      lastName: {
-        type: Sequelize.STRING
+      province: {
+        type: Sequelize.STRING,
       },
-      email: {
-        type: Sequelize.STRING
+      district: {
+        type: Sequelize.STRING,
+      },
+      sector: {
+        type: Sequelize.STRING,
+      },
+      street: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

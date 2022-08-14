@@ -1,6 +1,6 @@
 import model from "../database/models";
 
-const classOneRoutes = model.subCategoryOne;
+const classOneModel = model.subCategoryOne;
 
 const createClassOne  = async (req, res) => {
     const {catOneName, categoryId} = req.body;
@@ -9,7 +9,7 @@ const createClassOne  = async (req, res) => {
             message: "Please make sure you include both catOneName and category"
         })
     } 
-    await classOneRoutes.findOrCreate({
+    await classOneModel.findOrCreate({
         where: {
             catOneName: req.body.catOneName,
             categoryId: req.body.categoryId,
@@ -36,7 +36,7 @@ const createClassOne  = async (req, res) => {
 
 const getClassOne = async (req, res) => {
 
-    await classOneRoutes.findAll({
+    await classOneModel.findAll({
         order: [["catOneName", "ASC"]],
         include: [{
             model: model.subCategoryTwo,
@@ -57,7 +57,7 @@ const getOneClassOne = async (req, res) => {
 
     const id = req.params.id;
 
-    await classOneRoutes.findAll({
+    await classOneModel.findAll({
         order: [["catOneName", "ASC"]],
         include: [{
             model: model.subCategoryTwo,
@@ -81,7 +81,7 @@ const updateClassOne = async (req, res) => {
     
     const id = req.params.id;
 
-    await classOneRoutes.update(req.body,
+    await classOneModel.update(req.body,
         {
         where: {
             catOneName: id
@@ -109,7 +109,7 @@ const updateClassOne = async (req, res) => {
 
 const  deleteClassOne = async (req, res) => {
 
-    await classOneRoutes.destroy({
+    await classOneModel.destroy({
         where: { },
         truncate: false
     })
@@ -135,7 +135,7 @@ const  deleteClassOne = async (req, res) => {
 const  deleteOneClassOne = async (req, res) => {
     const id = req.params.id;
 
-    await classOneRoutes.destroy({
+    await classOneModel.destroy({
         where: { 
             catOneName: id
         },

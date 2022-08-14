@@ -1,7 +1,7 @@
 import model from "../database/models";
 import { imageUpload } from "../helpers/fileUpload";
 
-const profileRoutes = model.Profile;
+const profileModel = model.Profile;
 
 const createProfile = async (req, res) => {
   // try {
@@ -18,7 +18,7 @@ const createProfile = async (req, res) => {
       "https://s.pngkit.com/png/small/225-2257356_this-could-be-you-user-male.png";
   }
 
-  await profileRoutes
+  await profileModel
     .create({
       where: {
         userId,
@@ -37,11 +37,11 @@ const createProfile = async (req, res) => {
 };
 
 const seeProfile = async (req, res) => {
-  await profileRoutes.get({});
+  await profileModel.get({});
 };
 
 const updateProfile = async (req, res) => {
-  await profileRoutes.update();
+  await profileModel.update();
 };
 
 export { createProfile, seeProfile, updateProfile };

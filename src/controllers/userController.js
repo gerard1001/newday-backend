@@ -4,14 +4,18 @@ import {
   hashPassword,
   comparePassword,
   generateToken,
+  decodeToken,
 } from "../helpers/userHelper";
-const userRoutes = model.User;
-const profileRoutes = model.Profile;
+import sendEmail from "../helpers/nodemailer";
+
+const userModel = model.User;
+const profileModel = model.Profile;
+const addressModel = model.Address;
 
 const registerUser = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { email, password } = req.body;
 
-  await userRoutes
+  await userModel
     .findOne({
       where: { email },
     })
@@ -21,20 +25,18 @@ const registerUser = async (req, res) => {
           error: "email taken!",
         });
       } else {
-        const created = await userRoutes
+        const createdUser = await userModel
           .create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
             password: hashPassword(password),
-            categoryId: req.body.categoryId,
             roleId: req.body.roleId,
             where: {
               firstName: req.body.firstName,
               lastName: req.body.lastName,
               email: req.body.email,
               password: req.body.password,
-              categoryId: req.body.categoryId,
               roleId: req.body.roleId,
             },
           })
@@ -42,6 +44,7 @@ const registerUser = async (req, res) => {
             return res.send({ message: "error1", err });
           });
 
+        const token = generateToken({ id: createdUser.userId }, "1d");
         const gender = req.body.gender;
 
         if (req.file) {
@@ -56,26 +59,68 @@ const registerUser = async (req, res) => {
           }
         }
 
-        await profileRoutes
+        const createdProfile = await profileModel
           .create({
-            userId: created.userId,
+            userId: createdUser.userId,
             picture: req.body.picture,
             birthDate: req.body.birthDate,
             gender: req.body.gender,
             phoneNumber: req.body.phoneNumber,
           })
-          .then((data) => {
-            res.send({ message: "Success", data });
-          })
           .catch((error) => {
             res.send({ message: "error2", error });
+          });
+
+        await addressModel
+          .create({
+            profileId: createdProfile.profileId,
+            country: req.body.country,
+            province: req.body.province,
+            district: req.body.district,
+            sector: req.body.sector,
+            street: req.body.street,
+          })
+          .then((data) => {
+            // res.send({ message: "Success" });
+            const message = `
+        <h2>Your account has been registered. you can now login in</h2>
+        <p>Copy the following token<em>${token}</em></p>
+        `;
+            sendEmail(message, createdUser.email);
+            res.send({
+              message: "user_created",
+            });
+          })
+          .catch((error) => {
+            res.send({
+              message: "Error while creating user profile!!!",
+              error,
+            });
           });
       }
     });
 };
 
+const verifyUser = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const userInfo = decodeToken(token);
+    const userId = userInfo.id;
+
+    console.log(userId);
+
+    const user = await userModel.findOne({ where: { userId } });
+    await user.update({ userVerified: true }, { where: { id: userId } });
+    return res.status(200).send({
+      message: "Email verification successful",
+    });
+  } catch (error) {
+    return res.send({ message: `Failure ${error}` });
+  }
+};
+
 const getUser = async (req, res) => {
-  await userRoutes.findAll({}).then((data) => {
+  await userModel.findAll({}).then((data) => {
     return res.status(200).send({
       message: "Fetched all Users",
       body: { data },
@@ -85,7 +130,7 @@ const getUser = async (req, res) => {
 
 const getOneUser = async (req, res) => {
   const id = req.params.id;
-  await userRoutes
+  await userModel
     .findOne({
       where: {
         email: id,
@@ -94,6 +139,16 @@ const getOneUser = async (req, res) => {
         {
           model: model.Profile,
           as: "Profiles",
+          include: [
+            {
+              model: model.Address,
+              as: "Addresses",
+            },
+          ],
+        },
+        {
+          model: model.Category,
+          as: "Categories",
         },
       ],
     })
@@ -110,7 +165,7 @@ const getOneUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const id = req.params.id;
 
-  await userRoutes
+  await userModel
     .update(req.body, {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -135,7 +190,7 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  await userRoutes
+  await userModel
     .destroy({
       where: {},
       truncate: false,
@@ -154,7 +209,7 @@ const deleteUser = async (req, res) => {
 
 const deleteOneUser = async (req, res) => {
   const id = req.params.id;
-  await userRoutes
+  await userModel
     .destroy({
       where: {
         userId: id,
@@ -178,7 +233,7 @@ const deleteOneUser = async (req, res) => {
 const userLogin = async (req, res) => {
   try {
     const user = await req.body;
-    const userExist = await userRoutes.findOne({
+    const userExist = await userModel.findOne({
       where: { email: user.email },
     });
 
@@ -222,4 +277,5 @@ export {
   deleteOneUser,
   userLogin,
   getOneUser,
+  verifyUser,
 };

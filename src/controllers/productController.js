@@ -1,6 +1,6 @@
 import model from "../database/models";
 import { fileUpload } from "../helpers/fileUpload";
-const productRoutes = model.Product;
+const productModel = model.Product;
 
 const createProduct = async (req, res) => {
   const { productName, price } = req.body;
@@ -17,7 +17,7 @@ const createProduct = async (req, res) => {
       message: "Please make sure you include the product name and price!",
     });
   } else {
-    productRoutes
+    productModel
       .findOne({
         where: {
           productName,
@@ -29,7 +29,7 @@ const createProduct = async (req, res) => {
             message: "this product already exists",
           });
         } else {
-          return productRoutes
+          return productModel
             .create({
               productName: req.body.productName,
               price: req.body.price,
@@ -53,7 +53,7 @@ const createProduct = async (req, res) => {
 };
 
 const getProduct = async (req, res) => {
-  await productRoutes
+  await productModel
     .findAll({
       // attributes: {exclude: [
       //     "categoryId", "classOneId"
@@ -78,7 +78,7 @@ const updateProduct = async (req, res) => {
   }
 
   // console.log(req.body);
-  await productRoutes
+  await productModel
     .update(req.body, {
       where: {
         productId: id,
@@ -108,7 +108,7 @@ const updateProduct = async (req, res) => {
 const deleteOneProduct = async (req, res) => {
   const id = req.params.id;
 
-  await productRoutes
+  await productModel
     .destroy({
       where: {
         productId: id,
@@ -129,7 +129,7 @@ const deleteOneProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
-  await productRoutes
+  await productModel
     .destroy({
       where: {},
     })

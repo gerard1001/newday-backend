@@ -3,31 +3,35 @@ import model from "../database/models";
 const categoryRoutes = model.Category;
 
 const createCategory = async (req, res) => {
-  await categoryRoutes
-    .findOrCreate({
-      categoryName: req.body.categoryName,
-      where: {
+  try {
+    await categoryRoutes
+      .findOrCreate({
         categoryName: req.body.categoryName,
-      },
-    })
-    .then((created) => {
-      if (created[1]) {
-        res.status(201).send({
-          message: "successfully created!",
-          created,
+        where: {
+          categoryName: req.body.categoryName,
+        },
+      })
+      .then((created) => {
+        if (created[1]) {
+          res.status(201).send({
+            message: "successfully created!",
+            created,
+          });
+        } else {
+          res.send({
+            message: "This category already exists!",
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: `You got an error: ${err}`,
         });
-      } else {
-        res.send({
-          message: "This category already exists!",
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: `You got an error: ${err}`,
+        console.log(err);
       });
-      console.log(err);
-    });
+  } catch (error) {
+    res.send({ message: "YOU GOT AN ERROR", error });
+  }
 };
 
 const getCategory = async (req, res) => {
@@ -64,14 +68,6 @@ const getOneCategory = async (req, res) => {
           model: model.User,
           as: "Users",
           attributes: ["firstName", "lastName", "email"],
-
-          include: [
-            {
-              model: model.Role,
-              as: "Roles",
-              attributes: ["role"],
-            },
-          ],
         },
         {
           model: model.subCategoryOne,
@@ -116,13 +112,15 @@ const updateCategory = async (req, res) => {
 
   await categoryRoutes
     .update(req.body, {
+      categoryName: req.body.categoryName,
+      userId: req.body.userId,
       where: {
-        categoryName: id,
+        id: categoryId,
       },
     })
     .then((data) => {
       res.status(200).send({
-        message: "Category updated successfylly!",
+        message: "Category updated successfully!",
       });
     })
     .catch((err) => {

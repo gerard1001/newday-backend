@@ -30,9 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     country: {
       type: DataTypes.STRING
     },
-    country: {
-      type: DataTypes.STRING
-    },
     province: {
       type: DataTypes.STRING
     },

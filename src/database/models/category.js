@@ -1,47 +1,50 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
-
     static associate(models) {
-
       this.hasMany(models.subCategoryOne, {
-        foreignKey: 'categoryId', 
-        as: 'subCategoryOnes', 
-        onDelete: 'CASCADE' 
-      })
+        foreignKey: "categoryId",
+        as: "subCategoryOnes",
+        onDelete: "CASCADE",
+      });
 
-      this.hasMany(models.User, {
-        foreignKey: 'categoryId', 
-        as: 'Users', 
-        onDelete: 'SET NULL' 
-      })
+      // this.hasMany(models.User, {
+      // foreignKey: 'categoryId',
+      // as: 'Users',
+      // onDelete: 'SET NULL'
+      // })
 
+      this.belongsToMany(models.User, {
+        foreignKey: "categoryId",
+        through: "User_Category",
+      });
     }
   }
-  Category.init({
-    categoryId: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+  Category.init(
+    {
+      categoryId: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+      },
+      categoryName: {
+        type: DataTypes.STRING,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
-    categoryName: {
-      type: DataTypes.STRING
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    {
+      sequelize,
+      modelName: "Category",
     }
-  }, {
-    sequelize,
-    modelName: 'Category',
-  });
+  );
   return Category;
 };
