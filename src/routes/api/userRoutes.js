@@ -9,7 +9,7 @@ import {
   getOneUser,
   verifyUser,
 } from "../../controllers/userController";
-import { Auth, updateAuth } from "../../middlewares/userMiddleware";
+import { Auth, updateAuth, deleteAuth } from "../../middlewares/userMiddleware";
 import upload from "../../helpers/multer";
 
 const router = express.Router();
@@ -28,7 +28,7 @@ router.get("/:id", getOneUser);
 
 router.delete("/", Auth, deleteUser);
 
-router.delete("/:id", deleteOneUser);
+router.delete("/:id", deleteAuth, deleteOneUser);
 
 router.post("/login", userLogin);
 

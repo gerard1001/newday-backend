@@ -7,18 +7,14 @@ function sendEmail(message, toEmail) {
     port: 587,
     secure: false,
     auth: {
-      user: process.env.USER_EMAIL,
-      pass: process.env.USER_EMAIL_P,
+      user: process.env.SENDER_EMAIL,
+      pass: process.env.SENDER_PASSWORD,
     },
   });
   const mailOptions = {
-    // sender address
-    from: process.env.USER_EMAIL,
-    // list of receivers
+    from: process.env.SENDER_EMAIL,
     to: toEmail,
-    // Subject line
     subject: "Registration Successfull",
-    // html body
     html: message,
   };
 
@@ -27,7 +23,7 @@ function sendEmail(message, toEmail) {
       return console.log(error);
     }
 
-    res.render("contact", { msg: "Email has been sent" });
+    res.render("contact", { msg: "Email successfully sent" });
   });
 }
 

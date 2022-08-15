@@ -21,11 +21,16 @@ export const assignUser = async (req, res) => {
     where: { userId: req.body.userId, categoryId: req.body.categoryId },
   });
 
-  console.log("`````````KJBDIBDGSJA`````````", existingRelation);
+  console.log("`````````KJBDIBDGSJA`````````", existingUser);
 
   if (!existingCategory || !existingUser) {
     return res.send({
-      message: "the category or user you are trying assign does not exist!!!",
+      message: "The category or user you are trying assign no longer exists!!!",
+    });
+  }
+  if (existingUser.roleId != 2 && existingUser.roleId != 3) {
+    return res.send({
+      message: "You can't assign this category to client or admin.",
     });
   }
   if (existingRelation) {

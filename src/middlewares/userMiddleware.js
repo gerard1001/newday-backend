@@ -53,3 +53,22 @@ export const updateAuth = async (req, res, next) => {
 
   next();
 };
+
+export const deleteAuth = async (req, res, next) => {
+  const id = req.params;
+  const token = checkToken(req);
+
+  if (!token) {
+    return res.send({ message: "you are not logged in!!" });
+  }
+
+  const decode = decodeToken(token);
+
+  const newUser = await userModel.findByPk(decode.userId, {});
+
+  if (id.id !== newUser.userId && newUser.roleId !== 1) {
+    return res.send({ message: "You can not delete someone else's account." });
+  }
+
+  next();
+};

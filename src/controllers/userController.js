@@ -120,7 +120,7 @@ const verifyUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  await userModel.findAll({}).then((data) => {
+  await userModel.findAll({ order: [["roleId", "ASC"]] }).then((data) => {
     return res.status(200).send({
       message: "Fetched all Users",
       body: { data },
@@ -237,12 +237,22 @@ const userLogin = async (req, res) => {
       where: { email: user.email },
     });
 
+    const verified = userExist.userVerified;
+
+    console.log("~```````````````~~~~~~~~`````````````````~", verified);
+
     const validation = await comparePassword(
       req.body.password,
       userExist.password
     );
 
     if (validation) {
+      if (!verified) {
+        return res.send({
+          message:
+            "Please reach to your email and click the verify email button to proceed!!!",
+        });
+      }
       const token = await generateToken(
         {
           email: userExist.email,
