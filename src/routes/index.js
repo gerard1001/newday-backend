@@ -6,6 +6,9 @@ import classTwoRoutes from "./api/classTwoRoutes";
 import userRoutes from "./api/userRoutes";
 import roleRoutes from "./api/roleRoutes";
 import user_categoryRoutes from "./api/assignUserToCategory";
+import commentRoutes from "./api/commentRoutes";
+import articleRoutes from "./api/articleRoutes";
+import articleCommentRoutes from "./api/articleCommentRoutes";
 
 const router = express.Router();
 
@@ -22,5 +25,11 @@ router.use("/users", userRoutes);
 router.use("/roles", roleRoutes);
 
 router.use("/user_category", user_categoryRoutes);
+
+router.use("/comment", commentRoutes);
+
+router.use("/article", articleRoutes);
+
+router.use("/article_comment", articleCommentRoutes);
 
 export default router;

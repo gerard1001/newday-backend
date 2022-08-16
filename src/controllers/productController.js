@@ -1,9 +1,20 @@
 import model from "../database/models";
 import { fileUpload } from "../helpers/fileUpload";
+
 const productModel = model.Product;
+const classTwoModel = model.subCategoryTwo;
 
 const createProduct = async (req, res) => {
   const { productName, price } = req.body;
+  const existCatTwo = await classTwoModel.findOne({
+    where: { catTwoId: req.body.catTwoId },
+  });
+
+  if (!existCatTwo) {
+    return res.send({
+      message: "This class does not exist!",
+    });
+  }
 
   if (req.file) {
     req.body.productImage = await fileUpload(req);
@@ -58,6 +69,13 @@ const getProduct = async (req, res) => {
       // attributes: {exclude: [
       //     "categoryId", "classOneId"
       // ]},
+      include: [
+        {
+          model: model.ProductComment,
+          as: "ProductComments",
+          attributes: ["comment"],
+        },
+      ],
     })
     .then((data) => {
       return res.status(200).send({

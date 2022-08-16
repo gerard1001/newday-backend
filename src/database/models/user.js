@@ -3,15 +3,6 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // this.belongsTo(models.Category, {
-      //   foreignKey: {
-      //     name: 'categoryId',
-      //     allowNull: true
-      //   },
-      //   onDelete: 'SET NULL',
-      //   as: 'Categories'
-      // })
-
       this.belongsToMany(models.Category, {
         foreignKey: "userId",
         through: "User_Category",
@@ -29,6 +20,24 @@ module.exports = (sequelize, DataTypes) => {
       this.hasOne(models.Profile, {
         foreignKey: "userId",
         as: "Profiles",
+        onDelete: "CASCADE",
+      });
+
+      this.hasMany(models.ProductComment, {
+        foreignKey: "userId",
+        as: "ProductComments",
+        onDelete: "CASCADE",
+      });
+
+      this.hasMany(models.UserArticle, {
+        foreignKey: "userId",
+        as: "UserArticles",
+        onDelete: "CASCADE",
+      });
+
+      this.hasMany(models.UserComment, {
+        foreignKey: "userId",
+        as: "UserComments",
         onDelete: "CASCADE",
       });
     }

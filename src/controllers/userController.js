@@ -150,6 +150,30 @@ const getOneUser = async (req, res) => {
           model: model.Category,
           as: "Categories",
         },
+        {
+          model: model.ProductComment,
+          as: "ProductComments",
+          attributes: ["comment"],
+          include: [
+            {
+              model: model.Product,
+              as: "Products",
+              attributes: ["productName"],
+            },
+          ],
+        },
+        {
+          model: model.UserArticle,
+          as: "UserArticles",
+          attributes: ["article", "uaId"],
+          include: [
+            {
+              model: model.UserComment,
+              as: "UserComments",
+              attributes: ["comment"],
+            },
+          ],
+        },
       ],
     })
     .then((data) => {
