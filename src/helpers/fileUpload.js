@@ -11,7 +11,6 @@ export const fileUpload = async (req) => {
         throw new Error(err);
       }
       imageUrl = image.url;
-      console.log("Cheeeck this broooo", imageUrl);
     }
   );
   return imageUrl;
@@ -27,7 +26,6 @@ export const imageUpload = async (req) => {
         throw new Error(err);
       }
       imageUrl = image.url;
-      console.log("Cheeeck this broooo", imageUrl);
     }
   );
   return imageUrl;

@@ -5,174 +5,209 @@ const productModel = model.Product;
 const classTwoModel = model.subCategoryTwo;
 
 const createProduct = async (req, res) => {
-  const { productName, price } = req.body;
-  const existCatTwo = await classTwoModel.findOne({
-    where: { catTwoId: req.body.catTwoId },
-  });
-
-  if (!existCatTwo) {
-    return res.send({
-      message: "This class does not exist!",
+  try {
+    const { productName, price, catTwoId } = req.body;
+    const existCatTwo = await classTwoModel.findOne({
+      where: { catTwoId },
     });
-  }
 
-  if (req.file) {
-    req.body.productImage = await fileUpload(req);
-  } else {
-    req.body.productImage =
-      "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png";
-  }
+    if (!existCatTwo) {
+      return res.status(404).send({
+        message: "This class does not exist!",
+      });
+    }
 
-  if (!productName && !price) {
-    return res.send({
-      message: "Please make sure you include the product name and price!",
-    });
-  } else {
-    productModel
-      .findOne({
-        where: {
-          productName,
-        },
-      })
-      .then((exist) => {
-        if (exist) {
-          return res.send({
-            message: "this product already exists",
-          });
-        } else {
-          return productModel
-            .create({
-              productName: req.body.productName,
-              price: req.body.price,
-              catTwoId: req.body.catTwoId,
-              productImage: req.body.productImage,
-              where: {
+    if (req.file) {
+      req.body.productImage = await fileUpload(req);
+    } else {
+      req.body.productImage =
+        "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png";
+    }
+
+    if (!productName && !price) {
+      return res.status(400).send({
+        message: "Please make sure you include the product name and price!",
+      });
+    } else {
+      productModel
+        .findOne({
+          where: {
+            productName,
+            catTwoId,
+          },
+        })
+        .then((exist) => {
+          if (exist) {
+            return res.status(409).send({
+              message: "this product already exists",
+            });
+          } else {
+            return productModel
+              .create({
                 productName: req.body.productName,
                 price: req.body.price,
                 catTwoId: req.body.catTwoId,
                 productImage: req.body.productImage,
-              },
-            })
-            .then((data) => {
-              res.status(201).send({
-                message: "Success!",
+                where: {
+                  productName: req.body.productName,
+                  price: req.body.price,
+                  catTwoId: req.body.catTwoId,
+                  productImage: req.body.productImage,
+                },
+              })
+              .then((data) => {
+                return res.status(201).send({
+                  message: "Success!",
+                  data,
+                });
+              })
+              .catch((err) => {
+                return res.status(400).send({
+                  message: "ERR",
+                  err,
+                });
               });
-            });
-        }
-      });
+          }
+        });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
   }
 };
 
 const getProduct = async (req, res) => {
-  await productModel
-    .findAll({
-      // attributes: {exclude: [
-      //     "categoryId", "classOneId"
-      // ]},
-      include: [
-        {
-          model: model.ProductComment,
-          as: "ProductComments",
-          attributes: ["comment"],
-        },
-      ],
-    })
-    .then((data) => {
-      return res.status(200).send({
-        message: "List of all fruits available!",
-        body: { data },
+  try {
+    await productModel
+      .findAll({
+        // attributes: {exclude: [
+        //     "categoryId", "classOneId"
+        // ]},
+        include: [
+          {
+            model: model.ProductComment,
+            as: "ProductComments",
+            attributes: ["comment"],
+          },
+        ],
+      })
+      .then((data) => {
+        return res.status(200).send({
+          message: "List of all fruits available!",
+          body: { data },
+        });
+      })
+      .catch((err) => {
+        return res.status(400).send(err);
       });
-    })
-    .catch((err) => {
-      return res.send(err);
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };
 
 const updateProduct = async (req, res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  if (req.file) {
-    req.body.picture = await fileUpload(req);
-  }
+    if (req.file) {
+      req.body.picture = await fileUpload(req);
+    }
 
-  // console.log(req.body);
-  await productModel
-    .update(req.body, {
-      where: {
-        productId: id,
-      },
-      // returning: true,
-    })
-    .then((data) => {
-      //    console.log(data);
-      if (data == 1) {
-        return res.send({
-          message: "Updated product successfully!",
+    await productModel
+      .update(req.body, {
+        where: {
+          productId: id,
+        },
+      })
+      .then((data) => {
+        if (data == 1) {
+          return res.status(200).send({
+            message: "Updated product successfully!",
+          });
+        } else {
+          return res.status(400).send({
+            message: `Cannot update product ${id}!`,
+          });
+        }
+      })
+      .catch((err) => {
+        return res.status(400).send({
+          message: "ERR",
+          err,
         });
-      } else {
-        return res.send({
-          message: `Cannot update product ${id}!`,
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.send({
-        message: "",
       });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };
 
 const deleteOneProduct = async (req, res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  await productModel
-    .destroy({
-      where: {
-        productId: id,
-      },
-    })
-    .then((data) => {
-      return res.send({
-        message: "Deleted product successfully!",
-        body: { data },
+    await productModel
+      .destroy({
+        where: {
+          productId: id,
+        },
+      })
+      .then((data) => {
+        return res.status(200).send({
+          message: "Deleted product successfully!",
+          body: { data },
+        });
+      })
+      .catch((err) => {
+        return res.status(400).send({
+          message: "error!",
+          err,
+        });
       });
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.send({
-        message: "error!",
-      });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };
 
 const deleteProduct = async (req, res) => {
-  await productModel
-    .destroy({
-      where: {},
-    })
-    .then((data) => {
-      if (data === 1) {
-        return res.send({
-          message: `Deleted ${data} product successfully!`,
+  try {
+    await productModel
+      .destroy({
+        where: {},
+      })
+      .then((data) => {
+        if (data === 1) {
+          return res.status(200).send({
+            message: `Deleted ${data} product successfully!`,
+          });
+        } else if (data === 0) {
+          return res.status(403).send({
+            message: `You don't have any more products to delete!`,
+          });
+        } else {
+          return res.status(200).send({
+            message: `Deleted ${data} products successfully!`,
+            data,
+          });
+        }
+      })
+      .catch((err) => {
+        return res.status(400).send({
+          message: "You got an error@!",
+          err,
         });
-      } else if (data === 0) {
-        return res.send({
-          message: `You don't have any more products to delete!`,
-        });
-      } else {
-        return res.send({
-          message: `Deleted ${data} products successfully!`,
-          data,
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send({
-        message: "You got an error@!",
       });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };
 
 export {

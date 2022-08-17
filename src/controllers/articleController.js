@@ -5,24 +5,30 @@ import { decodeToken } from "../helpers/userHelper";
 const articleModel = model.UserArticle;
 
 export const createArticle = async (req, res) => {
-  const token = checkToken(req);
+  try {
+    const token = checkToken(req);
 
-  const decode = decodeToken(token);
+    const decode = decodeToken(token);
 
-  console.log(decode);
+    console.log(decode);
 
-  await articleModel
-    .create({
-      userId: decode.userId,
-      article: req.body.article,
-    })
-    .then((data) => {
-      res.send({
-        message: "success!!!",
-        data,
+    await articleModel
+      .create({
+        userId: decode.userId,
+        article: req.body.article,
+      })
+      .then((data) => {
+        return res.status(201).send({
+          message: "success!!!",
+          data,
+        });
+      })
+      .catch((err) => {
+        return res.status(400).send(err);
       });
-    })
-    .catch((err) => {
-      res.send(err);
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };

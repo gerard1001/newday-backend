@@ -4,174 +4,219 @@ const classOneModel = model.subCategoryOne;
 const categoryModel = model.Category;
 
 const createClassOne = async (req, res) => {
-  const { catOneName, categoryId } = req.body;
-  const existCategory = await categoryModel.findOne({
-    where: { categoryId: req.body.categoryId },
-  });
+  try {
+    const { catOneName, categoryId } = req.body;
+    const existCategory = await categoryModel.findOne({
+      where: { categoryId: req.body.categoryId },
+    });
 
-  if (!existCategory) {
-    return res.send({
-      message: "This category does not exist!",
+    if (!existCategory) {
+      return res.status(404).send({
+        message: "This category does not exist!",
+      });
+    }
+    if (!catOneName && !categoryId) {
+      return res.status(400).send({
+        message: "Please make sure you include both catOneName and category",
+      });
+    }
+    await classOneModel
+      .findOrCreate({
+        where: {
+          catOneName: req.body.catOneName,
+          categoryId: req.body.categoryId,
+        },
+      })
+      .then((data) => {
+        if (data[1]) {
+          return res.status(201).send({
+            message: "successfully created!",
+            body: { data },
+          });
+        } else {
+          return res.status(409).send({
+            message: "This class already exists!",
+          });
+        }
+      })
+      .catch((err) => {
+        return res.status(403).send(err);
+      });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
   }
-  if (!catOneName && !categoryId) {
-    res.send({
-      message: "Please make sure you include both catOneName and category",
-    });
-  }
-  await classOneModel
-    .findOrCreate({
-      where: {
-        catOneName: req.body.catOneName,
-        categoryId: req.body.categoryId,
-      },
-    })
-    .then((data) => {
-      if (data[1]) {
-        res.status(201).send({
-          message: "successfully created!",
-          body: { data },
-        });
-      } else {
-        res.send({
-          message: "This class already exists!",
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-      console.log(err);
-    });
 };
 
 const getClassOne = async (req, res) => {
-  await classOneModel
-    .findAll({
-      order: [["catOneName", "ASC"]],
-      include: [
-        {
-          model: model.subCategoryTwo,
-          as: "subCategoryTwos",
-          attributes: ["catTwoName"],
-          order: [["catTwoName", "ASC"]],
-        },
-      ],
-    })
-    .then((data) => {
-      res.status(200).send({
-        message: "Fetched all classOne elements",
-        body: { data },
+  try {
+    await classOneModel
+      .findAll({
+        order: [["catOneName", "ASC"]],
+        include: [
+          {
+            model: model.subCategoryTwo,
+            as: "subCategoryTwos",
+            attributes: ["catTwoName"],
+            order: [["catTwoName", "ASC"]],
+          },
+        ],
+      })
+      .then((data) => {
+        return res.status(200).send({
+          message: "Fetched all classOne elements",
+          body: { data },
+        });
+      })
+      .catch((err) => {
+        return res.status(403).send({
+          message: "ERROR",
+          err,
+        });
       });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };
 
 const getOneClassOne = async (req, res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  await classOneModel
-    .findAll({
-      order: [["catOneName", "ASC"]],
-      include: [
-        {
-          model: model.subCategoryTwo,
-          as: "subCategoryTwos",
-          attributes: ["catTwoName"],
-          order: [["catTwoName", "ASC"]],
+    await classOneModel
+      .findAll({
+        order: [["catOneName", "ASC"]],
+        include: [
+          {
+            model: model.subCategoryTwo,
+            as: "subCategoryTwos",
+            attributes: ["catTwoName"],
+            order: [["catTwoName", "ASC"]],
+          },
+        ],
+        where: {
+          catOneName: id,
         },
-      ],
-      where: {
-        catOneName: id,
-      },
-    })
-    .then((data) => {
-      res.status(200).send({
-        message: "Fetched all classOne elements",
-        body: { data },
+      })
+      .then((data) => {
+        return res.status(200).send({
+          message: "Fetched all classOne elements",
+          body: { data },
+        });
+      })
+      .catch((err) => {
+        return res.status(403).send({
+          message: "ERROR ",
+          err,
+        });
       });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };
 
 const updateClassOne = async (req, res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  await classOneModel
-    .update(req.body, {
-      where: {
-        catOneName: id,
-      },
-    })
-    .then((data) => {
-      if (data == 1) {
-        return res.send({
-          message: "Updated class 1 successfully!",
+    await classOneModel
+      .update(req.body, {
+        where: {
+          catOneName: id,
+        },
+      })
+      .then((data) => {
+        if (data == 1) {
+          return res.status(200).send({
+            message: "Updated class 1 successfully!",
+          });
+        } else {
+          return res.status(400).send({
+            message: `Cannot update class 1 ${id}!`,
+            data,
+          });
+        }
+      })
+      .catch((err) => {
+        return res.status(403).send({
+          message: "error while trying to update!",
         });
-      } else {
-        return res.send({
-          message: `Cannot update class 1 ${id}!`,
-          data,
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.send({
-        message: "error while trying to update!",
       });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };
 
 const deleteClassOne = async (req, res) => {
-  await classOneModel
-    .destroy({
-      where: {},
-      truncate: false,
-    })
-    .then((data) => {
-      if (data === 1) {
-        res.status(200).send({
-          message: `Deleted ${data} class one element successfully!`,
+  try {
+    await classOneModel
+      .destroy({
+        where: {},
+        truncate: false,
+      })
+      .then((data) => {
+        if (data === 1) {
+          return res.status(200).send({
+            message: `Deleted ${data} class one element successfully!`,
+          });
+        } else {
+          return res.status(200).send({
+            message: `Deleted ${data} class one elements successfully!`,
+          });
+        }
+      })
+      .catch((err) => {
+        return res.status(400).send({
+          message: "An error occured while deleting category!",
         });
-      } else {
-        res.status(200).send({
-          message: `Deleted ${data} class one elements successfully!`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: "An error occured while deleting category!",
       });
-      console.log(err);
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };
 
 const deleteOneClassOne = async (req, res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  await classOneModel
-    .destroy({
-      where: {
-        catOneName: id,
-      },
-      truncate: false,
-    })
-    .then((data) => {
-      if (data === 1) {
-        res.status(200).send({
-          message: `Deleted ${data} class one element successfully!`,
+    await classOneModel
+      .destroy({
+        where: {
+          catOneName: id,
+        },
+        truncate: false,
+      })
+      .then((data) => {
+        if (data === 1) {
+          return res.status(200).send({
+            message: `Deleted ${data} class one element successfully!`,
+          });
+        } else {
+          return res.status(200).send({
+            message: `Deleted ${data} class one elements successfully!`,
+          });
+        }
+      })
+      .catch((err) => {
+        return res.status(400).send({
+          message: "An error occured while deleting category!",
+          err,
         });
-      } else {
-        res.status(200).send({
-          message: `Deleted ${data} class one elements successfully!`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: "An error occured while deleting category!",
       });
-      console.log(err);
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
     });
+  }
 };
 
 export {

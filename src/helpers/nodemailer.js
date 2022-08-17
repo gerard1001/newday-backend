@@ -23,7 +23,7 @@ function sendEmail(message, toEmail) {
       return console.log(error);
     }
 
-    res.render("contact", { msg: "Email successfully sent" });
+    res.render("contact", { msg: "Email successfully sent!!!" });
   });
 }
 

@@ -8,6 +8,8 @@ import {
   userLogin,
   getOneUser,
   verifyUser,
+  resetLink,
+  resetPwd,
 } from "../../controllers/userController";
 import { Auth, updateAuth, deleteAuth } from "../../middlewares/userMiddleware";
 import upload from "../../helpers/multer";
@@ -33,5 +35,9 @@ router.delete("/:id", deleteAuth, deleteOneUser);
 router.post("/login", userLogin);
 
 router.get("/verify_user/:token", verifyUser);
+
+router.post("/reset_link/", resetLink);
+
+router.patch("/reset_pwd/:token", resetPwd);
 
 export default router;

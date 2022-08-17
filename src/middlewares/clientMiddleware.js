@@ -1,12 +1,18 @@
 import checkToken from "../helpers/checkToken";
 
 const ClientAuth = async (req, res, next) => {
-  const token = checkToken(req);
+  try {
+    const token = checkToken(req);
 
-  if (!token) {
-    return res.send({ message: "you are not logged in!!" });
+    if (!token) {
+      return res.status(401).send({ message: "you are not logged in!!" });
+    }
+
+    next();
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
   }
-
-  next();
 };
 export default ClientAuth;
