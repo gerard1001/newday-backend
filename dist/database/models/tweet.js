@@ -20,74 +20,59 @@ var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var Product = /*#__PURE__*/function (_Model) {
-    (0, _inherits2["default"])(Product, _Model);
+  var Tweet = /*#__PURE__*/function (_Model) {
+    (0, _inherits2["default"])(Tweet, _Model);
 
-    var _super = _createSuper(Product);
+    var _super = _createSuper(Tweet);
 
-    function Product() {
-      (0, _classCallCheck2["default"])(this, Product);
+    function Tweet() {
+      (0, _classCallCheck2["default"])(this, Tweet);
       return _super.apply(this, arguments);
     }
 
-    (0, _createClass2["default"])(Product, null, [{
+    (0, _createClass2["default"])(Tweet, null, [{
       key: "associate",
       value: function associate(models) {
-        this.belongsTo(models.subCategoryTwo, {
+        this.belongsTo(models.User, {
           foreignKey: {
-            name: "catTwoId",
+            name: "userId",
             allowNull: true
           },
           onDelete: "CASCADE",
-          as: "subCategoryTwos"
-        }), this.hasMany(models.ProductComment, {
-          foreignKey: "productId",
-          as: "ProductComments",
-          onDelete: "CASCADE"
+          as: "Users"
         });
       }
     }]);
-    return Product;
+    return Tweet;
   }(Model);
 
-  Product.init({
-    productId: {
+  Tweet.init({
+    tweetId: {
       type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      defaultValue: DataTypes.UUIDV4
     },
-    catTwoId: {
-      allowNull: true,
-      type: DataTypes.UUID
+    userId: {
+      type: DataTypes.UUID,
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+      references: {
+        model: "Users",
+        key: "userId"
+      }
     },
-    productName: {
+    title: {
       type: DataTypes.STRING
     },
-    price: {
-      type: DataTypes.INTEGER
-    },
-    description: {
+    content: {
       type: DataTypes.TEXT
     },
-    size: {
+    image: {
       type: DataTypes.STRING
-    },
-    productImage: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
     }
   }, {
     sequelize: sequelize,
-    modelName: "Product"
+    modelName: "Tweet"
   });
-  return Product;
+  return Tweet;
 };

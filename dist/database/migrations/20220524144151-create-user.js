@@ -6,6 +6,8 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
+var sequelize = require("sequelize");
+
 module.exports = {
   up: function up(queryInterface, Sequelize) {
     return (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
@@ -57,6 +59,10 @@ module.exports = {
                 },
                 userVerified: {
                   type: Sequelize.BOOLEAN,
+                  defaultValue: false
+                },
+                isSubscribed: {
+                  type: sequelize.BOOLEAN,
                   defaultValue: false
                 },
                 createdAt: {

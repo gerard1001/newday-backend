@@ -40,9 +40,8 @@ var fileUpload = /*#__PURE__*/function () {
 
                       case 2:
                         imageUrl = image.url;
-                        console.log("Cheeeck this broooo", imageUrl);
 
-                      case 4:
+                      case 3:
                       case "end":
                         return _context.stop();
                     }
@@ -99,9 +98,8 @@ var imageUpload = /*#__PURE__*/function () {
 
                       case 2:
                         imageUrl = image.url;
-                        console.log("Cheeeck this broooo", imageUrl);
 
-                      case 4:
+                      case 3:
                       case "end":
                         return _context3.stop();
                     }

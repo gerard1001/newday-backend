@@ -29,8 +29,7 @@ var postComment = /*#__PURE__*/function () {
             _context.prev = 0;
             token = (0, _checkToken["default"])(req);
             decode = (0, _userHelper.decodeToken)(token);
-            console.log(decode);
-            _context.next = 6;
+            _context.next = 5;
             return commentModel.create({
               userId: decode.userId,
               uaId: req.body.uaId,
@@ -46,23 +45,23 @@ var postComment = /*#__PURE__*/function () {
               });
             });
 
-          case 6:
-            _context.next = 11;
+          case 5:
+            _context.next = 10;
             break;
 
-          case 8:
-            _context.prev = 8;
+          case 7:
+            _context.prev = 7;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return", res.status(500).send({
               message: "".concat(_context.t0)
             }));
 
-          case 11:
+          case 10:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 8]]);
+    }, _callee, null, [[0, 7]]);
   }));
 
   return function postComment(_x, _x2) {

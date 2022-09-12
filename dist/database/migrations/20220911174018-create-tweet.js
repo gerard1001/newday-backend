@@ -14,8 +14,8 @@ module.exports = {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return queryInterface.createTable("UserComments", {
-                commentId: {
+              return queryInterface.createTable("Tweets", {
+                tweetId: {
                   type: Sequelize.UUID,
                   primaryKey: true,
                   defaultValue: Sequelize.UUIDV4
@@ -29,17 +29,14 @@ module.exports = {
                     key: "userId"
                   }
                 },
-                uaId: {
-                  type: Sequelize.UUID,
-                  onDelete: "CASCADE",
-                  onUpdate: "CASCADE",
-                  references: {
-                    model: "UserArticles",
-                    key: "uaId"
-                  }
+                title: {
+                  type: Sequelize.STRING
                 },
-                comment: {
+                content: {
                   type: Sequelize.TEXT
+                },
+                image: {
+                  type: Sequelize.STRING
                 },
                 createdAt: {
                   allowNull: false,
@@ -66,7 +63,7 @@ module.exports = {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return queryInterface.dropTable("UserComments");
+              return queryInterface.dropTable("Tweets");
 
             case 2:
             case "end":

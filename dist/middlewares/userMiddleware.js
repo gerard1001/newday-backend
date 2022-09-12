@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateAuth = exports.deleteAuth = exports.Auth = void 0;
+exports.updateAuth = exports.deleteAuth = exports.authent = exports.Auth = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -216,3 +216,66 @@ var deleteAuth = /*#__PURE__*/function () {
 }();
 
 exports.deleteAuth = deleteAuth;
+
+var authent = /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res, next) {
+    var token, decode, exixtUser;
+    return _regenerator["default"].wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            token = (0, _checkToken["default"])(req);
+
+            if (token) {
+              _context4.next = 4;
+              break;
+            }
+
+            return _context4.abrupt("return", res.status(401).send({
+              message: "you are not logged in!!"
+            }));
+
+          case 4:
+            decode = (0, _userHelper.decodeToken)(token);
+            _context4.next = 7;
+            return userModel.findByPk(decode.userId, {});
+
+          case 7:
+            exixtUser = _context4.sent;
+
+            if (exixtUser) {
+              _context4.next = 10;
+              break;
+            }
+
+            return _context4.abrupt("return", res.status(401).send({
+              message: "This user does not exist."
+            }));
+
+          case 10:
+            next();
+            _context4.next = 16;
+            break;
+
+          case 13:
+            _context4.prev = 13;
+            _context4.t0 = _context4["catch"](0);
+            return _context4.abrupt("return", res.status(500).send({
+              message: "".concat(_context4.t0)
+            }));
+
+          case 16:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, null, [[0, 13]]);
+  }));
+
+  return function authent(_x10, _x11, _x12) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
+exports.authent = authent;

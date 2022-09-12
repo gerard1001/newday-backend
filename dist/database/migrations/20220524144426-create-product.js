@@ -37,6 +37,12 @@ module.exports = {
                 price: {
                   type: Sequelize.INTEGER
                 },
+                description: {
+                  type: Sequelize.TEXT
+                },
+                size: {
+                  type: Sequelize.STRING
+                },
                 productImage: {
                   type: Sequelize.STRING,
                   defaultValue: "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png"

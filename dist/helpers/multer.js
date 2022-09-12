@@ -16,7 +16,7 @@ var storage = _multer["default"].diskStorage({
 });
 
 var fileFilter = function fileFilter(req, file, cb) {
-  console.log("`````````````````MUTER```````````````````", req.body);
+  console.log("`````````````````MULTER```````````````````", req.body);
 
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/webp") {
     cb(null, true);

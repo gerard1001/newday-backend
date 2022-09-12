@@ -29,6 +29,10 @@ var _articleRoutes = _interopRequireDefault(require("./api/articleRoutes"));
 
 var _articleCommentRoutes = _interopRequireDefault(require("./api/articleCommentRoutes"));
 
+var _tweetRoutes = _interopRequireDefault(require("./api/tweetRoutes"));
+
+var _subscrRoutes = _interopRequireDefault(require("./api/subscrRoutes"));
+
 var router = _express["default"].Router();
 
 router.use("/categories", _categoryRoutes["default"]);
@@ -36,10 +40,12 @@ router.use("/class1", _classOneRoutes["default"]);
 router.use("/class2", _classTwoRoutes["default"]);
 router.use("/products", _productRoutes["default"]);
 router.use("/users", _userRoutes["default"]);
+router.use("/subscr", _subscrRoutes["default"]);
 router.use("/roles", _roleRoutes["default"]);
 router.use("/user_category", _assignUserToCategory["default"]);
 router.use("/comment", _commentRoutes["default"]);
 router.use("/article", _articleRoutes["default"]);
 router.use("/article_comment", _articleCommentRoutes["default"]);
+router.use("/tweet", _tweetRoutes["default"]);
 var _default = router;
 exports["default"] = _default;

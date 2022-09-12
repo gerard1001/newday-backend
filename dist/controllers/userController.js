@@ -17,7 +17,7 @@ var _fileUpload = require("../helpers/fileUpload");
 
 var _userHelper = require("../helpers/userHelper");
 
-var _nodemailer = _interopRequireDefault(require("../helpers/nodemailer"));
+var _nodemailer = require("../helpers/nodemailer");
 
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
@@ -132,7 +132,7 @@ var registerUser = /*#__PURE__*/function () {
                           street: req.body.street
                         }).then(function (data) {
                           var message = "\n        <h2>Account creation successful.</h2>\n        <p>Copy the following token::: <em>".concat(token, "</em></p>\n        ");
-                          (0, _nodemailer["default"])(message, createdUser.email);
+                          (0, _nodemailer.sendEmail)(message, createdUser.email);
                           return res.status(201).send({
                             message: "Success"
                           });
@@ -646,7 +646,7 @@ var resetLink = /*#__PURE__*/function () {
               expiresIn: "1d"
             });
             message = "\n          <h2>First step to reseting your password.</h2>\n        <p>Copy the following token::: <em>".concat(process.env.FRONTEND_URL, "/resetPassword?token=").concat(token, "</em></p>\n        ");
-            (0, _nodemailer["default"])(message, userExist.email);
+            (0, _nodemailer.sendEmail)(message, userExist.email);
             return _context10.abrupt("return", res.status(200).send({
               message: "Reset password message sent!"
             }));
