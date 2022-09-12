@@ -52,15 +52,15 @@ module.exports = function (sequelize, DataTypes) {
 
   subCategoryOne.init({
     catOneId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.INTEGER,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
     categoryId: {
       allowNull: true,
-      type: DataTypes.INTEGER,
-      defaultValue: DataTypes.INTEGER
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
     catOneName: {
       type: DataTypes.STRING

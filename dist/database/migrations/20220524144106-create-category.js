@@ -16,10 +16,9 @@ module.exports = {
               _context.next = 2;
               return queryInterface.createTable("Categories", {
                 categoryId: {
-                  type: Sequelize.INTEGER,
-                  autoIncrement: true,
+                  type: Sequelize.UUID,
                   primaryKey: true,
-                  defaultValue: Sequelize.INTEGER,
+                  defaultValue: Sequelize.UUIDV4,
                   allowNull: false
                 },
                 categoryName: {

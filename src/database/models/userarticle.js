@@ -30,6 +30,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.UUID,
       },
+      image: {
+        type: DataTypes.STRING,
+      },
+      title: {
+        type: DataTypes.STRING,
+      },
       article: {
         type: DataTypes.TEXT,
       },

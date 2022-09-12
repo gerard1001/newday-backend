@@ -6,7 +6,7 @@ import {
   generateToken,
   decodeToken,
 } from "../helpers/userHelper";
-import sendEmail from "../helpers/nodemailer";
+import { sendEmail } from "../helpers/nodemailer";
 import jwt from "jsonwebtoken";
 
 const userModel = model.User;

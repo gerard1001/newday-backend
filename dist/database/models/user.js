@@ -33,13 +33,9 @@ module.exports = function (sequelize, DataTypes) {
     (0, _createClass2["default"])(User, null, [{
       key: "associate",
       value: function associate(models) {
-        this.belongsTo(models.Category, {
-          foreignKey: {
-            name: "categoryId",
-            allowNull: true
-          },
-          onDelete: "SET NULL",
-          as: "Categories"
+        this.belongsToMany(models.Category, {
+          foreignKey: "userId",
+          through: "User_Category"
         });
         this.belongsTo(models.Role, {
           foreignKey: {
@@ -54,6 +50,21 @@ module.exports = function (sequelize, DataTypes) {
           as: "Profiles",
           onDelete: "CASCADE"
         });
+        this.hasMany(models.ProductComment, {
+          foreignKey: "userId",
+          as: "ProductComments",
+          onDelete: "CASCADE"
+        });
+        this.hasMany(models.UserArticle, {
+          foreignKey: "userId",
+          as: "UserArticles",
+          onDelete: "CASCADE"
+        });
+        this.hasMany(models.UserComment, {
+          foreignKey: "userId",
+          as: "UserComments",
+          onDelete: "CASCADE"
+        });
       }
     }]);
     return User;
@@ -61,9 +72,9 @@ module.exports = function (sequelize, DataTypes) {
 
   User.init({
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.INTEGER,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
     //All users are predefined as clients during registration, we protest the route for updating users because it is here that the admin, managers and workers are created. The route for creating/registering a user is not protected for the sake of allowing clients to sign up.
@@ -72,10 +83,6 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       defaultValue: 4 // default role is client
 
-    },
-    categoryId: {
-      allowNull: true,
-      type: DataTypes.INTEGER
     },
     firstName: {
       type: DataTypes.STRING,
@@ -98,6 +105,10 @@ module.exports = function (sequelize, DataTypes) {
       validate: {
         min: 8
       }
+    },
+    userVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     createdAt: {
       allowNull: false,

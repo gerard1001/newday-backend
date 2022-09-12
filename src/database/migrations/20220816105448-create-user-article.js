@@ -16,6 +16,12 @@ module.exports = {
           key: "userId",
         },
       },
+      image: {
+        type: Sequelize.STRING,
+      },
+      title: {
+        type: Sequelize.STRING,
+      },
       article: {
         type: Sequelize.TEXT,
       },

@@ -1,6 +1,7 @@
 import model from "../database/models";
 import checkToken from "../helpers/checkToken";
 import { decodeToken } from "../helpers/userHelper";
+import { fileUpload } from "../helpers/fileUpload";
 
 const articleModel = model.UserArticle;
 
@@ -10,11 +11,19 @@ export const createArticle = async (req, res) => {
 
     const decode = decodeToken(token);
 
-    console.log(decode);
+
+    if (req.file) {
+      req.body.image = await fileUpload(req);
+    } else {
+      req.body.image =
+        "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png";
+    }
 
     await articleModel
       .create({
         userId: decode.userId,
+        image: req.body.image,
+        title: req.body.title,
         article: req.body.article,
       })
       .then((data) => {

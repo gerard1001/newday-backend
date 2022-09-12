@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
@@ -16,15 +16,14 @@ module.exports = {
               _context.next = 2;
               return queryInterface.createTable("Products", {
                 productId: {
-                  type: Sequelize.INTEGER,
-                  autoIncrement: true,
+                  type: Sequelize.UUID,
                   primaryKey: true,
-                  defaultValue: Sequelize.INTEGER,
+                  defaultValue: Sequelize.UUIDV4,
                   allowNull: false
                 },
                 catTwoId: {
                   allowNull: true,
-                  type: Sequelize.INTEGER,
+                  type: Sequelize.UUID,
                   onDelete: "CASCADE",
                   onUpdate: "CASCADE",
                   references: {
@@ -67,7 +66,7 @@ module.exports = {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return queryInterface.dropTable('Products');
+              return queryInterface.dropTable("Products");
 
             case 2:
             case "end":

@@ -21,6 +21,14 @@ var _userRoutes = _interopRequireDefault(require("./api/userRoutes"));
 
 var _roleRoutes = _interopRequireDefault(require("./api/roleRoutes"));
 
+var _assignUserToCategory = _interopRequireDefault(require("./api/assignUserToCategory"));
+
+var _commentRoutes = _interopRequireDefault(require("./api/commentRoutes"));
+
+var _articleRoutes = _interopRequireDefault(require("./api/articleRoutes"));
+
+var _articleCommentRoutes = _interopRequireDefault(require("./api/articleCommentRoutes"));
+
 var router = _express["default"].Router();
 
 router.use("/categories", _categoryRoutes["default"]);
@@ -29,5 +37,9 @@ router.use("/class2", _classTwoRoutes["default"]);
 router.use("/products", _productRoutes["default"]);
 router.use("/users", _userRoutes["default"]);
 router.use("/roles", _roleRoutes["default"]);
+router.use("/user_category", _assignUserToCategory["default"]);
+router.use("/comment", _commentRoutes["default"]);
+router.use("/article", _articleRoutes["default"]);
+router.use("/article_comment", _articleCommentRoutes["default"]);
 var _default = router;
 exports["default"] = _default;

@@ -52,13 +52,13 @@ module.exports = function (sequelize, DataTypes) {
 
   Profile.init({
     profileId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.INTEGER,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false
     },
     picture: {

@@ -40,6 +40,12 @@ module.exports = (sequelize, DataTypes) => {
         as: "UserComments",
         onDelete: "CASCADE",
       });
+
+      this.hasMany(models.Tweet, {
+        foreignKey: "userId",
+        as: "Tweets",
+        onDelete: "CASCADE",
+      });
     }
   }
   User.init(
@@ -79,6 +85,10 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       userVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      isSubscribed: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },

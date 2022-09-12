@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
@@ -16,7 +16,7 @@ function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflec
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-var _require = require('sequelize'),
+var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
@@ -34,14 +34,18 @@ module.exports = function (sequelize, DataTypes) {
       key: "associate",
       value: function associate(models) {
         this.hasMany(models.subCategoryOne, {
-          foreignKey: 'categoryId',
-          as: 'subCategoryOnes',
-          onDelete: 'CASCADE'
-        });
-        this.hasMany(models.User, {
-          foreignKey: 'categoryId',
-          as: 'Users',
-          onDelete: 'SET NULL'
+          foreignKey: "categoryId",
+          as: "subCategoryOnes",
+          onDelete: "CASCADE"
+        }); // this.hasMany(models.User, {
+        // foreignKey: 'categoryId',
+        // as: 'Users',
+        // onDelete: 'SET NULL'
+        // })
+
+        this.belongsToMany(models.User, {
+          foreignKey: "categoryId",
+          through: "User_Category"
         });
       }
     }]);
@@ -50,9 +54,9 @@ module.exports = function (sequelize, DataTypes) {
 
   Category.init({
     categoryId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.INTEGER,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
     categoryName: {
@@ -68,7 +72,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize: sequelize,
-    modelName: 'Category'
+    modelName: "Category"
   });
   return Category;
 };

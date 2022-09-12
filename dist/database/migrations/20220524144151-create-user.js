@@ -20,9 +20,9 @@ module.exports = {
               _context.next = 4;
               return queryInterface.createTable("Users", {
                 userId: {
-                  type: Sequelize.INTEGER,
-                  autoIncrement: true,
+                  type: Sequelize.UUID,
                   primaryKey: true,
+                  defaultValue: Sequelize.literal("uuid_generate_v4()"),
                   allowNull: false
                 },
                 roleId: {
@@ -34,16 +34,6 @@ module.exports = {
                   references: {
                     model: "Roles",
                     key: "roleId"
-                  }
-                },
-                categoryId: {
-                  allowNull: true,
-                  type: Sequelize.INTEGER,
-                  onDelete: "SET NULL",
-                  onUpdate: "CASCADE",
-                  references: {
-                    model: "Categories",
-                    key: "categoryId"
                   }
                 },
                 firstName: {
@@ -64,6 +54,10 @@ module.exports = {
                   validate: {
                     min: 8
                   }
+                },
+                userVerified: {
+                  type: Sequelize.BOOLEAN,
+                  defaultValue: false
                 },
                 createdAt: {
                   allowNull: false,

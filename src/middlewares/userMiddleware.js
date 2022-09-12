@@ -94,3 +94,27 @@ export const deleteAuth = async (req, res, next) => {
     });
   }
 };
+
+export const authent = async (req, res, next) => {
+  try {
+    const token = checkToken(req);
+
+    if (!token) {
+      return res.status(401).send({ message: "you are not logged in!!" });
+    }
+    const decode = decodeToken(token);
+
+    const exixtUser = await userModel.findByPk(decode.userId, {});
+
+    if (!exixtUser) {
+      return res.status(401).send({
+        message: "This user does not exist.",
+      });
+    }
+    next();
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
+  }
+};

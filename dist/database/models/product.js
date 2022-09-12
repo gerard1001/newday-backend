@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
@@ -16,7 +16,7 @@ function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflec
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-var _require = require('sequelize'),
+var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
@@ -35,11 +35,15 @@ module.exports = function (sequelize, DataTypes) {
       value: function associate(models) {
         this.belongsTo(models.subCategoryTwo, {
           foreignKey: {
-            name: 'catTwoId',
+            name: "catTwoId",
             allowNull: true
           },
-          onDelete: 'CASCADE',
-          as: 'subCategoryTwos'
+          onDelete: "CASCADE",
+          as: "subCategoryTwos"
+        }), this.hasMany(models.ProductComment, {
+          foreignKey: "productId",
+          as: "ProductComments",
+          onDelete: "CASCADE"
         });
       }
     }]);
@@ -48,14 +52,14 @@ module.exports = function (sequelize, DataTypes) {
 
   Product.init({
     productId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.INTEGER,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
     catTwoId: {
       allowNull: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.UUID
     },
     productName: {
       type: DataTypes.STRING
@@ -77,7 +81,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize: sequelize,
-    modelName: 'Product'
+    modelName: "Product"
   });
   return Product;
 };

@@ -16,16 +16,15 @@ module.exports = {
               _context.next = 2;
               return queryInterface.createTable("subCategoryTwos", {
                 catTwoId: {
-                  type: Sequelize.INTEGER,
-                  autoIncrement: true,
+                  type: Sequelize.UUID,
                   primaryKey: true,
-                  defaultValue: Sequelize.INTEGER,
+                  defaultValue: Sequelize.UUIDV4,
                   allowNull: false
                 },
                 catOneId: {
                   allowNull: true,
-                  type: Sequelize.INTEGER,
-                  defaultValue: Sequelize.INTEGER,
+                  type: Sequelize.UUID,
+                  defaultValue: Sequelize.UUIDV4,
                   onDelete: "CASCADE",
                   onUpdate: "CASCADE",
                   references: {

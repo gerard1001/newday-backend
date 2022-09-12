@@ -46,11 +46,15 @@ const createProduct = async (req, res) => {
               .create({
                 productName: req.body.productName,
                 price: req.body.price,
+                description: req.body.description,
+                size: req.body.size,
                 catTwoId: req.body.catTwoId,
                 productImage: req.body.productImage,
                 where: {
                   productName: req.body.productName,
                   price: req.body.price,
+                  description: req.body.description,
+                  size: req.body.size,
                   catTwoId: req.body.catTwoId,
                   productImage: req.body.productImage,
                 },

@@ -1,4 +1,7 @@
 "use strict";
+
+const sequelize = require("sequelize");
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.sequelize.query(
@@ -43,6 +46,10 @@ module.exports = {
       },
       userVerified: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      isSubscribed: {
+        type: sequelize.BOOLEAN,
         defaultValue: false,
       },
       createdAt: {

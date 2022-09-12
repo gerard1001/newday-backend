@@ -18,8 +18,7 @@ module.exports = {
             case 0:
               _context.next = 2;
               return queryInterface.bulkInsert("Profiles", [{
-                userId: 1,
-                profileId: 1,
+                userId: "202b2bfa-b290-4085-aba2-e66d158569f4",
                 picture: "https://s.pngkit.com/png/small/225-2257356_this-could-be-you-user-male.png",
                 gender: "male",
                 birthDate: "1999-11-24",
@@ -27,8 +26,7 @@ module.exports = {
                 createdAt: new Date(),
                 updatedAt: new Date()
               }, {
-                userId: 2,
-                profileId: 2,
+                userId: "4e3320b7-8d51-41ec-b946-b18ae2ec1fe7",
                 picture: "https://s.pngkit.com/png/small/806-8066032_person-icon-black-female-user-icon-png.png",
                 gender: "female",
                 birthDate: "2010-01-11",

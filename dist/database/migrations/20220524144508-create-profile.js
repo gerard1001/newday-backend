@@ -17,14 +17,13 @@ module.exports = {
               return queryInterface.createTable("Profiles", {
                 profileId: {
                   allowNull: false,
-                  type: Sequelize.INTEGER,
-                  autoIncrement: true,
+                  type: Sequelize.UUID,
                   primaryKey: true,
-                  defaultValue: Sequelize.INTEGER
+                  defaultValue: Sequelize.literal("uuid_generate_v4()")
                 },
                 userId: {
                   allowNull: true,
-                  type: Sequelize.INTEGER,
+                  type: Sequelize.UUID,
                   onDelete: "CASCADE",
                   onUpdate: "CASCADE",
                   references: {
@@ -34,6 +33,7 @@ module.exports = {
                 },
                 picture: {
                   type: Sequelize.STRING,
+                  defaultValue: "https://s.pngkit.com/png/small/128-1280585_user-icon-fa-fa-user-circle.png",
                   allowNull: true
                 },
                 gender: {

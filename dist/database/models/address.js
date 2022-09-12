@@ -2,8 +2,6 @@
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
@@ -22,8 +20,6 @@ var _require = require('sequelize'),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var _Address$init;
-
   var Address = /*#__PURE__*/function (_Model) {
     (0, _inherits2["default"])(Address, _Model);
 
@@ -50,31 +46,33 @@ module.exports = function (sequelize, DataTypes) {
     return Address;
   }(Model);
 
-  Address.init((_Address$init = {
+  Address.init({
     addressId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.INTEGER,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
     profileId: {
       allowNull: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.UUID
     },
     country: {
       type: DataTypes.STRING
+    },
+    province: {
+      type: DataTypes.STRING
+    },
+    district: {
+      type: DataTypes.STRING
+    },
+    sector: {
+      type: DataTypes.STRING
+    },
+    street: {
+      type: DataTypes.STRING
     }
-  }, (0, _defineProperty2["default"])(_Address$init, "country", {
-    type: DataTypes.STRING
-  }), (0, _defineProperty2["default"])(_Address$init, "province", {
-    type: DataTypes.STRING
-  }), (0, _defineProperty2["default"])(_Address$init, "district", {
-    type: DataTypes.STRING
-  }), (0, _defineProperty2["default"])(_Address$init, "sector", {
-    type: DataTypes.STRING
-  }), (0, _defineProperty2["default"])(_Address$init, "street", {
-    type: DataTypes.STRING
-  }), _Address$init), {
+  }, {
     sequelize: sequelize,
     modelName: 'Address',
     tableName: 'Addresses'

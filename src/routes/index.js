@@ -9,6 +9,8 @@ import user_categoryRoutes from "./api/assignUserToCategory";
 import commentRoutes from "./api/commentRoutes";
 import articleRoutes from "./api/articleRoutes";
 import articleCommentRoutes from "./api/articleCommentRoutes";
+import tweetRoutes from "./api/tweetRoutes";
+import subscrRoutes from "./api/subscrRoutes";
 
 const router = express.Router();
 
@@ -22,6 +24,8 @@ router.use("/products", productRoutes);
 
 router.use("/users", userRoutes);
 
+router.use("/subscr", subscrRoutes);
+
 router.use("/roles", roleRoutes);
 
 router.use("/user_category", user_categoryRoutes);
@@ -31,5 +35,7 @@ router.use("/comment", commentRoutes);
 router.use("/article", articleRoutes);
 
 router.use("/article_comment", articleCommentRoutes);
+
+router.use("/tweet", tweetRoutes);
 
 export default router;

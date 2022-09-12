@@ -11,7 +11,12 @@ import {
   resetLink,
   resetPwd,
 } from "../../controllers/userController";
-import { Auth, updateAuth, deleteAuth } from "../../middlewares/userMiddleware";
+import {
+  Auth,
+  updateAuth,
+  deleteAuth,
+  authent,
+} from "../../middlewares/userMiddleware";
 import upload from "../../helpers/multer";
 
 const router = express.Router();

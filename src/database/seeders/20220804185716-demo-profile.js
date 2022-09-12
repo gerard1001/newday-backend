@@ -26,6 +26,26 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          userId: "1d6ca114-9a21-49ef-8e04-e733b357153c",
+          picture:
+            "https://s.pngkit.com/png/small/225-2257356_this-could-be-you-user-male.png",
+          gender: "male",
+          birthDate: "1999-11-24",
+          phoneNumber: 789944560,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          userId: "49710ec2-a533-42ba-b190-247fd023e98c",
+          picture:
+            "https://s.pngkit.com/png/small/225-2257356_this-could-be-you-user-male.png",
+          gender: "male",
+          birthDate: "1999-11-24",
+          phoneNumber: 788147067,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

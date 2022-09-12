@@ -10,7 +10,6 @@ export const postComment = async (req, res) => {
 
     const decode = decodeToken(token);
 
-    console.log(decode);
     await commentModel
       .create({
         userId: decode.userId,
