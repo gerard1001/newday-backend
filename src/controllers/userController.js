@@ -483,7 +483,7 @@ const createReview = async (req, res) => {
     const decode = decodeToken(token);
     const id = decode.userId;
 
-    console.log(decode);
+    console.log(id);
 
     const { rate } = req.body;
     if (rate > 5.0) {
@@ -497,6 +497,11 @@ const createReview = async (req, res) => {
       });
     }
 
+    await reviewModel.destroy({ where: { userId: id } }).catch((err) => {
+      return res.status(500).send({
+        message: "err",
+      });
+    }); //
     await reviewModel
       .create({
         userId: id,
@@ -535,6 +540,10 @@ const getReviews = async (req, res) => {
         ],
       })
       .then((data) => {
+        const dt = data.map((iti) => {
+          return iti.rate;
+        });
+        console.log(dt.length);
         return res.status(200).send({
           message: "success",
           data,
@@ -542,7 +551,7 @@ const getReviews = async (req, res) => {
       })
       .catch((err) => {
         return res.status(500).send({
-          message: "err",
+          message: `${err}`,
         });
       });
   } catch (error) {

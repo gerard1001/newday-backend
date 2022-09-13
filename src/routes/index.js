@@ -13,6 +13,7 @@ import tweetRoutes from "./api/tweetRoutes";
 import subscribeRoutes from "./api/subscribeRoutes";
 import reviewRoutes from "./api/reviewRoutes";
 import replyRoutes from "./api/replyRoutes.js";
+import rateRoutes from "./api/rateRoutes.js";
 
 const router = express.Router();
 
@@ -43,5 +44,7 @@ router.use("/article_comment", articleCommentRoutes);
 router.use("/tweet", tweetRoutes);
 
 router.use("/review", reviewRoutes);
+
+router.use("/rate", rateRoutes);
 
 export default router;
