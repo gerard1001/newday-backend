@@ -14,8 +14,8 @@ module.exports = {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return queryInterface.createTable("UserArticles", {
-                userArticleId: {
+              return queryInterface.createTable("Reviews", {
+                reviewId: {
                   type: Sequelize.UUID,
                   primaryKey: true,
                   defaultValue: Sequelize.UUIDV4
@@ -29,14 +29,13 @@ module.exports = {
                     key: "userId"
                   }
                 },
-                image: {
-                  type: Sequelize.STRING
+                review: {
+                  type: Sequelize.TEXT,
+                  allowNull: false
                 },
-                title: {
-                  type: Sequelize.STRING
-                },
-                article: {
-                  type: Sequelize.TEXT
+                rate: {
+                  type: Sequelize.DECIMAL(2, 1),
+                  allowNull: false
                 },
                 createdAt: {
                   allowNull: false,
@@ -63,7 +62,7 @@ module.exports = {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return queryInterface.dropTable("UserArticles");
+              return queryInterface.dropTable("Reviews");
 
             case 2:
             case "end":

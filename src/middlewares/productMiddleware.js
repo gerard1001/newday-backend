@@ -1,19 +1,19 @@
 import { decodeToken } from "../helpers/userHelper";
+import checkToken from "../helpers/checkToken";
 import model from "../database/models";
 
-const userRoutes = model.User;
+const userModel = model.User;
 
 const Auth = async (req, res, next) => {
   try {
-    const token =
-      req.headers.authorization && req.headers.authorization.split(" ")[1];
+    const token = checkToken(req);
 
     if (!token) {
       return res.status(401).send({ message: "You are not logged in!!!" });
     }
 
     const decode = decodeToken(token);
-    const newUser = await userRoutes.findByPk(decode.userId, {
+    const newUser = await userModel.findByPk(decode.userId, {
       include: [
         {
           model: model.Role,

@@ -185,7 +185,7 @@ var getOneAssignment = /*#__PURE__*/function () {
             _context3.next = 4;
             return ucModel.findOne({
               where: {
-                ucId: id
+                userCategoryId: id
               }
             }).then(function (data) {
               return res.status(200).send({

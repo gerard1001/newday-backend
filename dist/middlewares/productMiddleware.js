@@ -13,9 +13,11 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _userHelper = require("../helpers/userHelper");
 
+var _checkToken = _interopRequireDefault(require("../helpers/checkToken"));
+
 var _models = _interopRequireDefault(require("../database/models"));
 
-var userRoutes = _models["default"].User;
+var userModel = _models["default"].User;
 
 var Auth = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res, next) {
@@ -25,7 +27,7 @@ var Auth = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            token = req.headers.authorization && req.headers.authorization.split(" ")[1];
+            token = (0, _checkToken["default"])(req);
 
             if (token) {
               _context.next = 4;
@@ -39,7 +41,7 @@ var Auth = /*#__PURE__*/function () {
           case 4:
             decode = (0, _userHelper.decodeToken)(token);
             _context.next = 7;
-            return userRoutes.findByPk(decode.userId, {
+            return userModel.findByPk(decode.userId, {
               include: [{
                 model: _models["default"].Role,
                 as: "Roles",

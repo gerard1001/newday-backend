@@ -32,7 +32,7 @@ var postComment = /*#__PURE__*/function () {
             _context.next = 5;
             return commentModel.create({
               userId: decode.userId,
-              uaId: req.body.uaId,
+              userArticleId: req.body.userArticleId,
               comment: req.body.comment
             }).then(function (data) {
               return res.status(200).send({

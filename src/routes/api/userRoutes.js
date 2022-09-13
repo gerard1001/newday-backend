@@ -1,7 +1,7 @@
 import express from "express";
 import {
   registerUser,
-  getUser,
+  getUsers,
   updateUser,
   deleteUser,
   deleteOneUser,
@@ -15,7 +15,6 @@ import {
   Auth,
   updateAuth,
   deleteAuth,
-  authent,
 } from "../../middlewares/userMiddleware";
 import upload from "../../helpers/multer";
 
@@ -25,7 +24,7 @@ router.post("/register", upload.single("picture"), registerUser);
 
 // router.post("/", createProfile);
 
-router.get("/", getUser);
+router.get("/", getUsers);
 
 router.patch("/admin-update/:id", Auth, updateUser); //This update option will have an option to change the role. Only performed by the admin.
 

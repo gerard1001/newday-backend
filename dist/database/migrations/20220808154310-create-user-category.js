@@ -15,7 +15,7 @@ module.exports = {
             case 0:
               _context.next = 2;
               return queryInterface.createTable("User_Categories", {
-                ucId: {
+                userCategoryId: {
                   type: Sequelize.UUID,
                   primaryKey: true,
                   defaultValue: Sequelize.UUIDV4

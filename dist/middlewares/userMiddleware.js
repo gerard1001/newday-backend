@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateAuth = exports.deleteAuth = exports.authent = exports.Auth = void 0;
+exports.updateAuth = exports.reviewAuth = exports.deleteAuth = exports.authent = exports.Auth = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -279,3 +279,73 @@ var authent = /*#__PURE__*/function () {
 }();
 
 exports.authent = authent;
+
+var reviewAuth = /*#__PURE__*/function () {
+  var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res, next) {
+    var token, decode, newUser;
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.prev = 0;
+            token = (0, _checkToken["default"])(req);
+
+            if (token) {
+              _context5.next = 4;
+              break;
+            }
+
+            return _context5.abrupt("return", res.status(401).send({
+              message: "You are not logged in!!!"
+            }));
+
+          case 4:
+            decode = (0, _userHelper.decodeToken)(token);
+            _context5.next = 7;
+            return userModel.findByPk(decode.userId, {
+              include: [{
+                model: _models["default"].Role,
+                as: "Roles",
+                attributes: ["role"]
+              }]
+            });
+
+          case 7:
+            newUser = _context5.sent;
+
+            if (!(newUser.roleId !== 1 && newUser.roleId !== 2)) {
+              _context5.next = 10;
+              break;
+            }
+
+            return _context5.abrupt("return", res.status(401).send({
+              message: "This action can only be performed by the admin or manager !!"
+            }));
+
+          case 10:
+            req.user = newUser;
+            next();
+            _context5.next = 17;
+            break;
+
+          case 14:
+            _context5.prev = 14;
+            _context5.t0 = _context5["catch"](0);
+            return _context5.abrupt("return", res.status(500).send({
+              message: "".concat(_context5.t0)
+            }));
+
+          case 17:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5, null, [[0, 14]]);
+  }));
+
+  return function reviewAuth(_x13, _x14, _x15) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+
+exports.reviewAuth = reviewAuth;

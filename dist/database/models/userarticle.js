@@ -42,7 +42,7 @@ module.exports = function (sequelize, DataTypes) {
           as: "Users"
         });
         this.hasMany(models.UserComment, {
-          foreignKey: "uaId",
+          foreignKey: "userArticleId",
           as: "UserComments",
           onDelete: "CASCADE"
         });
@@ -52,7 +52,7 @@ module.exports = function (sequelize, DataTypes) {
   }(Model);
 
   UserArticle.init({
-    uaId: {
+    userArticleId: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4

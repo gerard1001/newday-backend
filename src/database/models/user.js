@@ -46,6 +46,12 @@ module.exports = (sequelize, DataTypes) => {
         as: "Tweets",
         onDelete: "CASCADE",
       });
+
+      this.hasOne(models.Review, {
+        foreignKey: "userId",
+        as: "Reviews",
+        onDelete: "CASCADE",
+      });
     }
   }
   User.init(
@@ -56,7 +62,6 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
       },
-      //All users are predefined as clients during registration, we protest the route for updating users because it is here that the admin, managers and workers are created. The route for creating/registering a user is not protected for the sake of allowing clients to sign up.
       roleId: {
         allowNull: true,
         type: DataTypes.INTEGER,

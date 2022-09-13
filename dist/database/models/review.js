@@ -20,24 +20,20 @@ var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var Profile = /*#__PURE__*/function (_Model) {
-    (0, _inherits2["default"])(Profile, _Model);
+  var Review = /*#__PURE__*/function (_Model) {
+    (0, _inherits2["default"])(Review, _Model);
 
-    var _super = _createSuper(Profile);
+    var _super = _createSuper(Review);
 
-    function Profile() {
-      (0, _classCallCheck2["default"])(this, Profile);
+    function Review() {
+      (0, _classCallCheck2["default"])(this, Review);
       return _super.apply(this, arguments);
     }
 
-    (0, _createClass2["default"])(Profile, null, [{
+    (0, _createClass2["default"])(Review, null, [{
       key: "associate",
       value: function associate(models) {
-        this.hasOne(models.Address, {
-          foreignKey: "profileId",
-          as: "Addresses",
-          onDelete: "CASCADE"
-        }), this.belongsTo(models.User, {
+        this.belongsTo(models.User, {
           foreignKey: {
             name: "userId",
             allowNull: true
@@ -47,48 +43,30 @@ module.exports = function (sequelize, DataTypes) {
         });
       }
     }]);
-    return Profile;
+    return Review;
   }(Model);
 
-  Profile.init({
-    profileId: {
+  Review.init({
+    reviewId: {
       type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      defaultValue: DataTypes.UUIDV4
     },
     userId: {
       type: DataTypes.UUID,
       allowNull: false
     },
-    picture: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    gender: {
-      type: DataTypes.ENUM("male", "female"),
+    review: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
-    birthDate: {
-      type: DataTypes.DATE,
+    rate: {
+      type: DataTypes.DECIMAL(2, 1),
       allowNull: false
-    },
-    phoneNumber: {
-      type: DataTypes.BIGINT,
-      allowNull: false
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
     }
   }, {
     sequelize: sequelize,
-    modelName: "Profile",
-    tableName: "Profiles"
+    modelName: "Review"
   });
-  return Profile;
+  return Review;
 };

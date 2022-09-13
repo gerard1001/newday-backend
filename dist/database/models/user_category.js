@@ -39,7 +39,7 @@ module.exports = function (sequelize, DataTypes) {
   }(Model);
 
   User_Category.init({
-    ucId: {
+    userCategoryId: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,

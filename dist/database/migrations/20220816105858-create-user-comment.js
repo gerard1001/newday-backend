@@ -29,13 +29,13 @@ module.exports = {
                     key: "userId"
                   }
                 },
-                uaId: {
+                userArticleId: {
                   type: Sequelize.UUID,
                   onDelete: "CASCADE",
                   onUpdate: "CASCADE",
                   references: {
                     model: "UserArticles",
-                    key: "uaId"
+                    key: "userArticleId"
                   }
                 },
                 comment: {

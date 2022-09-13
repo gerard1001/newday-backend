@@ -1,17 +1,28 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("User_Categories", {
-      userCategoryId: {
+    await queryInterface.createTable("Reviews", {
+      reviewId: {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
       },
       userId: {
         type: Sequelize.UUID,
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+        references: {
+          model: "Users",
+          key: "userId",
+        },
       },
-      categoryId: {
-        type: Sequelize.UUID,
+      review: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      rate: {
+        type: Sequelize.DECIMAL(2, 1),
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -24,6 +35,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('User_Categories');
-  }
+    await queryInterface.dropTable("Reviews");
+  },
 };

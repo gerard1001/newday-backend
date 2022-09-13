@@ -43,7 +43,7 @@ module.exports = function (sequelize, DataTypes) {
         });
         this.belongsTo(models.UserArticle, {
           foreignKey: {
-            name: "uaId",
+            name: "userArticleId",
             allowNull: true
           },
           onDelete: "CASCADE",
@@ -64,7 +64,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
       type: DataTypes.UUID
     },
-    uaId: {
+    userArticleId: {
       allowNull: false,
       type: DataTypes.UUID
     },

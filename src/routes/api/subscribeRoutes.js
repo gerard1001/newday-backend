@@ -1,5 +1,5 @@
 import express from "express";
-import { subscribeMsg, subscribe } from "../../controllers/subscrController.js";
+import { subscribeMsg, subscribe } from "../../controllers/userController.js";
 import { authent } from "../../middlewares/userMiddleware";
 
 const router = express.Router();

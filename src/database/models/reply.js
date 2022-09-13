@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class UserArticle extends Model {
+  class Reply extends Model {
     static associate(models) {
       this.belongsTo(models.User, {
         foreignKey: {
@@ -12,38 +12,40 @@ module.exports = (sequelize, DataTypes) => {
         as: "Users",
       });
 
-      this.hasMany(models.UserComment, {
-        foreignKey: "userArticleId",
-        as: "UserComments",
+      this.belongsTo(models.UserComment, {
+        foreignKey: {
+          name: "commentId",
+          allowNull: true,
+        },
         onDelete: "CASCADE",
+        as: "UserComments",
       });
     }
   }
-  UserArticle.init(
+  Reply.init(
     {
-      userArticleId: {
+      replyId: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
       },
       userId: {
-        allowNull: false,
         type: DataTypes.UUID,
+        allowNull: false,
       },
-      image: {
-        type: DataTypes.STRING,
+      commentId: {
+        type: DataTypes.UUID,
+        allowNull: false,
       },
-      title: {
-        type: DataTypes.STRING,
-      },
-      article: {
+      reply: {
         type: DataTypes.TEXT,
+        allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: "UserArticle",
+      modelName: "Reply",
     }
   );
-  return UserArticle;
+  return Reply;
 };

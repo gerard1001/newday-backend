@@ -6,12 +6,14 @@ import {
   generateToken,
   decodeToken,
 } from "../helpers/userHelper";
-import { sendEmail } from "../helpers/nodemailer";
+import { sendEmail, sendTweet } from "../helpers/nodemailer";
 import jwt from "jsonwebtoken";
+import checkToken from "../helpers/checkToken";
 
 const userModel = model.User;
 const profileModel = model.Profile;
 const addressModel = model.Address;
+const reviewModel = model.Review;
 
 const registerUser = async (req, res) => {
   try {
@@ -88,7 +90,7 @@ const registerUser = async (req, res) => {
         <p>Copy the following token::: <em>${token}</em></p>
         `;
               sendEmail(message, createdUser.email);
-              return res.status(201).send({
+              return res.status(200).send({
                 message: "Success",
               });
             })
@@ -125,7 +127,53 @@ const verifyUser = async (req, res) => {
   }
 };
 
-const getUser = async (req, res) => {
+const subscribeMsg = async (req, res) => {
+  try {
+    const userToken = checkToken(req);
+    const decode = decodeToken(userToken);
+    const email = decode.email;
+    const id = decode.userId;
+
+    const token = generateToken({ userId: id }, "1d");
+
+    const message = `
+        <h2>Got subscription token.</h2>
+        <p>Copy the following token::: <em>${token}</em></p>
+        `;
+    sendTweet(message, email);
+    console.log(email);
+
+    return res.send({
+      msg: "Sent subscr...",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
+  }
+};
+
+const subscribe = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const userInfo = decodeToken(token);
+    const userId = userInfo.userId;
+
+    console.log(token);
+
+    const user = await userModel.findOne({ where: { userId } });
+    await user.update({ isSubscribed: true }, { where: { id: userId } });
+    return res.status(200).send({
+      message: "You have successfully subscribed to our page.",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
+  }
+};
+
+const getUsers = async (req, res) => {
   try {
     await userModel
       .findAll({ order: [["roleId", "ASC"]] })
@@ -186,14 +234,33 @@ const getOneUser = async (req, res) => {
           {
             model: model.UserArticle,
             as: "UserArticles",
-            attributes: ["article", "uaId"],
+            attributes: ["article", "userArticleId"],
             include: [
               {
                 model: model.UserComment,
                 as: "UserComments",
                 attributes: ["comment"],
+                include: [
+                  {
+                    model: model.User,
+                    as: "Users",
+                    attributes: ["email"],
+                  },
+                ],
+                include: [
+                  {
+                    model: model.Reply,
+                    as: "Replies",
+                    attributes: ["reply"],
+                  },
+                ],
               },
             ],
+          },
+          {
+            model: model.Review,
+            as: "Reviews",
+            attributes: ["review", "rate"],
           },
         ],
       })
@@ -327,7 +394,7 @@ const userLogin = async (req, res) => {
         },
         "1d"
       );
-      return res.status(201).header("authenticate", token).send({
+      return res.status(200).header("authenticate", token).send({
         message: `Logged in successfully`,
         token,
         roleId: userExist.roleId,
@@ -390,7 +457,7 @@ const resetPwd = async (req, res) => {
       )
       .then((data) => {
         if (data == 1) {
-          return res.status(201).send({
+          return res.status(200).send({
             message: "Password changed successfully!!!",
             data,
           });
@@ -410,15 +477,121 @@ const resetPwd = async (req, res) => {
   }
 };
 
+const createReview = async (req, res) => {
+  try {
+    const token = checkToken(req);
+    const decode = decodeToken(token);
+    const id = decode.userId;
+
+    console.log(decode);
+
+    const { rate } = req.body;
+    if (rate > 5.0) {
+      return res.send({
+        message: "You can't rate beyond 5.0 please",
+      });
+    }
+    if (rate <= 1.0) {
+      return res.send({
+        message: "You can't rate below 1.0 please",
+      });
+    }
+
+    await reviewModel
+      .create({
+        userId: id,
+        review: req.body.review,
+        rate: req.body.rate,
+      })
+      .then((data) => {
+        return res.status(200).send({
+          message: "success",
+          data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send({
+          message: "err",
+        });
+      });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
+  }
+};
+
+const getReviews = async (req, res) => {
+  try {
+    await reviewModel
+      .findAll({
+        include: [
+          {
+            model: model.User,
+            as: "Users",
+            attributes: ["email"],
+          },
+        ],
+      })
+      .then((data) => {
+        return res.status(200).send({
+          message: "success",
+          data,
+        });
+      })
+      .catch((err) => {
+        return res.status(500).send({
+          message: "err",
+        });
+      });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
+  }
+};
+
+const deleteReviews = async (req, res) => {
+  await reviewModel
+    .destroy({ where: {} })
+    .then((data) => {
+      if (data === 1) {
+        return res.status(200).send({
+          message: `Deleted ${data} review successfully!`,
+        });
+      } else if (data === 0) {
+        return res.status(403).send({
+          message: `You don't have any more reviews to delete!`,
+        });
+      } else {
+        return res.status(200).send({
+          message: `Deleted ${data} reviews successfully!`,
+          data,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(400).send({
+        message: `Failed ${err}`,
+      });
+    });
+};
+
 export {
   registerUser,
-  getUser,
+  getUsers,
   updateUser,
   deleteUser,
   deleteOneUser,
   userLogin,
   getOneUser,
   verifyUser,
+  subscribeMsg,
+  subscribe,
   resetLink,
   resetPwd,
+  createReview,
+  getReviews,
+  deleteReviews,
 };

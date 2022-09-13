@@ -93,7 +93,7 @@ export const getOneAssignment = async (req, res) => {
     await ucModel
       .findOne({
         where: {
-          ucId: id,
+          userCategoryId: id,
         },
       })
       .then((data) => {
