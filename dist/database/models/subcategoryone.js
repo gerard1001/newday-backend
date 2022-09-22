@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
@@ -16,7 +16,7 @@ function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflec
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-var _require = require('sequelize'),
+var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
@@ -33,17 +33,23 @@ module.exports = function (sequelize, DataTypes) {
     (0, _createClass2["default"])(subCategoryOne, null, [{
       key: "associate",
       value: function associate(models) {
-        this.hasMany(models.subCategoryTwo, {
-          foreignKey: 'catOneId',
-          as: 'subCategoryTwos',
-          onDelete: 'CASCADE'
-        }), this.belongsTo(models.Category, {
+        // this.hasMany(models.subCategoryTwo, {
+        //   foreignKey: 'catOneId',
+        //   as: 'subCategoryTwos',
+        //   onDelete: 'CASCADE'
+        // }),
+        this.hasMany(models.Product, {
+          foreignKey: "productId",
+          as: "Products",
+          onDelete: "CASCADE"
+        });
+        this.belongsTo(models.Category, {
           foreignKey: {
-            name: 'categoryId',
+            name: "categoryId",
             allowNull: true
           },
-          onDelete: 'CASCADE',
-          as: 'Categories'
+          onDelete: "CASCADE",
+          as: "Categories"
         });
       }
     }]);
@@ -75,7 +81,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize: sequelize,
-    modelName: 'subCategoryOne'
+    modelName: "subCategoryOne"
   });
   return subCategoryOne;
 };

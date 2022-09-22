@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateCategory = exports.getOneCategory = exports.getCategory = exports.deleteCategory = exports.createCategory = void 0;
+exports.updateClass = exports.getOneClass = exports.getClasses = exports.deleteOneClass = exports.deleteClasses = exports.createClass = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -13,65 +13,99 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _models = _interopRequireDefault(require("../database/models"));
 
-var categoryRoutes = _models["default"].Category;
+var classModel = _models["default"].Class;
+var categoryModel = _models["default"].Category;
 
-var createCategory = /*#__PURE__*/function () {
+var createClass = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
+    var _req$body, catOneName, categoryId, existCategory;
+
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            _context.next = 3;
-            return categoryRoutes.findOrCreate({
-              categoryName: req.body.categoryName,
+            _req$body = req.body, catOneName = _req$body.catOneName, categoryId = _req$body.categoryId;
+            _context.next = 4;
+            return categoryModel.findOne({
               where: {
-                categoryName: req.body.categoryName
+                categoryId: req.body.categoryId
               }
-            }).then(function (created) {
-              if (created[1]) {
+            });
+
+          case 4:
+            existCategory = _context.sent;
+
+            if (existCategory) {
+              _context.next = 7;
+              break;
+            }
+
+            return _context.abrupt("return", res.status(404).send({
+              message: "This category does not exist!"
+            }));
+
+          case 7:
+            if (!(!catOneName && !categoryId)) {
+              _context.next = 9;
+              break;
+            }
+
+            return _context.abrupt("return", res.status(400).send({
+              message: "Please make sure you include both catOneName and category"
+            }));
+
+          case 9:
+            _context.next = 11;
+            return classModel.findOrCreate({
+              where: {
+                catOneName: req.body.catOneName,
+                categoryId: req.body.categoryId
+              }
+            }).then(function (data) {
+              if (data[1]) {
                 return res.status(201).send({
                   message: "successfully created!",
-                  created: created
+                  body: {
+                    data: data
+                  }
                 });
               } else {
-                return res.status(403).send({
-                  message: "This category already exists!"
+                return res.status(409).send({
+                  message: "This class already exists!"
                 });
               }
             })["catch"](function (err) {
-              return res.status(500).send({
-                message: "You got an error: ".concat(err)
-              });
+              return res.status(403).send(err);
             });
 
-          case 3:
-            _context.next = 8;
+          case 11:
+            _context.next = 16;
             break;
 
-          case 5:
-            _context.prev = 5;
+          case 13:
+            _context.prev = 13;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return", res.status(500).send({
               message: "".concat(_context.t0)
             }));
 
-          case 8:
+          case 16:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 5]]);
+    }, _callee, null, [[0, 13]]);
   }));
 
-  return function createCategory(_x, _x2) {
+  return function createClass(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
 
-exports.createCategory = createCategory;
+exports.createClass = createClass;
 
-var getCategory = /*#__PURE__*/function () {
+var getClasses = /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res) {
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -79,34 +113,24 @@ var getCategory = /*#__PURE__*/function () {
           case 0:
             _context2.prev = 0;
             _context2.next = 3;
-            return categoryRoutes.findAndCountAll({
-              order: [["categoryName", "ASC"]],
+            return classModel.findAll({
+              order: [["catOneName", "ASC"]],
               include: [{
-                model: _models["default"].User,
-                as: "Users" // attributes: ["firstName", "lastName", "email"],
-
-              }, {
-                model: _models["default"].Class,
-                as: "Classes",
-                // attributes: ["catOneName"],
-                order: [["catOneName", "ASC"]],
-                include: [{
-                  model: _models["default"].Product,
-                  as: "Products",
-                  // attributes: ["productName", "price", "productImage"],
-                  order: [["productName", "ASC"]]
-                }]
+                model: _models["default"].Product,
+                as: "Products",
+                order: [["productName", "ASC"]]
               }]
             }).then(function (data) {
-              console.log(data);
               return res.status(200).send({
-                message: "Fetched all categories",
-                body: data.rows,
-                count: data.count
+                message: "Fetched all class elements",
+                body: {
+                  data: data
+                }
               });
             })["catch"](function (err) {
               return res.status(403).send({
-                message: "".concat(err)
+                message: "ERROR",
+                err: err
               });
             });
 
@@ -129,14 +153,14 @@ var getCategory = /*#__PURE__*/function () {
     }, _callee2, null, [[0, 5]]);
   }));
 
-  return function getCategory(_x3, _x4) {
+  return function getClasses(_x3, _x4) {
     return _ref2.apply(this, arguments);
   };
 }();
 
-exports.getCategory = getCategory;
+exports.getClasses = getClasses;
 
-var getOneCategory = /*#__PURE__*/function () {
+var getOneClass = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res) {
     var id;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
@@ -146,36 +170,27 @@ var getOneCategory = /*#__PURE__*/function () {
             _context3.prev = 0;
             id = req.params.id;
             _context3.next = 4;
-            return categoryRoutes.findOne({
-              // attributes: ["categoryName"],
-              order: [["categoryName", "ASC"]],
+            return classModel.findAll({
+              order: [["catOneName", "ASC"]],
               include: [{
-                model: _models["default"].User,
-                as: "Users" // attributes: ["firstName", "lastName", "email"],
-
-              }, {
-                model: _models["default"].Class,
-                as: "Classes",
-                // attributes: ["catOneName"],
-                order: [["catOneName", "ASC"]],
-                include: [{
-                  model: _models["default"].Product,
-                  as: "Products",
-                  // attributes: ["productName", "price", "productImage"],
-                  order: [["productName", "ASC"]]
-                }]
+                model: _models["default"].Product,
+                as: "Products",
+                order: [["productName", "ASC"]]
               }],
               where: {
-                categoryName: id
+                catOneName: id
               }
             }).then(function (data) {
               return res.status(200).send({
-                message: "Fetched all categories",
-                data: data
+                message: "Fetched all class elements",
+                body: {
+                  data: data
+                }
               });
             })["catch"](function (err) {
               return res.status(403).send({
-                message: "".concat(err)
+                message: "ERROR ",
+                err: err
               });
             });
 
@@ -198,14 +213,14 @@ var getOneCategory = /*#__PURE__*/function () {
     }, _callee3, null, [[0, 6]]);
   }));
 
-  return function getOneCategory(_x5, _x6) {
+  return function getOneClass(_x5, _x6) {
     return _ref3.apply(this, arguments);
   };
 }();
 
-exports.getOneCategory = getOneCategory;
+exports.getOneClass = getOneClass;
 
-var updateCategory = /*#__PURE__*/function () {
+var updateClass = /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
     var id;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
@@ -215,21 +230,25 @@ var updateCategory = /*#__PURE__*/function () {
             _context4.prev = 0;
             id = req.params.id;
             _context4.next = 4;
-            return categoryRoutes.update(req.body, {
-              categoryName: req.body.categoryName,
-              userId: req.body.userId,
+            return classModel.update(req.body, {
               where: {
-                id: categoryId
+                catOneName: id
               }
             }).then(function (data) {
-              return res.status(200).send({
-                message: "Category updated successfully!"
-              });
+              if (data == 1) {
+                return res.status(200).send({
+                  message: "Updated class 1 successfully!"
+                });
+              } else {
+                return res.status(400).send({
+                  message: "Cannot update class 1 ".concat(id, "!"),
+                  data: data
+                });
+              }
             })["catch"](function (err) {
               return res.status(403).send({
-                message: "An error occured while updated category!"
+                message: "error while trying to update!"
               });
-              console.log(err);
             });
 
           case 4:
@@ -251,14 +270,14 @@ var updateCategory = /*#__PURE__*/function () {
     }, _callee4, null, [[0, 6]]);
   }));
 
-  return function updateCategory(_x7, _x8) {
+  return function updateClass(_x7, _x8) {
     return _ref4.apply(this, arguments);
   };
 }();
 
-exports.updateCategory = updateCategory;
+exports.updateClass = updateClass;
 
-var deleteCategory = /*#__PURE__*/function () {
+var deleteClasses = /*#__PURE__*/function () {
   var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res) {
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) {
@@ -266,21 +285,21 @@ var deleteCategory = /*#__PURE__*/function () {
           case 0:
             _context5.prev = 0;
             _context5.next = 3;
-            return categoryRoutes.destroy({
+            return classModel.destroy({
               where: {},
               truncate: false
             }).then(function (data) {
               if (data === 1) {
                 return res.status(200).send({
-                  message: "Deleted ".concat(data, " category successfully!")
+                  message: "Deleted ".concat(data, " class one element successfully!")
                 });
               } else {
                 return res.status(200).send({
-                  message: "Deleted ".concat(data, " categories successfully!")
+                  message: "Deleted ".concat(data, " class one elements successfully!")
                 });
               }
             })["catch"](function (err) {
-              return res.status(403).send({
+              return res.status(400).send({
                 message: "An error occured while deleting category!"
               });
             });
@@ -304,9 +323,67 @@ var deleteCategory = /*#__PURE__*/function () {
     }, _callee5, null, [[0, 5]]);
   }));
 
-  return function deleteCategory(_x9, _x10) {
+  return function deleteClasses(_x9, _x10) {
     return _ref5.apply(this, arguments);
   };
 }();
 
-exports.deleteCategory = deleteCategory;
+exports.deleteClasses = deleteClasses;
+
+var deleteOneClass = /*#__PURE__*/function () {
+  var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req, res) {
+    var id;
+    return _regenerator["default"].wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.prev = 0;
+            id = req.params.id;
+            _context6.next = 4;
+            return classModel.destroy({
+              where: {
+                catOneName: id
+              },
+              truncate: false
+            }).then(function (data) {
+              if (data === 1) {
+                return res.status(200).send({
+                  message: "Deleted ".concat(data, " class one element successfully!")
+                });
+              } else {
+                return res.status(200).send({
+                  message: "Deleted ".concat(data, " class one elements successfully!")
+                });
+              }
+            })["catch"](function (err) {
+              return res.status(400).send({
+                message: "An error occured while deleting category!",
+                err: err
+              });
+            });
+
+          case 4:
+            _context6.next = 9;
+            break;
+
+          case 6:
+            _context6.prev = 6;
+            _context6.t0 = _context6["catch"](0);
+            return _context6.abrupt("return", res.status(500).send({
+              message: "".concat(_context6.t0)
+            }));
+
+          case 9:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6, null, [[0, 6]]);
+  }));
+
+  return function deleteOneClass(_x11, _x12) {
+    return _ref6.apply(this, arguments);
+  };
+}();
+
+exports.deleteOneClass = deleteOneClass;

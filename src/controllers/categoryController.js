@@ -38,21 +38,36 @@ const createCategory = async (req, res) => {
 const getCategory = async (req, res) => {
   try {
     await categoryRoutes
-      .findAll({
+      .findAndCountAll({
         order: [["categoryName", "ASC"]],
         include: [
           {
-            model: model.subCategoryOne,
-            as: "subCategoryOnes",
-            attributes: ["catOneName"],
+            model: model.User,
+            as: "Users",
+            // attributes: ["firstName", "lastName", "email"],
+          },
+          {
+            model: model.Class,
+            as: "Classes",
+            // attributes: ["catOneName"],
             order: [["catOneName", "ASC"]],
+            include: [
+              {
+                model: model.Product,
+                as: "Products",
+                // attributes: ["productName", "price", "productImage"],
+                order: [["productName", "ASC"]],
+              },
+            ],
           },
         ],
       })
       .then((data) => {
+        console.log(data);
         return res.status(200).send({
           message: "Fetched all categories",
-          data,
+          body: data.rows,
+          count: data.count,
         });
       })
       .catch((err) => {
@@ -73,36 +88,26 @@ const getOneCategory = async (req, res) => {
 
     await categoryRoutes
       .findOne({
-        attributes: ["categoryName"],
+        // attributes: ["categoryName"],
         order: [["categoryName", "ASC"]],
 
         include: [
           {
             model: model.User,
             as: "Users",
-            attributes: ["firstName", "lastName", "email"],
+            // attributes: ["firstName", "lastName", "email"],
           },
           {
-            model: model.subCategoryOne,
-            as: "subCategoryOnes",
-            attributes: ["catOneName"],
+            model: model.Class,
+            as: "Classes",
+            // attributes: ["catOneName"],
             order: [["catOneName", "ASC"]],
-
             include: [
               {
-                model: model.subCategoryTwo,
-                as: "subCategoryTwos",
-                attributes: ["catTwoName"],
-                order: [["catTwoName", "ASC"]],
-
-                include: [
-                  {
-                    model: model.Product,
-                    as: "Products",
-                    attributes: ["productName", "price", "productImage"],
-                    order: [["productName", "ASC"]],
-                  },
-                ],
+                model: model.Product,
+                as: "Products",
+                // attributes: ["productName", "price", "productImage"],
+                order: [["productName", "ASC"]],
               },
             ],
           },

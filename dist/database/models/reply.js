@@ -20,75 +20,61 @@ var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var Product = /*#__PURE__*/function (_Model) {
-    (0, _inherits2["default"])(Product, _Model);
+  var Reply = /*#__PURE__*/function (_Model) {
+    (0, _inherits2["default"])(Reply, _Model);
 
-    var _super = _createSuper(Product);
+    var _super = _createSuper(Reply);
 
-    function Product() {
-      (0, _classCallCheck2["default"])(this, Product);
+    function Reply() {
+      (0, _classCallCheck2["default"])(this, Reply);
       return _super.apply(this, arguments);
     }
 
-    (0, _createClass2["default"])(Product, null, [{
+    (0, _createClass2["default"])(Reply, null, [{
       key: "associate",
       value: function associate(models) {
-        this.belongsTo(models.Class, {
+        this.belongsTo(models.User, {
           foreignKey: {
-            name: "classId",
+            name: "userId",
             allowNull: true
           },
           onDelete: "CASCADE",
-          as: "Classes"
+          as: "Users"
         });
-        this.hasMany(models.ProductComment, {
-          foreignKey: "productId",
-          as: "ProductComments",
-          onDelete: "CASCADE"
+        this.belongsTo(models.UserComment, {
+          foreignKey: {
+            name: "commentId",
+            allowNull: true
+          },
+          onDelete: "CASCADE",
+          as: "UserComments"
         });
       }
     }]);
-    return Product;
+    return Reply;
   }(Model);
 
-  Product.init({
-    productId: {
+  Reply.init({
+    replyId: {
       type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
+      defaultValue: DataTypes.UUIDV4
+    },
+    userId: {
+      type: DataTypes.UUID,
       allowNull: false
     },
-    classId: {
-      allowNull: true,
-      type: DataTypes.UUID
+    commentId: {
+      type: DataTypes.UUID,
+      allowNull: false
     },
-    productName: {
-      type: DataTypes.STRING
-    },
-    price: {
-      type: DataTypes.INTEGER
-    },
-    description: {
-      type: DataTypes.TEXT
-    },
-    size: {
-      type: DataTypes.STRING
-    },
-    productImage: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    reply: {
+      type: DataTypes.TEXT,
+      allowNull: false
     }
   }, {
     sequelize: sequelize,
-    modelName: "Product"
+    modelName: "Reply"
   });
-  return Product;
+  return Reply;
 };

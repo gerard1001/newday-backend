@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createArticle = void 0;
+exports.getArticles = exports.createArticle = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -89,3 +89,54 @@ var createArticle = /*#__PURE__*/function () {
 }();
 
 exports.createArticle = createArticle;
+
+var getArticles = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res) {
+    return _regenerator["default"].wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return articleModel.findAll({
+              include: [{
+                model: _models["default"].User,
+                as: "Users",
+                attributes: ["email"]
+              }]
+            }).then(function (data) {
+              return res.send({
+                message: "success",
+                data: data
+              });
+            })["catch"](function (err) {
+              return res.status(500).send({
+                message: "".concat(err)
+              });
+            });
+
+          case 3:
+            _context2.next = 8;
+            break;
+
+          case 5:
+            _context2.prev = 5;
+            _context2.t0 = _context2["catch"](0);
+            return _context2.abrupt("return", res.status(500).send({
+              message: "".concat(_context2.t0)
+            }));
+
+          case 8:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 5]]);
+  }));
+
+  return function getArticles(_x3, _x4) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.getArticles = getArticles;

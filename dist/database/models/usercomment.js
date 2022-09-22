@@ -49,6 +49,11 @@ module.exports = function (sequelize, DataTypes) {
           onDelete: "CASCADE",
           as: "UserArticles"
         });
+        this.hasMany(models.Reply, {
+          foreignKey: "commentId",
+          as: "Replies",
+          onDelete: "CASCADE"
+        });
       }
     }]);
     return UserComment;

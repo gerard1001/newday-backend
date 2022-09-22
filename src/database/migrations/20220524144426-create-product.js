@@ -8,14 +8,14 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
       },
-      catTwoId: {
+      classId: {
         allowNull: true,
         type: Sequelize.UUID,
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
         references: {
-          model: "subCategoryTwos",
-          key: "catTwoId",
+          model: "Classes",
+          key: "classId",
         },
       },
       productName: {

@@ -33,16 +33,11 @@ module.exports = function (sequelize, DataTypes) {
     (0, _createClass2["default"])(Category, null, [{
       key: "associate",
       value: function associate(models) {
-        this.hasMany(models.subCategoryOne, {
+        this.hasMany(models.Class, {
           foreignKey: "categoryId",
-          as: "subCategoryOnes",
+          as: "Classes",
           onDelete: "CASCADE"
-        }); // this.hasMany(models.User, {
-        // foreignKey: 'categoryId',
-        // as: 'Users',
-        // onDelete: 'SET NULL'
-        // })
-
+        });
         this.belongsToMany(models.User, {
           foreignKey: "categoryId",
           through: "User_Category"

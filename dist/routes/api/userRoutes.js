@@ -19,7 +19,7 @@ var router = _express["default"].Router();
 
 router.post("/register", _multer["default"].single("picture"), _userController.registerUser); // router.post("/", createProfile);
 
-router.get("/", _userController.getUser);
+router.get("/", _userController.getUsers);
 router.patch("/admin-update/:id", _userMiddleware.Auth, _userController.updateUser); //This update option will have an option to change the role. Only performed by the admin.
 
 router.patch("/:id", _userMiddleware.updateAuth, _userController.updateUser); //This will allow the user to update their information, exept their role.

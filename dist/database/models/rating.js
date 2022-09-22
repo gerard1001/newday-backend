@@ -20,75 +20,34 @@ var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var Product = /*#__PURE__*/function (_Model) {
-    (0, _inherits2["default"])(Product, _Model);
+  var Rating = /*#__PURE__*/function (_Model) {
+    (0, _inherits2["default"])(Rating, _Model);
 
-    var _super = _createSuper(Product);
+    var _super = _createSuper(Rating);
 
-    function Product() {
-      (0, _classCallCheck2["default"])(this, Product);
+    function Rating() {
+      (0, _classCallCheck2["default"])(this, Rating);
       return _super.apply(this, arguments);
     }
 
-    (0, _createClass2["default"])(Product, null, [{
+    (0, _createClass2["default"])(Rating, null, [{
       key: "associate",
-      value: function associate(models) {
-        this.belongsTo(models.Class, {
-          foreignKey: {
-            name: "classId",
-            allowNull: true
-          },
-          onDelete: "CASCADE",
-          as: "Classes"
-        });
-        this.hasMany(models.ProductComment, {
-          foreignKey: "productId",
-          as: "ProductComments",
-          onDelete: "CASCADE"
-        });
-      }
+      value: function associate(models) {}
     }]);
-    return Product;
+    return Rating;
   }(Model);
 
-  Product.init({
-    productId: {
+  Rating.init({
+    ratingId: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
-    classId: {
-      allowNull: true,
-      type: DataTypes.UUID
-    },
-    productName: {
-      type: DataTypes.STRING
-    },
-    price: {
-      type: DataTypes.INTEGER
-    },
-    description: {
-      type: DataTypes.TEXT
-    },
-    size: {
-      type: DataTypes.STRING
-    },
-    productImage: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    }
+    rating: DataTypes.DECIMAL(2, 1)
   }, {
     sequelize: sequelize,
-    modelName: "Product"
+    modelName: "Rating"
   });
-  return Product;
+  return Rating;
 };

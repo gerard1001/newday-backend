@@ -17,7 +17,7 @@ const reviewModel = model.Review;
 
 const registerUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     await userModel
       .findOne({
@@ -47,8 +47,11 @@ const registerUser = async (req, res) => {
             .catch((err) => {
               return res.status(400).send({ message: "error1", err });
             });
-
-          const token = generateToken({ id: createdUser.userId }, "1d");
+          console.log("````````++++++++++`````", createdUser.userId);
+          const token = generateToken({ id: createdUser.userId }, "30d");
+          console.log("++++++++=====USER_ID=====++++++++++++", token);
+          const dcdtkn = decodeToken(token);
+          console.log("++++++++=====USER_ID=====++++++++++++", dcdtkn);
           const gender = req.body.gender;
 
           if (req.file) {
@@ -86,7 +89,7 @@ const registerUser = async (req, res) => {
             })
             .then((data) => {
               const message = `
-        <h2>Account creation successful.</h2>
+        <h2>Congratulations ${firstName} ${lastName}! your account creation was successful.</h2>
         <p>Copy the following token::: <em>${token}</em></p>
         `;
               sendEmail(message, createdUser.email);
@@ -115,14 +118,24 @@ const verifyUser = async (req, res) => {
     const userInfo = decodeToken(token);
     const userId = userInfo.id;
 
+    console.log("````````++++++++++`````", userInfo);
+
     const user = await userModel.findOne({ where: { userId } });
     await user.update({ userVerified: true }, { where: { id: userId } });
-    return res.status(200).send({
-      message: "Email verification successful",
-    });
+    return res
+      .status(200)
+      .send({
+        message: "Email verification successful",
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.send({
+          message: `${err}`,
+        });
+      });
   } catch (error) {
     return res.status(500).send({
-      message: `${error}`,
+      message: "Error",
     });
   }
 };
@@ -175,12 +188,93 @@ const subscribe = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
+    const pageAsNbr = Number.parseInt(req.query.page);
+    const sizeASNbr = Number.parseInt(req.query.size);
+
+    let page = 0;
+
+    if (!Number.isNaN(pageAsNbr) && pageAsNbr > 0) {
+      page = pageAsNbr;
+    }
+
+    let size = 20;
+
+    if (!Number.isNaN(sizeASNbr) && sizeASNbr > 0 && size < 100) {
+      size = sizeASNbr;
+    }
+
     await userModel
-      .findAll({ order: [["roleId", "ASC"]] })
+      .findAndCountAll({
+        limit: size,
+        offset: page * size,
+        order: [["roleId", "ASC"]],
+        include: [
+          {
+            model: model.Profile,
+            as: "Profiles",
+            include: [
+              {
+                model: model.Address,
+                as: "Addresses",
+              },
+            ],
+          },
+          {
+            model: model.Category,
+            as: "Categories",
+          },
+          {
+            model: model.ProductComment,
+            as: "ProductComments",
+            attributes: ["comment"],
+            include: [
+              {
+                model: model.Product,
+                as: "Products",
+                attributes: ["productName"],
+              },
+            ],
+          },
+          {
+            model: model.UserArticle,
+            as: "UserArticles",
+            attributes: ["article", "userArticleId"],
+            include: [
+              {
+                model: model.UserComment,
+                as: "UserComments",
+                attributes: ["comment"],
+                include: [
+                  {
+                    model: model.User,
+                    as: "Users",
+                    attributes: ["email"],
+                  },
+                ],
+                include: [
+                  {
+                    model: model.Reply,
+                    as: "Replies",
+                    attributes: ["reply"],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            model: model.Review,
+            as: "Reviews",
+            attributes: ["review", "rate"],
+          },
+        ],
+      })
       .then((data) => {
         return res.status(200).send({
           message: "Fetched all Users",
-          body: { data },
+          body: data.rows,
+          totalPages: Math.ceil(data.count / size),
+          currentPage: page + 1,
+          count: data.count,
         });
       })
       .catch((err) => {
@@ -491,7 +585,7 @@ const createReview = async (req, res) => {
         message: "You can't rate beyond 5.0 please",
       });
     }
-    if (rate <= 1.0) {
+    if (rate < 1.0) {
       return res.send({
         message: "You can't rate below 1.0 please",
       });
@@ -501,7 +595,7 @@ const createReview = async (req, res) => {
       return res.status(500).send({
         message: "err",
       });
-    }); //
+    });
     await reviewModel
       .create({
         userId: id,
@@ -530,17 +624,28 @@ const createReview = async (req, res) => {
 const getReviews = async (req, res) => {
   try {
     await reviewModel
-      .findAll({
+      .findAndCountAll({
         include: [
           {
             model: model.User,
             as: "Users",
-            attributes: ["email"],
+            include: [
+              {
+                model: model.Profile,
+                as: "Profiles",
+                include: [
+                  {
+                    model: model.Address,
+                    as: "Addresses",
+                  },
+                ],
+              },
+            ],
           },
         ],
       })
       .then((data) => {
-        const dt = data.map((iti) => {
+        const dt = data.rows.map((iti) => {
           return iti.rate;
         });
         console.log(dt.length);

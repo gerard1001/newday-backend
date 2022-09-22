@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("subCategoryOnes", {
-      catOneId: {
+    await queryInterface.createTable("Classes", {
+      classId: {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
@@ -33,6 +33,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('subCategoryOnes');
-  }
+    await queryInterface.dropTable("Classes");
+  },
 };

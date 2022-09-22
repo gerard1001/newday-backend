@@ -20,62 +20,55 @@ var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var Product = /*#__PURE__*/function (_Model) {
-    (0, _inherits2["default"])(Product, _Model);
+  var Class = /*#__PURE__*/function (_Model) {
+    (0, _inherits2["default"])(Class, _Model);
 
-    var _super = _createSuper(Product);
+    var _super = _createSuper(Class);
 
-    function Product() {
-      (0, _classCallCheck2["default"])(this, Product);
+    function Class() {
+      (0, _classCallCheck2["default"])(this, Class);
       return _super.apply(this, arguments);
     }
 
-    (0, _createClass2["default"])(Product, null, [{
+    (0, _createClass2["default"])(Class, null, [{
       key: "associate",
       value: function associate(models) {
-        this.belongsTo(models.Class, {
+        // this.hasMany(models.subCategoryTwo, {
+        //   foreignKey: 'classId',
+        //   as: 'subCategoryTwos',
+        //   onDelete: 'CASCADE'
+        // }),
+        this.hasMany(models.Product, {
+          foreignKey: "classId",
+          as: "Products",
+          onDelete: "CASCADE"
+        });
+        this.belongsTo(models.Category, {
           foreignKey: {
-            name: "classId",
+            name: "categoryId",
             allowNull: true
           },
           onDelete: "CASCADE",
-          as: "Classes"
-        });
-        this.hasMany(models.ProductComment, {
-          foreignKey: "productId",
-          as: "ProductComments",
-          onDelete: "CASCADE"
+          as: "Categories"
         });
       }
     }]);
-    return Product;
+    return Class;
   }(Model);
 
-  Product.init({
-    productId: {
+  Class.init({
+    classId: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
-    classId: {
+    categoryId: {
       allowNull: true,
-      type: DataTypes.UUID
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
-    productName: {
-      type: DataTypes.STRING
-    },
-    price: {
-      type: DataTypes.INTEGER
-    },
-    description: {
-      type: DataTypes.TEXT
-    },
-    size: {
-      type: DataTypes.STRING
-    },
-    productImage: {
-      allowNull: true,
+    catOneName: {
       type: DataTypes.STRING
     },
     createdAt: {
@@ -88,7 +81,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize: sequelize,
-    modelName: "Product"
+    modelName: "Class"
   });
-  return Product;
+  return Class;
 };

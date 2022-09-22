@@ -18,5 +18,6 @@ var _articleController = require("../../controllers/articleController");
 var router = _express["default"].Router();
 
 router.post("/", _multer["default"].single("image"), _clientMiddleware["default"], _articleController.createArticle);
+router.get("/", _articleController.getArticles);
 var _default = router;
 exports["default"] = _default;

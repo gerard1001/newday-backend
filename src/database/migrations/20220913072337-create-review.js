@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
       },
       rate: {
-        type: Sequelize.DECIMAL(2, 1),
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       createdAt: {

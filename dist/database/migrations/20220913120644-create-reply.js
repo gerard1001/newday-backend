@@ -14,38 +14,32 @@ module.exports = {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return queryInterface.createTable("Products", {
-                productId: {
+              return queryInterface.createTable("Replies", {
+                replyId: {
                   type: Sequelize.UUID,
                   primaryKey: true,
-                  defaultValue: Sequelize.UUIDV4,
-                  allowNull: false
+                  defaultValue: Sequelize.UUIDV4
                 },
-                classId: {
-                  allowNull: true,
+                userId: {
                   type: Sequelize.UUID,
                   onDelete: "CASCADE",
                   onUpdate: "CASCADE",
                   references: {
-                    model: "Classes",
-                    key: "classId"
+                    model: "Users",
+                    key: "userId"
                   }
                 },
-                productName: {
-                  type: Sequelize.STRING
+                commentId: {
+                  type: Sequelize.UUID,
+                  onDelete: "CASCADE",
+                  onUpdate: "CASCADE",
+                  references: {
+                    model: "UserComments",
+                    key: "commentId"
+                  }
                 },
-                price: {
-                  type: Sequelize.INTEGER
-                },
-                description: {
+                reply: {
                   type: Sequelize.TEXT
-                },
-                size: {
-                  type: Sequelize.STRING
-                },
-                productImage: {
-                  type: Sequelize.STRING,
-                  defaultValue: "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png"
                 },
                 createdAt: {
                   allowNull: false,
@@ -72,7 +66,7 @@ module.exports = {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return queryInterface.dropTable("Products");
+              return queryInterface.dropTable("Replies");
 
             case 2:
             case "end":

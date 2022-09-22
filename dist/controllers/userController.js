@@ -5,9 +5,11 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.verifyUser = exports.userLogin = exports.updateUser = exports.subscribeMsg = exports.subscribe = exports.resetPwd = exports.resetLink = exports.registerUser = exports.getUser = exports.getReviews = exports.getOneUser = exports.deleteUser = exports.deleteReviews = exports.deleteOneUser = exports.createReview = void 0;
+exports.verifyUser = exports.userLogin = exports.updateUser = exports.subscribeMsg = exports.subscribe = exports.resetPwd = exports.resetLink = exports.registerUser = exports.getUsers = exports.getReviews = exports.getOneUser = exports.deleteUser = exports.deleteReviews = exports.deleteOneUser = exports.createReview = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
@@ -342,22 +344,82 @@ var subscribe = /*#__PURE__*/function () {
 
 exports.subscribe = subscribe;
 
-var getUser = /*#__PURE__*/function () {
+var getUsers = /*#__PURE__*/function () {
   var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req, res) {
+    var pageAsNbr, sizeASNbr, page, size;
     return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
             _context6.prev = 0;
-            _context6.next = 3;
-            return userModel.findAll({
-              order: [["roleId", "ASC"]]
+            pageAsNbr = Number.parseInt(req.query.page);
+            sizeASNbr = Number.parseInt(req.query.size);
+            page = 0;
+
+            if (!Number.isNaN(pageAsNbr) && pageAsNbr > 0) {
+              page = pageAsNbr;
+            }
+
+            size = 20;
+
+            if (!Number.isNaN(sizeASNbr) && sizeASNbr > 0 && size < 100) {
+              size = sizeASNbr;
+            }
+
+            _context6.next = 9;
+            return userModel.findAndCountAll({
+              limit: size,
+              offset: page * size,
+              order: [["roleId", "ASC"]],
+              include: [{
+                model: _models["default"].Profile,
+                as: "Profiles",
+                include: [{
+                  model: _models["default"].Address,
+                  as: "Addresses"
+                }]
+              }, {
+                model: _models["default"].Category,
+                as: "Categories"
+              }, {
+                model: _models["default"].ProductComment,
+                as: "ProductComments",
+                attributes: ["comment"],
+                include: [{
+                  model: _models["default"].Product,
+                  as: "Products",
+                  attributes: ["productName"]
+                }]
+              }, {
+                model: _models["default"].UserArticle,
+                as: "UserArticles",
+                attributes: ["article", "userArticleId"],
+                include: [(0, _defineProperty2["default"])({
+                  model: _models["default"].UserComment,
+                  as: "UserComments",
+                  attributes: ["comment"],
+                  include: [{
+                    model: _models["default"].User,
+                    as: "Users",
+                    attributes: ["email"]
+                  }]
+                }, "include", [{
+                  model: _models["default"].Reply,
+                  as: "Replies",
+                  attributes: ["reply"]
+                }])]
+              }, {
+                model: _models["default"].Review,
+                as: "Reviews",
+                attributes: ["review", "rate"]
+              }]
             }).then(function (data) {
               return res.status(200).send({
                 message: "Fetched all Users",
-                body: {
-                  data: data
-                }
+                body: data.rows,
+                totalPages: Math.ceil(data.count / size),
+                currentPage: page + 1,
+                count: data.count
               });
             })["catch"](function (err) {
               return res.status(400).send({
@@ -366,34 +428,34 @@ var getUser = /*#__PURE__*/function () {
               });
             });
 
-          case 3:
-            _context6.next = 8;
+          case 9:
+            _context6.next = 14;
             break;
 
-          case 5:
-            _context6.prev = 5;
+          case 11:
+            _context6.prev = 11;
             _context6.t0 = _context6["catch"](0);
             return _context6.abrupt("return", res.status(500).send({
               message: "".concat(_context6.t0)
             }));
 
-          case 8:
+          case 14:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee6, null, [[0, 5]]);
+    }, _callee6, null, [[0, 11]]);
   }));
 
-  return function getUser(_x10, _x11) {
+  return function getUsers(_x10, _x11) {
     return _ref6.apply(this, arguments);
   };
 }();
 
-exports.getUser = getUser;
+exports.getUsers = getUsers;
 
 var getOneUser = /*#__PURE__*/function () {
-  var _ref7 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(req, res) {
+  var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(req, res) {
     var id;
     return _regenerator["default"].wrap(function _callee7$(_context7) {
       while (1) {
@@ -429,11 +491,20 @@ var getOneUser = /*#__PURE__*/function () {
                 model: _models["default"].UserArticle,
                 as: "UserArticles",
                 attributes: ["article", "userArticleId"],
-                include: [{
+                include: [(0, _defineProperty2["default"])({
                   model: _models["default"].UserComment,
                   as: "UserComments",
-                  attributes: ["comment"]
-                }]
+                  attributes: ["comment"],
+                  include: [{
+                    model: _models["default"].User,
+                    as: "Users",
+                    attributes: ["email"]
+                  }]
+                }, "include", [{
+                  model: _models["default"].Reply,
+                  as: "Replies",
+                  attributes: ["reply"]
+                }])]
               }, {
                 model: _models["default"].Review,
                 as: "Reviews",
@@ -467,14 +538,14 @@ var getOneUser = /*#__PURE__*/function () {
   }));
 
   return function getOneUser(_x12, _x13) {
-    return _ref7.apply(this, arguments);
+    return _ref8.apply(this, arguments);
   };
 }();
 
 exports.getOneUser = getOneUser;
 
 var updateUser = /*#__PURE__*/function () {
-  var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(req, res) {
+  var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(req, res) {
     var id;
     return _regenerator["default"].wrap(function _callee8$(_context8) {
       while (1) {
@@ -521,14 +592,14 @@ var updateUser = /*#__PURE__*/function () {
   }));
 
   return function updateUser(_x14, _x15) {
-    return _ref8.apply(this, arguments);
+    return _ref10.apply(this, arguments);
   };
 }();
 
 exports.updateUser = updateUser;
 
 var deleteUser = /*#__PURE__*/function () {
-  var _ref9 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(req, res) {
+  var _ref11 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(req, res) {
     return _regenerator["default"].wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
@@ -568,14 +639,14 @@ var deleteUser = /*#__PURE__*/function () {
   }));
 
   return function deleteUser(_x16, _x17) {
-    return _ref9.apply(this, arguments);
+    return _ref11.apply(this, arguments);
   };
 }();
 
 exports.deleteUser = deleteUser;
 
 var deleteOneUser = /*#__PURE__*/function () {
-  var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(req, res) {
+  var _ref12 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(req, res) {
     var id;
     return _regenerator["default"].wrap(function _callee10$(_context10) {
       while (1) {
@@ -624,14 +695,14 @@ var deleteOneUser = /*#__PURE__*/function () {
   }));
 
   return function deleteOneUser(_x18, _x19) {
-    return _ref10.apply(this, arguments);
+    return _ref12.apply(this, arguments);
   };
 }();
 
 exports.deleteOneUser = deleteOneUser;
 
 var userLogin = /*#__PURE__*/function () {
-  var _ref11 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(req, res) {
+  var _ref13 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(req, res) {
     var user, userExist, verified, validation, token;
     return _regenerator["default"].wrap(function _callee11$(_context11) {
       while (1) {
@@ -714,14 +785,14 @@ var userLogin = /*#__PURE__*/function () {
   }));
 
   return function userLogin(_x20, _x21) {
-    return _ref11.apply(this, arguments);
+    return _ref13.apply(this, arguments);
   };
 }();
 
 exports.userLogin = userLogin;
 
 var resetLink = /*#__PURE__*/function () {
-  var _ref12 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(req, res) {
+  var _ref14 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(req, res) {
     var userExist, token, message;
     return _regenerator["default"].wrap(function _callee12$(_context12) {
       while (1) {
@@ -775,14 +846,14 @@ var resetLink = /*#__PURE__*/function () {
   }));
 
   return function resetLink(_x22, _x23) {
-    return _ref12.apply(this, arguments);
+    return _ref14.apply(this, arguments);
   };
 }();
 
 exports.resetLink = resetLink;
 
 var resetPwd = /*#__PURE__*/function () {
-  var _ref13 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(req, res) {
+  var _ref15 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(req, res) {
     var password, confirm_pass, token, userId;
     return _regenerator["default"].wrap(function _callee13$(_context13) {
       while (1) {
@@ -847,14 +918,14 @@ var resetPwd = /*#__PURE__*/function () {
   }));
 
   return function resetPwd(_x24, _x25) {
-    return _ref13.apply(this, arguments);
+    return _ref15.apply(this, arguments);
   };
 }();
 
 exports.resetPwd = resetPwd;
 
 var createReview = /*#__PURE__*/function () {
-  var _ref14 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(req, res) {
+  var _ref16 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(req, res) {
     var token, decode, id, rate;
     return _regenerator["default"].wrap(function _callee14$(_context14) {
       while (1) {
@@ -864,7 +935,7 @@ var createReview = /*#__PURE__*/function () {
             token = (0, _checkToken["default"])(req);
             decode = (0, _userHelper.decodeToken)(token);
             id = decode.userId;
-            console.log(decode);
+            console.log(id);
             rate = req.body.rate;
 
             if (!(rate > 5.0)) {
@@ -888,6 +959,18 @@ var createReview = /*#__PURE__*/function () {
 
           case 10:
             _context14.next = 12;
+            return reviewModel.destroy({
+              where: {
+                userId: id
+              }
+            })["catch"](function (err) {
+              return res.status(500).send({
+                message: "err"
+              });
+            });
+
+          case 12:
+            _context14.next = 14;
             return reviewModel.create({
               userId: id,
               review: req.body.review,
@@ -904,34 +987,34 @@ var createReview = /*#__PURE__*/function () {
               });
             });
 
-          case 12:
-            _context14.next = 17;
+          case 14:
+            _context14.next = 19;
             break;
 
-          case 14:
-            _context14.prev = 14;
+          case 16:
+            _context14.prev = 16;
             _context14.t0 = _context14["catch"](0);
             return _context14.abrupt("return", res.status(500).send({
               message: "".concat(_context14.t0)
             }));
 
-          case 17:
+          case 19:
           case "end":
             return _context14.stop();
         }
       }
-    }, _callee14, null, [[0, 14]]);
+    }, _callee14, null, [[0, 16]]);
   }));
 
   return function createReview(_x26, _x27) {
-    return _ref14.apply(this, arguments);
+    return _ref16.apply(this, arguments);
   };
 }();
 
 exports.createReview = createReview;
 
 var getReviews = /*#__PURE__*/function () {
-  var _ref15 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(req, res) {
+  var _ref17 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(req, res) {
     return _regenerator["default"].wrap(function _callee15$(_context15) {
       while (1) {
         switch (_context15.prev = _context15.next) {
@@ -945,13 +1028,17 @@ var getReviews = /*#__PURE__*/function () {
                 attributes: ["email"]
               }]
             }).then(function (data) {
+              var dt = data.map(function (iti) {
+                return iti.rate;
+              });
+              console.log(dt.length);
               return res.status(200).send({
                 message: "success",
                 data: data
               });
             })["catch"](function (err) {
               return res.status(500).send({
-                message: "err"
+                message: "".concat(err)
               });
             });
 
@@ -975,14 +1062,14 @@ var getReviews = /*#__PURE__*/function () {
   }));
 
   return function getReviews(_x28, _x29) {
-    return _ref15.apply(this, arguments);
+    return _ref17.apply(this, arguments);
   };
 }();
 
 exports.getReviews = getReviews;
 
 var deleteReviews = /*#__PURE__*/function () {
-  var _ref16 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee16(req, res) {
+  var _ref18 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee16(req, res) {
     return _regenerator["default"].wrap(function _callee16$(_context16) {
       while (1) {
         switch (_context16.prev = _context16.next) {
@@ -1020,7 +1107,7 @@ var deleteReviews = /*#__PURE__*/function () {
   }));
 
   return function deleteReviews(_x30, _x31) {
-    return _ref16.apply(this, arguments);
+    return _ref18.apply(this, arguments);
   };
 }();
 

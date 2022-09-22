@@ -1,49 +1,44 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Product extends Model {
+  class Class extends Model {
     static associate(models) {
-      this.belongsTo(models.Class, {
+      // this.hasMany(models.subCategoryTwo, {
+      //   foreignKey: 'classId',
+      //   as: 'subCategoryTwos',
+      //   onDelete: 'CASCADE'
+      // }),
+
+      this.hasMany(models.Product, {
+        foreignKey: "classId",
+        as: "Products",
+        onDelete: "CASCADE",
+      });
+
+      this.belongsTo(models.Category, {
         foreignKey: {
-          name: "classId",
+          name: "categoryId",
           allowNull: true,
         },
         onDelete: "CASCADE",
-        as: "Classes",
-      });
-      this.hasMany(models.ProductComment, {
-        foreignKey: "productId",
-        as: "ProductComments",
-        onDelete: "CASCADE",
+        as: "Categories",
       });
     }
   }
-  Product.init(
+  Class.init(
     {
-      productId: {
+      classId: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
       },
-      classId: {
+      categoryId: {
         allowNull: true,
         type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
       },
-      productName: {
-        type: DataTypes.STRING,
-      },
-      price: {
-        type: DataTypes.INTEGER,
-      },
-      description: {
-        type: DataTypes.TEXT,
-      },
-      size: {
-        type: DataTypes.STRING,
-      },
-      productImage: {
-        allowNull: true,
+      catOneName: {
         type: DataTypes.STRING,
       },
       createdAt: {
@@ -57,8 +52,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Product",
+      modelName: "Class",
     }
   );
-  return Product;
+  return Class;
 };

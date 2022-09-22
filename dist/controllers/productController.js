@@ -16,29 +16,29 @@ var _models = _interopRequireDefault(require("../database/models"));
 var _fileUpload = require("../helpers/fileUpload");
 
 var productModel = _models["default"].Product;
-var classTwoModel = _models["default"].subCategoryTwo;
+var classModel = _models["default"].Class;
 
 var createProduct = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var _req$body, productName, price, catTwoId, existCatTwo;
+    var _req$body, productName, price, classId, existCatOne;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            _req$body = req.body, productName = _req$body.productName, price = _req$body.price, catTwoId = _req$body.catTwoId;
+            _req$body = req.body, productName = _req$body.productName, price = _req$body.price, classId = _req$body.classId;
             _context.next = 4;
-            return classTwoModel.findOne({
+            return classModel.findOne({
               where: {
-                catTwoId: catTwoId
+                classId: classId
               }
             });
 
           case 4:
-            existCatTwo = _context.sent;
+            existCatOne = _context.sent;
 
-            if (existCatTwo) {
+            if (existCatOne) {
               _context.next = 7;
               break;
             }
@@ -78,7 +78,7 @@ var createProduct = /*#__PURE__*/function () {
             productModel.findOne({
               where: {
                 productName: productName,
-                catTwoId: catTwoId
+                classId: classId
               }
             }).then(function (exist) {
               if (exist) {
@@ -91,14 +91,14 @@ var createProduct = /*#__PURE__*/function () {
                   price: req.body.price,
                   description: req.body.description,
                   size: req.body.size,
-                  catTwoId: req.body.catTwoId,
+                  classId: req.body.classId,
                   productImage: req.body.productImage,
                   where: {
                     productName: req.body.productName,
                     price: req.body.price,
                     description: req.body.description,
                     size: req.body.size,
-                    catTwoId: req.body.catTwoId,
+                    classId: req.body.classId,
                     productImage: req.body.productImage
                   }
                 }).then(function (data) {
@@ -143,49 +143,73 @@ exports.createProduct = createProduct;
 
 var getProduct = /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res) {
+    var pageAsNbr, sizeASNbr, page, size;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.prev = 0;
-            _context2.next = 3;
-            return productModel.findAll({
-              // attributes: {exclude: [
-              //     "categoryId", "classOneId"
-              // ]},
+            pageAsNbr = Number.parseInt(req.query.page);
+            sizeASNbr = Number.parseInt(req.query.size);
+            page = 0;
+
+            if (!Number.isNaN(pageAsNbr) && pageAsNbr > 0) {
+              page = pageAsNbr;
+            }
+
+            size = 20;
+
+            if (!Number.isNaN(sizeASNbr) && sizeASNbr > 0 && size < 100) {
+              size = sizeASNbr;
+            }
+
+            _context2.next = 9;
+            return productModel.findAndCountAll({
+              limit: size,
+              offset: page * size,
               include: [{
                 model: _models["default"].ProductComment,
-                as: "ProductComments",
-                attributes: ["comment"]
+                as: "ProductComments" // attributes: ["comment"],
+
+              }, {
+                model: _models["default"].Class,
+                as: "Classes",
+                include: [{
+                  model: _models["default"].Category,
+                  as: "Categories"
+                }]
               }]
             }).then(function (data) {
               return res.status(200).send({
-                message: "List of all fruits available!",
-                body: {
-                  data: data
-                }
+                message: "List of all products available!",
+                body: data.rows,
+                totalPages: Math.ceil(data.count / size),
+                currentPage: page + 1,
+                count: data.count
               });
             })["catch"](function (err) {
+              console.log(err);
               return res.status(400).send(err);
             });
 
-          case 3:
-            _context2.next = 8;
+          case 9:
+            _context2.next = 15;
             break;
 
-          case 5:
-            _context2.prev = 5;
+          case 11:
+            _context2.prev = 11;
             _context2.t0 = _context2["catch"](0);
+            console.log(_context2.t0);
             return _context2.abrupt("return", res.status(500).send({
               message: "".concat(_context2.t0)
             }));
 
-          case 8:
+          case 15:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 5]]);
+    }, _callee2, null, [[0, 11]]);
   }));
 
   return function getProduct(_x3, _x4) {

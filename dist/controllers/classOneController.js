@@ -116,10 +116,9 @@ var getClassOne = /*#__PURE__*/function () {
             return classOneModel.findAll({
               order: [["catOneName", "ASC"]],
               include: [{
-                model: _models["default"].subCategoryTwo,
-                as: "subCategoryTwos",
-                attributes: ["catTwoName"],
-                order: [["catTwoName", "ASC"]]
+                model: _models["default"].Product,
+                as: "Products",
+                order: [["productName", "ASC"]]
               }]
             }).then(function (data) {
               return res.status(200).send({
@@ -174,10 +173,9 @@ var getOneClassOne = /*#__PURE__*/function () {
             return classOneModel.findAll({
               order: [["catOneName", "ASC"]],
               include: [{
-                model: _models["default"].subCategoryTwo,
-                as: "subCategoryTwos",
-                attributes: ["catTwoName"],
-                order: [["catTwoName", "ASC"]]
+                model: _models["default"].Product,
+                as: "Products",
+                order: [["productName", "ASC"]]
               }],
               where: {
                 catOneName: id

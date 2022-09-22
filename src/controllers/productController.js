@@ -2,16 +2,16 @@ import model from "../database/models";
 import { fileUpload } from "../helpers/fileUpload";
 
 const productModel = model.Product;
-const classTwoModel = model.subCategoryTwo;
+const classModel = model.Class;
 
 const createProduct = async (req, res) => {
   try {
-    const { productName, price, catTwoId } = req.body;
-    const existCatTwo = await classTwoModel.findOne({
-      where: { catTwoId },
+    const { productName, price, classId } = req.body;
+    const existCatOne = await classModel.findOne({
+      where: { classId },
     });
 
-    if (!existCatTwo) {
+    if (!existCatOne) {
       return res.status(404).send({
         message: "This class does not exist!",
       });
@@ -33,7 +33,7 @@ const createProduct = async (req, res) => {
         .findOne({
           where: {
             productName,
-            catTwoId,
+            classId,
           },
         })
         .then((exist) => {
@@ -48,14 +48,14 @@ const createProduct = async (req, res) => {
                 price: req.body.price,
                 description: req.body.description,
                 size: req.body.size,
-                catTwoId: req.body.catTwoId,
+                classId: req.body.classId,
                 productImage: req.body.productImage,
                 where: {
                   productName: req.body.productName,
                   price: req.body.price,
                   description: req.body.description,
                   size: req.body.size,
-                  catTwoId: req.body.catTwoId,
+                  classId: req.body.classId,
                   productImage: req.body.productImage,
                 },
               })
@@ -83,29 +83,85 @@ const createProduct = async (req, res) => {
 
 const getProduct = async (req, res) => {
   try {
+    const pageAsNbr = Number.parseInt(req.query.page);
+    const sizeASNbr = Number.parseInt(req.query.size);
+
+    let page = 0;
+
+    if (!Number.isNaN(pageAsNbr) && pageAsNbr > 0) {
+      page = pageAsNbr;
+    }
+
+    let size = 50;
+
+    if (!Number.isNaN(sizeASNbr) && sizeASNbr > 0 && size < 100) {
+      size = sizeASNbr;
+    }
+
     await productModel
-      .findAll({
-        // attributes: {exclude: [
-        //     "categoryId", "classOneId"
-        // ]},
+      .findAndCountAll({
+        limit: size,
+        offset: page * size,
         include: [
           {
             model: model.ProductComment,
             as: "ProductComments",
-            attributes: ["comment"],
+            // attributes: ["comment"],
+          },
+          {
+            model: model.Class,
+            as: "Classes",
+            include: [
+              {
+                model: model.Category,
+                as: "Categories",
+              },
+            ],
           },
         ],
       })
       .then((data) => {
         return res.status(200).send({
-          message: "List of all fruits available!",
+          message: "List of all products available!",
+          body: data.rows,
+          totalPages: Math.ceil(data.count / size),
+          currentPage: page + 1,
+          count: data.count,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(400).send(err);
+      });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: `${error}`,
+    });
+  }
+};
+
+const getOneProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await productModel
+      .findOne({
+        where: { productName: id },
+      })
+      .then((data) => {
+        return res.status(200).send({
+          message: "Fetched",
           body: { data },
         });
       })
       .catch((err) => {
-        return res.status(400).send(err);
+        return res.status(403).send({
+          message: "ERROR",
+          err,
+        });
       });
   } catch (error) {
+    console.log(error);
     return res.status(500).send({
       message: `${error}`,
     });
@@ -134,6 +190,7 @@ const updateProduct = async (req, res) => {
         } else {
           return res.status(400).send({
             message: `Cannot update product ${id}!`,
+            data,
           });
         }
       })
@@ -220,4 +277,5 @@ export {
   updateProduct,
   deleteOneProduct,
   deleteProduct,
+  getOneProduct,
 };
