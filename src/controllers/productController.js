@@ -2,20 +2,10 @@ import model from "../database/models";
 import { fileUpload } from "../helpers/fileUpload";
 
 const productModel = model.Product;
-const classModel = model.Class;
 
 const createProduct = async (req, res) => {
   try {
-    const { productName, price, classId } = req.body;
-    const existCatOne = await classModel.findOne({
-      where: { classId },
-    });
-
-    if (!existCatOne) {
-      return res.status(404).send({
-        message: "This class does not exist!",
-      });
-    }
+    const { productName, price } = req.body;
 
     if (req.file) {
       req.body.productImage = await fileUpload(req);
@@ -33,7 +23,6 @@ const createProduct = async (req, res) => {
         .findOne({
           where: {
             productName,
-            classId,
           },
         })
         .then((exist) => {
@@ -48,15 +37,21 @@ const createProduct = async (req, res) => {
                 price: req.body.price,
                 description: req.body.description,
                 size: req.body.size,
-                classId: req.body.classId,
                 productImage: req.body.productImage,
+                author: req.body.author,
+                ISBN: req.body.ISBN,
+                edition: req.body.edition,
+                releaseDate: req.body.releaseDate,
                 where: {
                   productName: req.body.productName,
                   price: req.body.price,
                   description: req.body.description,
                   size: req.body.size,
-                  classId: req.body.classId,
                   productImage: req.body.productImage,
+                  author: req.body.author,
+                  ISBN: req.body.ISBN,
+                  edition: req.body.edition,
+                  releaseDate: req.body.releaseDate,
                 },
               })
               .then((data) => {
@@ -92,7 +87,7 @@ const getProduct = async (req, res) => {
       page = pageAsNbr;
     }
 
-    let size = 50;
+    let size = 100;
 
     if (!Number.isNaN(sizeASNbr) && sizeASNbr > 0 && size < 100) {
       size = sizeASNbr;
@@ -146,7 +141,7 @@ const getOneProduct = async (req, res) => {
     const id = req.params.id;
     await productModel
       .findOne({
-        where: { productName: id },
+        where: { productId: id },
       })
       .then((data) => {
         return res.status(200).send({

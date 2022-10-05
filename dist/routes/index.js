@@ -37,15 +37,18 @@ var _replyRoutes = _interopRequireDefault(require("./api/replyRoutes.js"));
 
 var _rateRoutes = _interopRequireDefault(require("./api/rateRoutes.js"));
 
+var _assignClassToCategory = _interopRequireDefault(require("./api/assignClassToCategory.js"));
+
 var router = _express["default"].Router();
 
 router.use("/categories", _categoryRoutes["default"]);
-router.use("/class1", _classRoutes["default"]);
+router.use("/class", _classRoutes["default"]);
 router.use("/products", _productRoutes["default"]);
 router.use("/users", _userRoutes["default"]);
 router.use("/subscribe", _subscribeRoutes["default"]);
 router.use("/roles", _roleRoutes["default"]);
 router.use("/user_category", _assignUserToCategory["default"]);
+router.use("/category_class", _assignClassToCategory["default"]);
 router.use("/comment", _commentRoutes["default"]);
 router.use("/reply", _replyRoutes["default"]);
 router.use("/article", _articleRoutes["default"]);

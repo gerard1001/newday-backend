@@ -33,18 +33,14 @@ module.exports = function (sequelize, DataTypes) {
     (0, _createClass2["default"])(Product, null, [{
       key: "associate",
       value: function associate(models) {
-        this.belongsTo(models.Class, {
-          foreignKey: {
-            name: "classId",
-            allowNull: true
-          },
-          onDelete: "CASCADE",
-          as: "Classes"
-        });
         this.hasMany(models.ProductComment, {
           foreignKey: "productId",
           as: "ProductComments",
           onDelete: "CASCADE"
+        });
+        this.belongsToMany(models.Class, {
+          foreignKey: "productId",
+          through: "Class_Product"
         });
       }
     }]);
@@ -58,32 +54,35 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
-    classId: {
-      allowNull: true,
-      type: DataTypes.UUID
-    },
     productName: {
       type: DataTypes.STRING
     },
     price: {
-      type: DataTypes.INTEGER
+      type: DataTypes.DECIMAL(8, 2)
     },
     description: {
       type: DataTypes.TEXT
     },
     size: {
-      type: DataTypes.STRING
+      type: DataTypes.INTEGER
     },
     productImage: {
       allowNull: true,
       type: DataTypes.STRING
     },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    productFile: {
+      type: DataTypes.STRING
     },
-    updatedAt: {
-      allowNull: false,
+    author: {
+      type: DataTypes.STRING
+    },
+    ISBN: {
+      type: DataTypes.BIGINT
+    },
+    edition: {
+      type: DataTypes.STRING
+    },
+    releaseDate: {
       type: DataTypes.DATE
     }
   }, {

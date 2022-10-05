@@ -18,49 +18,28 @@ var categoryModel = _models["default"].Category;
 
 var createClass = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var _req$body, catOneName, categoryId, existCategory;
-
+    var className;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            _req$body = req.body, catOneName = _req$body.catOneName, categoryId = _req$body.categoryId;
-            _context.next = 4;
-            return categoryModel.findOne({
-              where: {
-                categoryId: req.body.categoryId
-              }
-            });
+            className = req.body.className;
 
-          case 4:
-            existCategory = _context.sent;
-
-            if (existCategory) {
-              _context.next = 7;
-              break;
-            }
-
-            return _context.abrupt("return", res.status(404).send({
-              message: "This category does not exist!"
-            }));
-
-          case 7:
-            if (!(!catOneName && !categoryId)) {
-              _context.next = 9;
+            if (className) {
+              _context.next = 4;
               break;
             }
 
             return _context.abrupt("return", res.status(400).send({
-              message: "Please make sure you include both catOneName and category"
+              message: "Please make sure you include both className and category"
             }));
 
-          case 9:
-            _context.next = 11;
+          case 4:
+            _context.next = 6;
             return classModel.findOrCreate({
               where: {
-                catOneName: req.body.catOneName,
-                categoryId: req.body.categoryId
+                className: req.body.className
               }
             }).then(function (data) {
               if (data[1]) {
@@ -76,26 +55,27 @@ var createClass = /*#__PURE__*/function () {
                 });
               }
             })["catch"](function (err) {
+              console.log("******************", err);
               return res.status(403).send(err);
             });
 
-          case 11:
-            _context.next = 16;
+          case 6:
+            _context.next = 11;
             break;
 
-          case 13:
-            _context.prev = 13;
+          case 8:
+            _context.prev = 8;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return", res.status(500).send({
               message: "".concat(_context.t0)
             }));
 
-          case 16:
+          case 11:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 13]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function createClass(_x, _x2) {
@@ -113,19 +93,22 @@ var getClasses = /*#__PURE__*/function () {
           case 0:
             _context2.prev = 0;
             _context2.next = 3;
-            return classModel.findAll({
-              order: [["catOneName", "ASC"]],
+            return classModel.findAndCountAll({
+              order: [["className", "ASC"]],
               include: [{
                 model: _models["default"].Product,
                 as: "Products",
                 order: [["productName", "ASC"]]
+              }, {
+                model: _models["default"].Category,
+                as: "Categories",
+                order: [["categoryName", "ASC"]]
               }]
             }).then(function (data) {
               return res.status(200).send({
                 message: "Fetched all class elements",
-                body: {
-                  data: data
-                }
+                body: data.rows,
+                count: data.count
               });
             })["catch"](function (err) {
               return res.status(403).send({
@@ -170,19 +153,19 @@ var getOneClass = /*#__PURE__*/function () {
             _context3.prev = 0;
             id = req.params.id;
             _context3.next = 4;
-            return classModel.findAll({
-              order: [["catOneName", "ASC"]],
+            return classModel.findOne({
+              order: [["className", "ASC"]],
               include: [{
                 model: _models["default"].Product,
                 as: "Products",
                 order: [["productName", "ASC"]]
               }],
               where: {
-                catOneName: id
+                className: id
               }
             }).then(function (data) {
               return res.status(200).send({
-                message: "Fetched all class elements",
+                message: "Fetched one class",
                 body: {
                   data: data
                 }
@@ -232,7 +215,7 @@ var updateClass = /*#__PURE__*/function () {
             _context4.next = 4;
             return classModel.update(req.body, {
               where: {
-                catOneName: id
+                className: id
               }
             }).then(function (data) {
               if (data == 1) {
@@ -342,17 +325,17 @@ var deleteOneClass = /*#__PURE__*/function () {
             _context6.next = 4;
             return classModel.destroy({
               where: {
-                catOneName: id
+                classId: id
               },
               truncate: false
             }).then(function (data) {
               if (data === 1) {
                 return res.status(200).send({
-                  message: "Deleted ".concat(data, " class one element successfully!")
+                  message: "Deleted ".concat(data, " class element successfully!")
                 });
               } else {
                 return res.status(200).send({
-                  message: "Deleted ".concat(data, " class one elements successfully!")
+                  message: "Deleted ".concat(data, " class elements successfully!")
                 });
               }
             })["catch"](function (err) {

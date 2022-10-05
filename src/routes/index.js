@@ -13,12 +13,14 @@ import subscribeRoutes from "./api/subscribeRoutes";
 import reviewRoutes from "./api/reviewRoutes";
 import replyRoutes from "./api/replyRoutes.js";
 import rateRoutes from "./api/rateRoutes.js";
+import category_classRoutes from "./api/assignClassToCategory.js";
+import class_productRoutes from "./api/assignProductToClass.js";
 
 const router = express.Router();
 
 router.use("/categories", categoryRoutes);
 
-router.use("/class1", classRoutes);
+router.use("/class", classRoutes);
 
 router.use("/products", productRoutes);
 
@@ -29,6 +31,10 @@ router.use("/subscribe", subscribeRoutes);
 router.use("/roles", roleRoutes);
 
 router.use("/user_category", user_categoryRoutes);
+
+router.use("/category_class", category_classRoutes);
+
+router.use("/class_product", class_productRoutes);
 
 router.use("/comment", commentRoutes);
 

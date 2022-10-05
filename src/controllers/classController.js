@@ -5,26 +5,17 @@ const categoryModel = model.Category;
 
 const createClass = async (req, res) => {
   try {
-    const { catOneName, categoryId } = req.body;
-    const existCategory = await categoryModel.findOne({
-      where: { categoryId: req.body.categoryId },
-    });
+    const { className } = req.body;
 
-    if (!existCategory) {
-      return res.status(404).send({
-        message: "This category does not exist!",
-      });
-    }
-    if (!catOneName && !categoryId) {
+    if (!className) {
       return res.status(400).send({
-        message: "Please make sure you include both catOneName and category",
+        message: "Please make sure you include both className and category",
       });
     }
     await classModel
       .findOrCreate({
         where: {
-          catOneName: req.body.catOneName,
-          categoryId: req.body.categoryId,
+          className: req.body.className,
         },
       })
       .then((data) => {
@@ -40,6 +31,7 @@ const createClass = async (req, res) => {
         }
       })
       .catch((err) => {
+        console.log("******************", err);
         return res.status(403).send(err);
       });
   } catch (error) {
@@ -53,7 +45,7 @@ const getClasses = async (req, res) => {
   try {
     await classModel
       .findAndCountAll({
-        order: [["catOneName", "ASC"]],
+        order: [["className", "ASC"]],
         include: [
           {
             model: model.Product,
@@ -93,7 +85,7 @@ const getOneClass = async (req, res) => {
 
     await classModel
       .findOne({
-        order: [["catOneName", "ASC"]],
+        order: [["className", "ASC"]],
         include: [
           {
             model: model.Product,
@@ -102,13 +94,52 @@ const getOneClass = async (req, res) => {
           },
         ],
         where: {
-          catOneName: id,
+          classId: id,
         },
       })
       .then((data) => {
         return res.status(200).send({
           message: "Fetched one class",
           body: { data },
+        });
+      })
+      .catch((err) => {
+        return res.status(403).send({
+          message: "ERROR ",
+          err,
+        });
+      });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
+  }
+};
+
+const getClassProducts = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await classModel
+      .findOne({
+        order: [["className", "ASC"]],
+        include: [
+          {
+            model: model.Product,
+            as: "Products",
+            order: [["productName", "ASC"]],
+          },
+        ],
+        where: {
+          classId: id,
+        },
+      })
+      .then((datas) => {
+        const data = datas.Products;
+        console.log(data.Products);
+        return res.status(200).send({
+          message: "Fetched class's products",
+          data,
         });
       })
       .catch((err) => {
@@ -131,7 +162,7 @@ const updateClass = async (req, res) => {
     await classModel
       .update(req.body, {
         where: {
-          catOneName: id,
+          classId: id,
         },
       })
       .then((data) => {
@@ -195,18 +226,18 @@ const deleteOneClass = async (req, res) => {
     await classModel
       .destroy({
         where: {
-          catOneName: id,
+          classId: id,
         },
         truncate: false,
       })
       .then((data) => {
         if (data === 1) {
           return res.status(200).send({
-            message: `Deleted ${data} class one element successfully!`,
+            message: `Deleted ${data} class element successfully!`,
           });
         } else {
           return res.status(200).send({
-            message: `Deleted ${data} class one elements successfully!`,
+            message: `Deleted ${data} class elements successfully!`,
           });
         }
       })
@@ -230,4 +261,5 @@ export {
   updateClass,
   deleteClasses,
   deleteOneClass,
+  getClassProducts,
 };

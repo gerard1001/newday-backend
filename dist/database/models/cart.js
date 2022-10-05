@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
@@ -16,43 +16,41 @@ function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflec
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-var _require = require("sequelize"),
+var _require = require('sequelize'),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var User_Category = /*#__PURE__*/function (_Model) {
-    (0, _inherits2["default"])(User_Category, _Model);
+  var Cart = /*#__PURE__*/function (_Model) {
+    (0, _inherits2["default"])(Cart, _Model);
 
-    var _super = _createSuper(User_Category);
+    var _super = _createSuper(Cart);
 
-    function User_Category() {
-      (0, _classCallCheck2["default"])(this, User_Category);
+    function Cart() {
+      (0, _classCallCheck2["default"])(this, Cart);
       return _super.apply(this, arguments);
     }
 
-    (0, _createClass2["default"])(User_Category, null, [{
+    (0, _createClass2["default"])(Cart, null, [{
       key: "associate",
-      value: function associate(models) {}
+      value:
+      /**
+       * Helper method for defining associations.
+       * This method is not a part of Sequelize lifecycle.
+       * The `models/index` file will call this method automatically.
+       */
+      function associate(models) {// define association here
+      }
     }]);
-    return User_Category;
+    return Cart;
   }(Model);
 
-  User_Category.init({
-    userCategoryId: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false
-    },
-    userId: {
-      type: DataTypes.UUID
-    },
-    categoryId: {
-      type: DataTypes.UUID
-    }
+  Cart.init({
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
+    email: DataTypes.STRING
   }, {
     sequelize: sequelize,
-    modelName: "User_Category"
+    modelName: 'Cart'
   });
-  return User_Category;
+  return Cart;
 };

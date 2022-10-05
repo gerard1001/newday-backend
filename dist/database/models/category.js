@@ -33,14 +33,18 @@ module.exports = function (sequelize, DataTypes) {
     (0, _createClass2["default"])(Category, null, [{
       key: "associate",
       value: function associate(models) {
-        this.hasMany(models.Class, {
-          foreignKey: "categoryId",
-          as: "Classes",
-          onDelete: "CASCADE"
-        });
+        // this.hasMany(models.Class, {
+        //   foreignKey: "categoryId",
+        //   as: "Classes",
+        //   onDelete: "CASCADE",
+        // });
         this.belongsToMany(models.User, {
           foreignKey: "categoryId",
           through: "User_Category"
+        });
+        this.belongsToMany(models.Class, {
+          foreignKey: "categoryId",
+          through: "Category_Class"
         });
       }
     }]);
@@ -56,14 +60,6 @@ module.exports = function (sequelize, DataTypes) {
     },
     categoryName: {
       type: DataTypes.STRING
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
     }
   }, {
     sequelize: sequelize,

@@ -46,17 +46,18 @@ var createCategory = /*#__PURE__*/function () {
             });
 
           case 3:
-            _context.next = 8;
+            _context.next = 9;
             break;
 
           case 5:
             _context.prev = 5;
             _context.t0 = _context["catch"](0);
+            console.log("++++++++++++++++++=", _context.t0);
             return _context.abrupt("return", res.status(500).send({
               message: "".concat(_context.t0)
             }));
 
-          case 8:
+          case 9:
           case "end":
             return _context.stop();
         }
@@ -83,19 +84,10 @@ var getCategory = /*#__PURE__*/function () {
               order: [["categoryName", "ASC"]],
               include: [{
                 model: _models["default"].User,
-                as: "Users" // attributes: ["firstName", "lastName", "email"],
-
+                as: "Users"
               }, {
                 model: _models["default"].Class,
-                as: "Classes",
-                // attributes: ["catOneName"],
-                order: [["catOneName", "ASC"]],
-                include: [{
-                  model: _models["default"].Product,
-                  as: "Products",
-                  // attributes: ["productName", "price", "productImage"],
-                  order: [["productName", "ASC"]]
-                }]
+                as: "Classes"
               }]
             }).then(function (data) {
               console.log(data);
@@ -105,6 +97,7 @@ var getCategory = /*#__PURE__*/function () {
                 count: data.count
               });
             })["catch"](function (err) {
+              console.log("++++++++++++++++++=", err.message);
               return res.status(403).send({
                 message: "".concat(err)
               });
@@ -147,23 +140,13 @@ var getOneCategory = /*#__PURE__*/function () {
             id = req.params.id;
             _context3.next = 4;
             return categoryRoutes.findOne({
-              // attributes: ["categoryName"],
               order: [["categoryName", "ASC"]],
               include: [{
                 model: _models["default"].User,
-                as: "Users" // attributes: ["firstName", "lastName", "email"],
-
+                as: "Users"
               }, {
                 model: _models["default"].Class,
-                as: "Classes",
-                // attributes: ["catOneName"],
-                order: [["catOneName", "ASC"]],
-                include: [{
-                  model: _models["default"].Product,
-                  as: "Products",
-                  // attributes: ["productName", "price", "productImage"],
-                  order: [["productName", "ASC"]]
-                }]
+                as: "Classes"
               }],
               where: {
                 categoryName: id
@@ -219,7 +202,7 @@ var updateCategory = /*#__PURE__*/function () {
               categoryName: req.body.categoryName,
               userId: req.body.userId,
               where: {
-                id: categoryId
+                categoryId: id
               }
             }).then(function (data) {
               return res.status(200).send({

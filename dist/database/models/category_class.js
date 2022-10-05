@@ -20,39 +20,38 @@ var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var User_Category = /*#__PURE__*/function (_Model) {
-    (0, _inherits2["default"])(User_Category, _Model);
+  var Category_Class = /*#__PURE__*/function (_Model) {
+    (0, _inherits2["default"])(Category_Class, _Model);
 
-    var _super = _createSuper(User_Category);
+    var _super = _createSuper(Category_Class);
 
-    function User_Category() {
-      (0, _classCallCheck2["default"])(this, User_Category);
+    function Category_Class() {
+      (0, _classCallCheck2["default"])(this, Category_Class);
       return _super.apply(this, arguments);
     }
 
-    (0, _createClass2["default"])(User_Category, null, [{
+    (0, _createClass2["default"])(Category_Class, null, [{
       key: "associate",
       value: function associate(models) {}
     }]);
-    return User_Category;
+    return Category_Class;
   }(Model);
 
-  User_Category.init({
-    userCategoryId: {
+  Category_Class.init({
+    categoryClassId: {
       type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false
-    },
-    userId: {
-      type: DataTypes.UUID
+      defaultValue: DataTypes.UUIDV4
     },
     categoryId: {
+      type: DataTypes.UUID
+    },
+    classId: {
       type: DataTypes.UUID
     }
   }, {
     sequelize: sequelize,
-    modelName: "User_Category"
+    modelName: "Category_Class"
   });
-  return User_Category;
+  return Category_Class;
 };

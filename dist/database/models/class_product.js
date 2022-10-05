@@ -20,39 +20,38 @@ var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var User_Category = /*#__PURE__*/function (_Model) {
-    (0, _inherits2["default"])(User_Category, _Model);
+  var Class_Product = /*#__PURE__*/function (_Model) {
+    (0, _inherits2["default"])(Class_Product, _Model);
 
-    var _super = _createSuper(User_Category);
+    var _super = _createSuper(Class_Product);
 
-    function User_Category() {
-      (0, _classCallCheck2["default"])(this, User_Category);
+    function Class_Product() {
+      (0, _classCallCheck2["default"])(this, Class_Product);
       return _super.apply(this, arguments);
     }
 
-    (0, _createClass2["default"])(User_Category, null, [{
+    (0, _createClass2["default"])(Class_Product, null, [{
       key: "associate",
       value: function associate(models) {}
     }]);
-    return User_Category;
+    return Class_Product;
   }(Model);
 
-  User_Category.init({
-    userCategoryId: {
+  Class_Product.init({
+    categoryClassId: {
       type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      defaultValue: DataTypes.UUIDV4
     },
-    userId: {
+    classId: {
       type: DataTypes.UUID
     },
-    categoryId: {
+    productId: {
       type: DataTypes.UUID
     }
   }, {
     sequelize: sequelize,
-    modelName: "User_Category"
+    modelName: "Class_Product"
   });
-  return User_Category;
+  return Class_Product;
 };

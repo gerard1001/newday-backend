@@ -32,14 +32,14 @@ var reviewModel = _models["default"].Review;
 
 var registerUser = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res) {
-    var _req$body, email, password;
+    var _req$body, firstName, lastName, email, password;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.prev = 0;
-            _req$body = req.body, email = _req$body.email, password = _req$body.password;
+            _req$body = req.body, firstName = _req$body.firstName, lastName = _req$body.lastName, email = _req$body.email, password = _req$body.password;
             _context2.next = 4;
             return userModel.findOne({
               where: {
@@ -47,7 +47,7 @@ var registerUser = /*#__PURE__*/function () {
               }
             }).then( /*#__PURE__*/function () {
               var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(usedEmail) {
-                var createdUser, token, gender, createdProfile;
+                var createdUser, token, dcdtkn, gender, createdProfile;
                 return _regenerator["default"].wrap(function _callee$(_context) {
                   while (1) {
                     switch (_context.prev = _context.next) {
@@ -85,33 +85,37 @@ var registerUser = /*#__PURE__*/function () {
 
                       case 6:
                         createdUser = _context.sent;
+                        console.log("````````++++++++++`````", createdUser.userId);
                         token = (0, _userHelper.generateToken)({
                           id: createdUser.userId
-                        }, "1d");
+                        }, "30d");
+                        console.log("++++++++=====USER_ID=====++++++++++++", token);
+                        dcdtkn = (0, _userHelper.decodeToken)(token);
+                        console.log("++++++++=====USER_ID=====++++++++++++", dcdtkn);
                         gender = req.body.gender;
 
                         if (!req.file) {
-                          _context.next = 15;
+                          _context.next = 19;
                           break;
                         }
 
-                        _context.next = 12;
+                        _context.next = 16;
                         return (0, _fileUpload.imageUpload)(req);
 
-                      case 12:
+                      case 16:
                         req.body.picture = _context.sent;
-                        _context.next = 16;
+                        _context.next = 20;
                         break;
 
-                      case 15:
+                      case 19:
                         if (gender == "female") {
                           req.body.picture = "https://s.pngkit.com/png/small/806-8066032_person-icon-black-female-user-icon-png.png";
                         } else {
                           req.body.picture = "https://s.pngkit.com/png/small/225-2257356_this-could-be-you-user-male.png";
                         }
 
-                      case 16:
-                        _context.next = 18;
+                      case 20:
+                        _context.next = 22;
                         return profileModel.create({
                           userId: createdUser.userId,
                           picture: req.body.picture,
@@ -125,9 +129,9 @@ var registerUser = /*#__PURE__*/function () {
                           });
                         });
 
-                      case 18:
+                      case 22:
                         createdProfile = _context.sent;
-                        _context.next = 21;
+                        _context.next = 25;
                         return addressModel.create({
                           profileId: createdProfile.profileId,
                           country: req.body.country,
@@ -136,7 +140,7 @@ var registerUser = /*#__PURE__*/function () {
                           sector: req.body.sector,
                           street: req.body.street
                         }).then(function (data) {
-                          var message = "\n        <h2>Account creation successful.</h2>\n        <p>Copy the following token::: <em>".concat(token, "</em></p>\n        ");
+                          var message = "\n        <h2>Congratulations ".concat(firstName, " ").concat(lastName, "! your account creation was successful.</h2>\n        <p>Copy the following token::: <em>").concat(token, "</em></p>\n        ");
                           (0, _nodemailer.sendEmail)(message, createdUser.email);
                           return res.status(200).send({
                             message: "Success"
@@ -148,7 +152,7 @@ var registerUser = /*#__PURE__*/function () {
                           });
                         });
 
-                      case 21:
+                      case 25:
                       case "end":
                         return _context.stop();
                     }
@@ -198,16 +202,17 @@ var verifyUser = /*#__PURE__*/function () {
             token = req.params.token;
             userInfo = (0, _userHelper.decodeToken)(token);
             userId = userInfo.id;
-            _context3.next = 6;
+            console.log("````````++++++++++`````", userInfo);
+            _context3.next = 7;
             return userModel.findOne({
               where: {
                 userId: userId
               }
             });
 
-          case 6:
+          case 7:
             user = _context3.sent;
-            _context3.next = 9;
+            _context3.next = 10;
             return user.update({
               userVerified: true
             }, {
@@ -216,24 +221,29 @@ var verifyUser = /*#__PURE__*/function () {
               }
             });
 
-          case 9:
+          case 10:
             return _context3.abrupt("return", res.status(200).send({
               message: "Email verification successful"
+            })["catch"](function (err) {
+              console.log(err);
+              return res.send({
+                message: "".concat(err)
+              });
             }));
 
-          case 12:
-            _context3.prev = 12;
+          case 13:
+            _context3.prev = 13;
             _context3.t0 = _context3["catch"](0);
             return _context3.abrupt("return", res.status(500).send({
-              message: "".concat(_context3.t0)
+              message: "Error"
             }));
 
-          case 15:
+          case 16:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, null, [[0, 12]]);
+    }, _callee3, null, [[0, 13]]);
   }));
 
   return function verifyUser(_x4, _x5) {
@@ -948,7 +958,7 @@ var createReview = /*#__PURE__*/function () {
             }));
 
           case 8:
-            if (!(rate <= 1.0)) {
+            if (!(rate < 1.0)) {
               _context14.next = 10;
               break;
             }
@@ -1021,14 +1031,21 @@ var getReviews = /*#__PURE__*/function () {
           case 0:
             _context15.prev = 0;
             _context15.next = 3;
-            return reviewModel.findAll({
+            return reviewModel.findAndCountAll({
               include: [{
                 model: _models["default"].User,
                 as: "Users",
-                attributes: ["email"]
+                include: [{
+                  model: _models["default"].Profile,
+                  as: "Profiles",
+                  include: [{
+                    model: _models["default"].Address,
+                    as: "Addresses"
+                  }]
+                }]
               }]
             }).then(function (data) {
-              var dt = data.map(function (iti) {
+              var dt = data.rows.map(function (iti) {
                 return iti.rate;
               });
               console.log(dt.length);

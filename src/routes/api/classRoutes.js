@@ -7,6 +7,7 @@ import {
   deleteClasses,
   deleteOneClass,
 } from "../../controllers/classController";
+import { getCategoryClasses } from "../../controllers/categoryController";
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.get("/:id/", getOneClass);
 router.patch("/:id/", updateClass);
 router.delete("/", deleteClasses);
 router.delete("/:id", deleteOneClass);
+router.get("/class_of_category/:id", getCategoryClasses);
 
 export default router;

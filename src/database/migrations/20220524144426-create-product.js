@@ -8,32 +8,37 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
       },
-      classId: {
-        allowNull: true,
-        type: Sequelize.UUID,
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-        references: {
-          model: "Classes",
-          key: "classId",
-        },
-      },
       productName: {
         type: Sequelize.STRING,
       },
       price: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL(8, 2),
       },
       description: {
         type: Sequelize.TEXT,
       },
       size: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       productImage: {
         type: Sequelize.STRING,
         defaultValue:
           "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png",
+      },
+      productFile: {
+        type: Sequelize.STRING,
+      },
+      author: {
+        type: Sequelize.STRING,
+      },
+      ISBN: {
+        type: Sequelize.BIGINT,
+      },
+      edition: {
+        type: Sequelize.STRING,
+      },
+      releaseDate: {
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,

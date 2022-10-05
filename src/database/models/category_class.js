@@ -1,28 +1,27 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class User_Category extends Model {
+  class Category_Class extends Model {
     static associate(models) {}
   }
-  User_Category.init(
+  Category_Class.init(
     {
-      userCategoryId: {
+      categoryClassId: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-      },
-      userId: {
-        type: DataTypes.UUID,
       },
       categoryId: {
+        type: DataTypes.UUID,
+      },
+      classId: {
         type: DataTypes.UUID,
       },
     },
     {
       sequelize,
-      modelName: "User_Category",
+      modelName: "Category_Class",
     }
   );
-  return User_Category;
+  return Category_Class;
 };

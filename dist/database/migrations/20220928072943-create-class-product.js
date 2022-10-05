@@ -14,15 +14,17 @@ module.exports = {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return queryInterface.createTable("Classes", {
-                classId: {
+              return queryInterface.createTable("Class_Products", {
+                categoryClassId: {
                   type: Sequelize.UUID,
                   primaryKey: true,
-                  defaultValue: Sequelize.UUIDV4,
-                  allowNull: false
+                  defaultValue: Sequelize.UUIDV4
                 },
-                className: {
-                  type: Sequelize.STRING
+                classId: {
+                  type: Sequelize.UUID
+                },
+                productId: {
+                  type: Sequelize.UUID
                 },
                 createdAt: {
                   allowNull: false,
@@ -49,7 +51,7 @@ module.exports = {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return queryInterface.dropTable("Classes");
+              return queryInterface.dropTable("Class_Products");
 
             case 2:
             case "end":

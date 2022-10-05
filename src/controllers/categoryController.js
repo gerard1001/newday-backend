@@ -29,6 +29,7 @@ const createCategory = async (req, res) => {
         });
       });
   } catch (error) {
+    console.log("++++++++++++++++++=", error);
     return res.status(500).send({
       message: `${error}`,
     });
@@ -44,21 +45,10 @@ const getCategory = async (req, res) => {
           {
             model: model.User,
             as: "Users",
-            // attributes: ["firstName", "lastName", "email"],
           },
           {
             model: model.Class,
             as: "Classes",
-            // attributes: ["catOneName"],
-            order: [["catOneName", "ASC"]],
-            include: [
-              {
-                model: model.Product,
-                as: "Products",
-                // attributes: ["productName", "price", "productImage"],
-                order: [["productName", "ASC"]],
-              },
-            ],
           },
         ],
       })
@@ -71,6 +61,7 @@ const getCategory = async (req, res) => {
         });
       })
       .catch((err) => {
+        console.log("++++++++++++++++++=", err.message);
         return res.status(403).send({
           message: `${err}`,
         });
@@ -88,38 +79,76 @@ const getOneCategory = async (req, res) => {
 
     await categoryRoutes
       .findOne({
-        // attributes: ["categoryName"],
         order: [["categoryName", "ASC"]],
 
         include: [
           {
             model: model.User,
             as: "Users",
-            // attributes: ["firstName", "lastName", "email"],
           },
           {
             model: model.Class,
             as: "Classes",
-            // attributes: ["catOneName"],
-            order: [["catOneName", "ASC"]],
-            include: [
-              {
-                model: model.Product,
-                as: "Products",
-                // attributes: ["productName", "price", "productImage"],
-                order: [["productName", "ASC"]],
-              },
-            ],
           },
         ],
 
         where: {
-          categoryName: id,
+          categoryId: id,
         },
       })
       .then((data) => {
         return res.status(200).send({
-          message: "Fetched all categories",
+          message: "Fetched One category",
+          data,
+        });
+      })
+      .catch((err) => {
+        return res.status(403).send({
+          message: `${err}`,
+        });
+      });
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
+  }
+};
+
+const getCategoryClasses = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (id == "" || id == undefined) {
+      console.log("NOOOOO IDDDDDDD!!");
+      return res.send({
+        message: "NOOOOO IDDDDDDD!!!",
+      });
+    }
+
+    await categoryRoutes
+      .findOne({
+        order: [["categoryName", "ASC"]],
+
+        include: [
+          {
+            model: model.User,
+            as: "Users",
+          },
+          {
+            model: model.Class,
+            as: "Classes",
+          },
+        ],
+
+        where: {
+          categoryId: id,
+        },
+      })
+      .then((datas) => {
+        const data = datas.Classes;
+        console.log("````````               ````````````", id);
+        return res.status(200).send({
+          message: "Fetched all category classes",
           data,
         });
       })
@@ -137,14 +166,14 @@ const getOneCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
 
     await categoryRoutes
       .update(req.body, {
         categoryName: req.body.categoryName,
         userId: req.body.userId,
         where: {
-          id: categoryId,
+          categoryId: id,
         },
       })
       .then((data) => {
@@ -199,6 +228,7 @@ export {
   createCategory,
   getCategory,
   getOneCategory,
+  getCategoryClasses,
   updateCategory,
   deleteCategory,
 };
