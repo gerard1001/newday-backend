@@ -20,9 +20,9 @@ module.exports = {
 
         {
           userId: "4e3320b7-8d51-41ec-b946-b18ae2ec1fe7",
-          firstName: "Ruta",
-          lastName: "Gerard",
-          email: "ruta@gmail.com",
+          firstName: "Rita",
+          lastName: "Orra",
+          email: "rita@gmail.com",
           roleId: 2,
           password: await bcrypt.hash("ruta1001", 12),
           userVerified: true,
@@ -44,9 +44,9 @@ module.exports = {
 
         {
           userId: "49710ec2-a533-42ba-b190-247fd023e98c",
-          firstName: "Shema",
-          lastName: "Alain",
-          email: "alain@gmail.com",
+          firstName: "Mizero",
+          lastName: "Ellen",
+          email: "ellen@gmail.com",
           roleId: 4,
           password: await bcrypt.hash("ruta1001", 12),
           userVerified: true,

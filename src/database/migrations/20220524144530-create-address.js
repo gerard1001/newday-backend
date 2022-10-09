@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Addresses", {
@@ -20,13 +20,7 @@ module.exports = {
       country: {
         type: Sequelize.STRING,
       },
-      province: {
-        type: Sequelize.STRING,
-      },
-      district: {
-        type: Sequelize.STRING,
-      },
-      sector: {
+      city: {
         type: Sequelize.STRING,
       },
       street: {
@@ -43,6 +37,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Addresses');
-  }
+    await queryInterface.dropTable("Addresses");
+  },
 };

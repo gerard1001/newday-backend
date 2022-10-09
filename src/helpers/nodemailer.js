@@ -12,7 +12,10 @@ export const sendEmail = async (message, toEmail) => {
     },
   });
   const mailOptions = {
-    from: process.env.SENDER_EMAIL,
+    from: {
+      name: "New Day",
+      address: process.env.SENDER_EMAIL,
+    },
     to: toEmail,
     subject: "NEWDAY REGISTRATION",
     html: message,
@@ -38,7 +41,10 @@ export const sendTweet = async (message, toEmail) => {
     },
   });
   const mailOptions = {
-    from: process.env.SENDER_EMAIL,
+    from: {
+      name: "New Day",
+      address: process.env.SENDER_EMAIL,
+    },
     to: toEmail,
     subject: "TWEET FROM NEWDAY.",
     html: message,

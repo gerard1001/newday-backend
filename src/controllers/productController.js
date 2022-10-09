@@ -62,7 +62,7 @@ const createProduct = async (req, res) => {
               })
               .catch((err) => {
                 return res.status(400).send({
-                  message: "ERR",
+                  message: `${err.message}`,
                   err,
                 });
               });
@@ -168,7 +168,7 @@ const updateProduct = async (req, res) => {
     const id = req.params.id;
 
     if (req.file) {
-      req.body.picture = await fileUpload(req);
+      req.body.productImage = await fileUpload(req);
     }
 
     await productModel

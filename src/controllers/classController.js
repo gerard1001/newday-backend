@@ -1,11 +1,18 @@
 import model from "../database/models";
+import { fileUpload } from "../helpers/fileUpload";
 
 const classModel = model.Class;
-const categoryModel = model.Category;
 
 const createClass = async (req, res) => {
   try {
     const { className } = req.body;
+
+    if (req.file) {
+      req.body.coverImage = await fileUpload(req);
+    } else {
+      req.body.coverImage =
+        "https://www.pngkit.com/png/detail/5-56812_lineart-by-frankes-line-art-books-on-openclipart.png";
+    }
 
     if (!className) {
       return res.status(400).send({
@@ -158,6 +165,13 @@ const getClassProducts = async (req, res) => {
 const updateClass = async (req, res) => {
   try {
     const id = req.params.id;
+
+    if (req.file) {
+      req.body.coverImage = await fileUpload(req);
+    } else {
+      req.body.coverImage =
+        "https://www.pngkit.com/png/detail/5-56812_lineart-by-frankes-line-art-books-on-openclipart.png";
+    }
 
     await classModel
       .update(req.body, {

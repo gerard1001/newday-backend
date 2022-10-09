@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
       .then(async (usedEmail) => {
         if (usedEmail) {
           return res.status(409).send({
-            error: "email taken!",
+            message: "email taken!",
           });
         } else {
           const createdUser = await userModel
@@ -45,13 +45,10 @@ const registerUser = async (req, res) => {
               },
             })
             .catch((err) => {
-              return res.status(400).send({ message: "error1", err });
+              return res.status(400).send({ message: `${err.message}`, err });
             });
-          console.log("````````++++++++++`````", createdUser.userId);
           const token = generateToken({ id: createdUser.userId }, "30d");
-          console.log("++++++++=====USER_ID=====++++++++++++", token);
           const dcdtkn = decodeToken(token);
-          console.log("++++++++=====USER_ID=====++++++++++++", dcdtkn);
           const gender = req.body.gender;
 
           if (req.file) {
@@ -84,7 +81,7 @@ const registerUser = async (req, res) => {
               country: req.body.country,
               province: req.body.province,
               district: req.body.district,
-              sector: req.body.sector,
+              city: req.body.city,
               street: req.body.street,
             })
             .then((data) => {
@@ -93,7 +90,7 @@ const registerUser = async (req, res) => {
         <p>Copy the following token::: <em>${token}</em></p>
         `;
               sendEmail(message, createdUser.email);
-              return res.status(200).send({
+              return res.send({
                 message: "Success",
               });
             })
@@ -106,8 +103,8 @@ const registerUser = async (req, res) => {
         }
       });
   } catch (error) {
-    return res.status(500).send({
-      message: `${error}`,
+    return res.send({
+      message: `${error.message}`,
     });
   }
 };
@@ -118,8 +115,6 @@ const verifyUser = async (req, res) => {
     const userInfo = decodeToken(token);
     const userId = userInfo.id;
 
-    console.log("````````++++++++++`````", userInfo);
-
     const user = await userModel.findOne({ where: { userId } });
     await user.update({ userVerified: true }, { where: { id: userId } });
     return res
@@ -128,7 +123,6 @@ const verifyUser = async (req, res) => {
         message: "Email verification successful",
       })
       .catch((err) => {
-        console.log(err);
         return res.send({
           message: `${err}`,
         });
@@ -154,7 +148,6 @@ const subscribeMsg = async (req, res) => {
         <p>Copy the following token::: <em>${token}</em></p>
         `;
     sendTweet(message, email);
-    console.log(email);
 
     return res.send({
       msg: "Sent subscr...",
@@ -171,8 +164,6 @@ const subscribe = async (req, res) => {
     const { token } = req.params;
     const userInfo = decodeToken(token);
     const userId = userInfo.userId;
-
-    console.log(token);
 
     const user = await userModel.findOne({ where: { userId } });
     await user.update({ isSubscribed: true }, { where: { id: userId } });
@@ -577,8 +568,6 @@ const createReview = async (req, res) => {
     const decode = decodeToken(token);
     const id = decode.userId;
 
-    console.log(id);
-
     const { rate } = req.body;
     if (rate > 5.0) {
       return res.send({
@@ -609,7 +598,6 @@ const createReview = async (req, res) => {
         });
       })
       .catch((err) => {
-        console.log(err);
         return res.status(500).send({
           message: "err",
         });
@@ -648,7 +636,6 @@ const getReviews = async (req, res) => {
         const dt = data.rows.map((iti) => {
           return iti.rate;
         });
-        console.log(dt.length);
         return res.status(200).send({
           message: "success",
           data,

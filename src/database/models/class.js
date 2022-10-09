@@ -3,12 +3,6 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Class extends Model {
     static associate(models) {
-      // this.hasMany(models.Product, {
-      //   foreignKey: "classId",
-      //   as: "Products",
-      //   onDelete: "CASCADE",
-      // });
-
       this.belongsToMany(models.Category, {
         foreignKey: "classId",
         through: "Category_Class",
@@ -29,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       className: {
+        type: DataTypes.STRING,
+      },
+      coverImage: {
         type: DataTypes.STRING,
       },
     },
