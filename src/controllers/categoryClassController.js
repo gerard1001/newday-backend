@@ -25,12 +25,12 @@ export const assignClass = async (req, res) => {
     if (!existingCategory || !existingClass) {
       return res.status(404).send({
         message:
-          "The category or Class you are trying assign no longer exists!!!",
+          "The category or Class you are trying assign no longer exists.",
       });
     }
     if (existingRelation) {
       return res.status(409).send({
-        message: "This relation has aready been established!!!",
+        error: "This relation has aready been established.",
       });
     }
     await ccModel
@@ -44,7 +44,7 @@ export const assignClass = async (req, res) => {
       })
       .then((data) => {
         return res.status(200).send({
-          message: "Success. Link made btn the class and category!!!",
+          message: "Success. Link made btn the class and category.",
           data,
         });
       })
@@ -64,7 +64,7 @@ export const getAssignments = async (req, res) => {
       .findAndCountAll({})
       .then((data) => {
         return res.status(200).send({
-          message: "Fetched all the assigned classes and categories!!!",
+          message: "Fetched all the assigned classes and categories.",
           body: data.rows,
         });
       })
@@ -93,7 +93,7 @@ export const getOneAssignment = async (req, res) => {
       })
       .then((data) => {
         return res.status(200).send({
-          message: "Fetched one assignment!!!",
+          message: "Fetched one assignment.",
           data,
         });
       })
@@ -109,13 +109,3 @@ export const getOneAssignment = async (req, res) => {
     });
   }
 };
-
-// export const getCategoryClasses = async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//   } catch (error) {
-//     return res.status(500).send({
-//       message: `${error}`,
-//     });
-//   }
-// };

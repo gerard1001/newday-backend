@@ -4,6 +4,12 @@ const categoryRoutes = model.Category;
 
 const createCategory = async (req, res) => {
   try {
+    const { categoryName } = req.body;
+    if (categoryName == "") {
+      return res.status(400).send({
+        error: "Fill in the missing field please.",
+      });
+    }
     await categoryRoutes
       .findOrCreate({
         categoryName: req.body.categoryName,
@@ -18,18 +24,17 @@ const createCategory = async (req, res) => {
             created,
           });
         } else {
-          return res.status(403).send({
-            message: "This category already exists!",
+          return res.status(409).send({
+            error: "This category already exists!",
           });
         }
       })
       .catch((err) => {
-        return res.status(500).send({
-          message: `You got an error: ${err}`,
+        return res.status(400).send({
+          error: `Please include the category name. ${err}`,
         });
       });
   } catch (error) {
-    console.log("++++++++++++++++++=", error);
     return res.status(500).send({
       message: `${error}`,
     });
@@ -214,7 +219,42 @@ const deleteCategory = async (req, res) => {
       })
       .catch((err) => {
         return res.status(403).send({
+          error: "An error occured while deleting category!",
+        });
+      });
+  } catch (error) {
+    return res.status(500).send({
+      error: `${error}`,
+    });
+  }
+};
+
+const deleteOneCategory = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await categoryRoutes
+      .destroy({
+        where: {
+          categoryId: id,
+        },
+        truncate: false,
+      })
+      .then((data) => {
+        if (data === 1) {
+          return res.status(200).send({
+            message: `Deleted ${data} category element successfully!`,
+          });
+        } else {
+          return res.status(200).send({
+            message: `Deleted ${data} category elements successfully!`,
+          });
+        }
+      })
+      .catch((err) => {
+        return res.status(400).send({
           message: "An error occured while deleting category!",
+          err,
         });
       });
   } catch (error) {
@@ -231,4 +271,5 @@ export {
   getCategoryClasses,
   updateCategory,
   deleteCategory,
+  deleteOneCategory,
 };

@@ -9,10 +9,11 @@ import {
   getOneProduct,
 } from "../../controllers/productController";
 import { getClassProducts } from "../../controllers/classController";
+import Auth from "../../middlewares/productMiddleware";
 
 const router = express.Router();
 
-router.post("/", upload.single("productImage"), createProduct);
+router.post("/", Auth, upload.single("productImage"), createProduct);
 router.get("/", getProduct);
 router.get("/:id", getOneProduct);
 router.patch("/:id/", upload.single("productImage"), updateProduct);

@@ -16,7 +16,7 @@ const createProduct = async (req, res) => {
 
     if (!productName && !price) {
       return res.status(400).send({
-        message: "Please make sure you include the product name and price!",
+        error: "Please make sure you include the product name and price!",
       });
     } else {
       productModel
@@ -28,7 +28,7 @@ const createProduct = async (req, res) => {
         .then((exist) => {
           if (exist) {
             return res.status(409).send({
-              message: "this product already exists",
+              error: "this product already exists",
             });
           } else {
             return productModel
@@ -62,7 +62,7 @@ const createProduct = async (req, res) => {
               })
               .catch((err) => {
                 return res.status(400).send({
-                  message: `${err.message}`,
+                  error: `${err.message}`,
                   err,
                 });
               });
@@ -71,7 +71,7 @@ const createProduct = async (req, res) => {
     }
   } catch (error) {
     return res.status(500).send({
-      message: `${error}`,
+      error: `${error.message}`,
     });
   }
 };

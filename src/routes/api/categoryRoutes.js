@@ -5,6 +5,7 @@ import {
   getOneCategory,
   updateCategory,
   deleteCategory,
+  deleteOneCategory,
 } from "../../controllers/categoryController";
 import Auth from "../../middlewares/productMiddleware";
 
@@ -15,5 +16,6 @@ router.get("/", getCategory);
 router.get("/:id", getOneCategory);
 router.patch("/:id/", updateCategory);
 router.delete("/", deleteCategory);
+router.delete("/:id", deleteOneCategory);
 
 export default router;

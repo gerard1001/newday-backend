@@ -22,16 +22,14 @@ export const assignProduct = async (req, res) => {
       where: { classId: req.body.classId, productId: req.body.productId },
     });
 
-    console.log("existingProduct", existingRelation);
-
     if (!existingClass || !existingProduct) {
       return res.status(404).send({
-        message: "The product or Class you are trying assign don't exist!!!",
+        error: "The product or Class you are trying assign don't exist.",
       });
     }
     if (existingRelation) {
       return res.status(409).send({
-        message: "This relation has aready been established!!!",
+        error: "This relation has aready been established.",
       });
     }
     await cpModel
@@ -45,7 +43,7 @@ export const assignProduct = async (req, res) => {
       })
       .then((data) => {
         return res.status(200).send({
-          message: "Success. Link made btn the class and product!!!",
+          message: "Link made between the class and product successfully.",
           data,
         });
       })
@@ -54,8 +52,8 @@ export const assignProduct = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
-    return res.status(500).send({
-      message: `${error}`,
+    return res.status(400).send({
+      error: `Fill all the fields.`,
     });
   }
 };
@@ -72,7 +70,7 @@ export const getAssignments = async (req, res) => {
       })
       .catch((err) => {
         return res.status(400).send({
-          message: "ERR",
+          error: "ERR",
           err,
         });
       });
@@ -101,13 +99,13 @@ export const getOneAssignment = async (req, res) => {
       })
       .catch((err) => {
         return res.status(400).send({
-          message: "ERR",
+          error: "ERR",
           err,
         });
       });
   } catch (error) {
     return res.status(500).send({
-      message: `${error}`,
+      error: `${error}`,
     });
   }
 };

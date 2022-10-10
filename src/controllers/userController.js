@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
       .then(async (usedEmail) => {
         if (usedEmail) {
           return res.status(409).send({
-            message: "email taken!",
+            error: "email taken!",
           });
         } else {
           const createdUser = await userModel
@@ -45,7 +45,9 @@ const registerUser = async (req, res) => {
               },
             })
             .catch((err) => {
-              return res.status(400).send({ message: `${err.message}`, err });
+              return res
+                .status(400)
+                .send({ error: `Fill all missing fields correctly`, err });
             });
           const token = generateToken({ id: createdUser.userId }, "30d");
           const dcdtkn = decodeToken(token);
@@ -91,20 +93,19 @@ const registerUser = async (req, res) => {
         `;
               sendEmail(message, createdUser.email);
               return res.send({
-                message: "Success",
+                message: "Sign up successul",
               });
             })
             .catch((error) => {
               return res.status(400).send({
-                message: "Error while creating user profile!!!",
-                error,
+                error: "Error while creating user profile!!!",
               });
             });
         }
       });
   } catch (error) {
     return res.send({
-      message: `${error.message}`,
+      error: `Fill all missing fields correctly.`,
     });
   }
 };
@@ -129,7 +130,7 @@ const verifyUser = async (req, res) => {
       });
   } catch (error) {
     return res.status(500).send({
-      message: "Error",
+      error: "Email verification failed.",
     });
   }
 };
@@ -488,10 +489,10 @@ const userLogin = async (req, res) => {
         lastName: userExist.lastName,
       });
     }
-    return res.status(400).send({ message: "Incorrect password" });
+    return res.status(400).send({ error: "Incorrect password" });
   } catch (error) {
     return res.status(404).send({
-      message: "Invalid credentials.",
+      error: "Invalid credentials.",
     });
   }
 };

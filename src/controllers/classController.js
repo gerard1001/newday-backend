@@ -16,7 +16,7 @@ const createClass = async (req, res) => {
 
     if (!className) {
       return res.status(400).send({
-        message: "Please make sure you include both className and category",
+        error: "Please make sure you include the className.",
       });
     }
     await classModel
@@ -33,7 +33,7 @@ const createClass = async (req, res) => {
           });
         } else {
           return res.status(409).send({
-            message: "This class already exists!",
+            error: "This class already exists!",
           });
         }
       })
@@ -43,7 +43,7 @@ const createClass = async (req, res) => {
       });
   } catch (error) {
     return res.status(500).send({
-      message: `${error}`,
+      error: `${error}`,
     });
   }
 };

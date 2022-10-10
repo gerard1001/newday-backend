@@ -9,10 +9,11 @@ import {
   deleteOneClass,
 } from "../../controllers/classController";
 import { getCategoryClasses } from "../../controllers/categoryController";
+import Auth from "../../middlewares/productMiddleware";
 
 const router = express.Router();
 
-router.post("/", upload.single("coverImage"), createClass);
+router.post("/", Auth, upload.single("coverImage"), createClass);
 router.get("/", getClasses);
 router.get("/:id/", getOneClass);
 router.patch("/:id/", upload.single("coverImage"), updateClass);

@@ -9,7 +9,7 @@ const Auth = async (req, res, next) => {
     const token = checkToken(req);
 
     if (!token) {
-      return res.status(401).send({ message: "You are not logged in!!!" });
+      return res.status(401).send({ error: "You are not logged in!!!" });
     }
 
     const decode = decodeToken(token);
@@ -25,7 +25,7 @@ const Auth = async (req, res, next) => {
 
     if (newUser.roleId !== 1 && newUser.roleId !== 2) {
       return res.status(401).send({
-        message: "This action can only be performed by the admin or manager !!",
+        error: "This action can only be performed by the admin or manager !!",
       });
     }
 
@@ -34,7 +34,7 @@ const Auth = async (req, res, next) => {
     next();
   } catch (error) {
     return res.status(500).send({
-      message: `${error}`,
+      error: `${error}`,
     });
   }
 };
