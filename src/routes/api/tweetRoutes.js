@@ -4,7 +4,7 @@ import {
   getTweets,
   deleteTweets,
 } from "../../controllers/tweetController.js";
-import Auth from "../../middlewares/productMiddleware.js";
+import { Auth } from "../../middlewares/productMiddleware.js";
 import upload from "../../helpers/multer.js";
 
 const router = express.Router();

@@ -15,6 +15,7 @@ module.exports = {
         references: {
           model: "Profiles",
           key: "profileId",
+          as: "Profile",
         },
       },
       country: {

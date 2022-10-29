@@ -15,6 +15,8 @@ import replyRoutes from "./api/replyRoutes.js";
 import rateRoutes from "./api/rateRoutes.js";
 import category_classRoutes from "./api/assignClassToCategory.js";
 import class_productRoutes from "./api/assignProductToClass.js";
+import companyRoutes from "./api/companyRoutes";
+import comodityRoutes from "./api/comodityRoutes";
 
 const router = express.Router();
 
@@ -25,6 +27,10 @@ router.use("/class", classRoutes);
 router.use("/products", productRoutes);
 
 router.use("/users", userRoutes);
+
+router.use("/company", companyRoutes);
+
+router.use("/comodities", comodityRoutes);
 
 router.use("/subscribe", subscribeRoutes);
 

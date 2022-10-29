@@ -9,7 +9,7 @@ import {
   getOneProduct,
 } from "../../controllers/productController";
 import { getClassProducts } from "../../controllers/classController";
-import Auth from "../../middlewares/productMiddleware";
+import { Auth } from "../../middlewares/productMiddleware";
 
 const router = express.Router();
 

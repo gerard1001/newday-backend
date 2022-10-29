@@ -45,7 +45,7 @@ export const getArticles = async (req, res) => {
   try {
     await articleModel
       .findAll({
-        include: [{ model: model.User, as: "Users", attributes: ["email"] }],
+        include: [{ model: model.User, as: "User", attributes: ["email"] }],
       })
       .then((data) => {
         return res.send({

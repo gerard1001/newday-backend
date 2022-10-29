@@ -1,6 +1,7 @@
 import express from "express";
 import {
-  registerUser,
+  registerWorker,
+  clientSignUp,
   getUsers,
   updateUser,
   deleteUser,
@@ -11,16 +12,14 @@ import {
   resetLink,
   resetPwd,
 } from "../../controllers/userController";
-import {
-  Auth,
-  updateAuth,
-  deleteAuth,
-} from "../../middlewares/userMiddleware";
+import { Auth, updateAuth, deleteAuth } from "../../middlewares/userMiddleware";
 import upload from "../../helpers/multer";
 
 const router = express.Router();
 
-router.post("/register", upload.single("picture"), registerUser);
+router.post("/register", upload.single("picture"), registerWorker);
+
+router.post("/client_register", upload.single("picture"), clientSignUp);
 
 // router.post("/", createProfile);
 

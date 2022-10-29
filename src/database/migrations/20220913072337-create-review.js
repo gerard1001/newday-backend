@@ -14,6 +14,7 @@ module.exports = {
         references: {
           model: "Users",
           key: "userId",
+          as: "User",
         },
       },
       review: {

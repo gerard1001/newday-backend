@@ -1,45 +1,48 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Address extends Model {
+  class Company extends Model {
     static associate(models) {
-      this.belongsTo(models.Profile, {
+      this.belongsToMany(models.Comodity, {
+        foreignKey: "companyId",
+        through: "Comodity_Company",
+      });
+
+      this.belongsTo(models.User, {
         foreignKey: {
-          name: "profileId",
+          name: "userId",
           allowNull: true,
         },
         onDelete: "CASCADE",
-        as: "Profile",
+        as: "owner",
       });
     }
   }
-  Address.init(
+  Company.init(
     {
-      addressId: {
+      companyId: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
       },
-      profileId: {
-        allowNull: true,
-        type: DataTypes.UUID,
-      },
-      country: {
+      companyName: {
         type: DataTypes.STRING,
       },
-      city: {
+      companyLogo: {
         type: DataTypes.STRING,
       },
-      street: {
+      description: {
+        type: DataTypes.TEXT,
+      },
+      address: {
         type: DataTypes.STRING,
       },
     },
     {
       sequelize,
-      modelName: "Address",
-      tableName: "Addresses",
+      modelName: "Company",
     }
   );
-  return Address;
+  return Company;
 };

@@ -4,7 +4,7 @@ import {
   getAssignments,
   getOneAssignment,
 } from "../../controllers/categoryClassController.js";
-import { Auth } from "../../middlewares/userMiddleware";
+import { Auth } from "../../middlewares/productMiddleware";
 
 const router = express.Router();
 

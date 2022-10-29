@@ -1,11 +1,12 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("UserComments", {
-      commentId: {
+    await queryInterface.createTable("Companies", {
+      companyId: {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
       },
       userId: {
         type: Sequelize.UUID,
@@ -14,21 +15,23 @@ module.exports = {
         references: {
           model: "Users",
           key: "userId",
-          as: "User",
+          as: "Owner",
         },
       },
-      userArticleId: {
-        type: Sequelize.UUID,
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-        references: {
-          model: "UserArticles",
-          key: "userArticleId",
-          as: "UserArticle",
-        },
+      companyName: {
+        type: Sequelize.STRING,
       },
-      comment: {
+      companyLogo: {
+        type: Sequelize.STRING,
+        defaultValue:
+          "https://www.pngkit.com/png/detail/87-873983_huffington-post-logo-tv-logo-png.png",
+        allowNull: true,
+      },
+      description: {
         type: Sequelize.TEXT,
+      },
+      address: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -41,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("UserComments");
+    await queryInterface.dropTable("Companies");
   },
 };

@@ -1,29 +1,17 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("UserArticles", {
-      userArticleId: {
+    await queryInterface.createTable("Comodities", {
+      comodityId: {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
       },
-      userId: {
-        type: Sequelize.UUID,
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-        references: {
-          model: "Users",
-          key: "userId",
-          as: "User",
-        },
-      },
-      image: {
+      comodityName: {
         type: Sequelize.STRING,
       },
-      title: {
-        type: Sequelize.STRING,
-      },
-      article: {
+      description: {
         type: Sequelize.TEXT,
       },
       createdAt: {
@@ -37,6 +25,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("UserArticles");
+    await queryInterface.dropTable("Comodities");
   },
 };

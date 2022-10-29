@@ -18,6 +18,28 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
+          profileId: "a8a1ab60-4d61-4b8d-8c46-f2de4d3c9ec1",
+          userId: "42b130fd-41f7-45db-ad2f-50e3eec363d3",
+          picture:
+            "https://s.pngkit.com/png/small/225-2257356_this-could-be-you-user-male.png",
+          gender: "male",
+          birthDate: "1999-11-24",
+          phoneNumber: 788180999,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          profileId: "3af956d3-ee2f-4823-b2a6-6243d5fa3c91",
+          userId: "74f21682-2ba4-4818-b838-7f5dcf35d2ff",
+          picture:
+            "https://s.pngkit.com/png/small/225-2257356_this-could-be-you-user-male.png",
+          gender: "male",
+          birthDate: "1999-11-24",
+          phoneNumber: 788180525,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
           profileId: "1df916ed-8de3-4fa1-adde-b5a5b1246a78",
           userId: "4e3320b7-8d51-41ec-b946-b18ae2ec1fe7",
           picture:

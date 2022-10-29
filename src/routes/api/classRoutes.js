@@ -9,7 +9,7 @@ import {
   deleteOneClass,
 } from "../../controllers/classController";
 import { getCategoryClasses } from "../../controllers/categoryController";
-import Auth from "../../middlewares/productMiddleware";
+import { Auth } from "../../middlewares/productMiddleware";
 
 const router = express.Router();
 

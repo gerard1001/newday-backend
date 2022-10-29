@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "categoryId",
         through: "Category_Class",
       });
+
+      this.belongsToMany(models.Comodity, {
+        foreignKey: "categoryId",
+        through: "Comodity_Category",
+      });
     }
   }
   Category.init(

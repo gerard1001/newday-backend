@@ -7,7 +7,7 @@ import {
   deleteCategory,
   deleteOneCategory,
 } from "../../controllers/categoryController";
-import Auth from "../../middlewares/productMiddleware";
+import { Auth } from "../../middlewares/productMiddleware";
 
 const router = express.Router();
 

@@ -15,7 +15,7 @@ const profileModel = model.Profile;
 const addressModel = model.Address;
 const reviewModel = model.Review;
 
-const registerUser = async (req, res) => {
+const registerWorker = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
@@ -50,7 +50,6 @@ const registerUser = async (req, res) => {
                 .send({ error: `Fill all missing fields correctly`, err });
             });
           const token = generateToken({ id: createdUser.userId }, "30d");
-          const dcdtkn = decodeToken(token);
           const gender = req.body.gender;
 
           if (req.file) {
@@ -71,6 +70,9 @@ const registerUser = async (req, res) => {
               picture: req.body.picture,
               birthDate: req.body.birthDate,
               gender: req.body.gender,
+              status: req.body.status,
+              maritalStatus: req.body.maritalStatus,
+              department: req.body.department,
               phoneNumber: req.body.phoneNumber,
             })
             .catch((error) => {
@@ -89,11 +91,12 @@ const registerUser = async (req, res) => {
             .then((data) => {
               const message = `
         <h2>Congratulations ${firstName} ${lastName}! your account creation was successful.</h2>
-        <p>Copy the following token::: <em>${token}</em></p>
+        <p>Copy the following token::: <em> 
+        <a href="http://localhost:8080/verify/?${token}">Click here</a></em></p>
         `;
               sendEmail(message, createdUser.email);
               return res.send({
-                message: "Sign up successul",
+                message: "Sign up successfull",
               });
             })
             .catch((error) => {
@@ -110,6 +113,62 @@ const registerUser = async (req, res) => {
   }
 };
 
+const clientSignUp = async (req, res) => {
+  try {
+    const { firstName, lastName, email, password } = req.body;
+
+    await userModel
+      .findOne({
+        where: { email },
+      })
+      .then(async (usedEmail) => {
+        if (usedEmail) {
+          return res.status(409).send({
+            error: "email taken!",
+          });
+        } else {
+          await userModel
+            .create({
+              firstName: req.body.firstName,
+              lastName: req.body.lastName,
+              email: req.body.email,
+              password: hashPassword(password),
+              roleId: req.body.roleId,
+              where: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+                password: req.body.password,
+                roleId: req.body.roleId,
+              },
+            })
+            .then((data) => {
+              const token = generateToken({ id: data.userId }, "30d");
+              const message = `
+        <h2>Congratulations ${firstName} ${lastName}! your account creation was successful.</h2>
+        <p>Click on the following url: <em> 
+        <a href="http://localhost:8080/verify/?${token}">Click here</a></em></p>
+        `;
+              sendEmail(message, data.email);
+              return res.send({
+                message: "Client sign up successfull",
+                data,
+              });
+            })
+            .catch((err) => {
+              return res.status(400).send({
+                error: `Fill all missing fields correctly/${err}`,
+              });
+            });
+        }
+      });
+  } catch (error) {
+    return res.send({
+      error: `${error}`,
+    });
+  }
+};
+
 const verifyUser = async (req, res) => {
   try {
     const { token } = req.params;
@@ -121,16 +180,16 @@ const verifyUser = async (req, res) => {
     return res
       .status(200)
       .send({
-        message: "Email verification successful",
+        message: "Email verification successfull",
       })
-      .catch((err) => {
-        return res.send({
-          message: `${err}`,
+      .catch((error) => {
+        return res.status(400).send({
+          error: `error`,
         });
       });
   } catch (error) {
     return res.status(500).send({
-      error: "Email verification failed.",
+      message: "Email verification failed.",
     });
   }
 };
@@ -172,7 +231,7 @@ const subscribe = async (req, res) => {
       message: "You have successfully subscribed to our page.",
     });
   } catch (error) {
-    return res.status(500).send({
+    return res.status(404).send({
       message: `${error}`,
     });
   }
@@ -203,17 +262,23 @@ const getUsers = async (req, res) => {
         include: [
           {
             model: model.Profile,
-            as: "Profiles",
+            as: "Profile",
+            // attributes: ["profileId"],
             include: [
               {
                 model: model.Address,
-                as: "Addresses",
+                as: "Address",
+                // attributes: ["addressId"],
               },
             ],
           },
           {
             model: model.Category,
             as: "Categories",
+          },
+          {
+            model: model.Company,
+            as: "Companies",
           },
           {
             model: model.ProductComment,
@@ -681,7 +746,7 @@ const deleteReviews = async (req, res) => {
 };
 
 export {
-  registerUser,
+  registerWorker,
   getUsers,
   updateUser,
   deleteUser,
@@ -696,4 +761,5 @@ export {
   createReview,
   getReviews,
   deleteReviews,
+  clientSignUp,
 };

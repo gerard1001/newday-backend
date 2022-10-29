@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasOne(models.Profile, {
         foreignKey: "userId",
-        as: "Profiles",
+        as: "Profile",
         onDelete: "CASCADE",
       });
 
@@ -52,6 +52,26 @@ module.exports = (sequelize, DataTypes) => {
         as: "Reviews",
         onDelete: "CASCADE",
       });
+
+      this.belongsTo(models.User, {
+        foreignKey: {
+          name: "userId",
+          allowNull: true,
+        },
+        onDelete: "CASCADE",
+        as: "Manager",
+      });
+
+      this.hasMany(models.User, {
+        foreignKey: "userId",
+        onDelete: "CASCADE",
+      });
+
+      this.hasMany(models.Company, {
+        foreignKey: "userId",
+        as: "Companies",
+        onDelete: "CASCADE",
+      });
     }
   }
   User.init(
@@ -66,6 +86,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         type: DataTypes.INTEGER,
         defaultValue: 4, // default role is client
+      },
+      managerId: {
+        type: DataTypes.UUID,
+        default: null,
+        references: {
+          model: "Users",
+          key: "userId",
+          as: "Manager",
+        },
       },
       firstName: {
         type: DataTypes.STRING,

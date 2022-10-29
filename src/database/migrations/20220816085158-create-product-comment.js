@@ -15,6 +15,7 @@ module.exports = {
         references: {
           model: "Users",
           key: "userId",
+          as: "User",
         },
       },
       productId: {
@@ -25,6 +26,7 @@ module.exports = {
         references: {
           model: "Products",
           key: "productId",
+          as: "Product",
         },
       },
       comment: {

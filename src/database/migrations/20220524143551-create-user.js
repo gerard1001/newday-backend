@@ -23,6 +23,16 @@ module.exports = {
         references: {
           model: "Roles",
           key: "roleId",
+          as: "Role",
+        },
+      },
+      managerId: {
+        allowNull: true,
+        type: Sequelize.UUID,
+        references: {
+          model: "Users",
+          key: "userId",
+          as: "Manager",
         },
       },
       firstName: {

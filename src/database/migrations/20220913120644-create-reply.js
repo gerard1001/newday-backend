@@ -14,6 +14,7 @@ module.exports = {
         references: {
           model: "Users",
           key: "userId",
+          as: "User",
         },
       },
       commentId: {
@@ -23,6 +24,7 @@ module.exports = {
         references: {
           model: "UserComments",
           key: "commentId",
+          as: "UserComment",
         },
       },
       reply: {
