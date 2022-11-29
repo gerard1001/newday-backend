@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
@@ -16,7 +16,7 @@ function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflec
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-var _require = require('sequelize'),
+var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
@@ -35,11 +35,11 @@ module.exports = function (sequelize, DataTypes) {
       value: function associate(models) {
         this.belongsTo(models.Profile, {
           foreignKey: {
-            name: 'profileId',
+            name: "profileId",
             allowNull: true
           },
-          onDelete: 'CASCADE',
-          as: 'Profiles'
+          onDelete: "CASCADE",
+          as: "Profile"
         });
       }
     }]);
@@ -60,13 +60,7 @@ module.exports = function (sequelize, DataTypes) {
     country: {
       type: DataTypes.STRING
     },
-    province: {
-      type: DataTypes.STRING
-    },
-    district: {
-      type: DataTypes.STRING
-    },
-    sector: {
+    city: {
       type: DataTypes.STRING
     },
     street: {
@@ -74,8 +68,8 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize: sequelize,
-    modelName: 'Address',
-    tableName: 'Addresses'
+    modelName: "Address",
+    tableName: "Addresses"
   });
   return Address;
 };

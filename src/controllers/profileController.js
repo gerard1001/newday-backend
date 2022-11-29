@@ -2,6 +2,7 @@ import model from "../database/models";
 import { imageUpload } from "../helpers/fileUpload";
 
 const profileModel = model.Profile;
+const addressModel = model.Address;
 
 const createProfile = async (req, res) => {
   try {
@@ -55,10 +56,77 @@ const seeProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    await profileModel.update();
+    const id = req.params.id;
+
+    if (req.file) {
+      req.body.picture = await imageUpload(req);
+    }
+
+    //////////////////////////////////////////////////
+    const profileUser = await profileModel
+      .findOne({
+        where: {
+          profileId: id,
+        },
+        include: [
+          {
+            model: model.Address,
+            as: "Address",
+          },
+        ],
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.send({
+          message: `failed to get ${error}`,
+        });
+      });
+    //////////////////////////////////////////////////
+
+    const addressId = profileUser.Address.addressId;
+
+    await profileModel
+      .update(req.body, {
+        picture: req.body.picture,
+        birthDate: req.body.birthDate,
+        gender: req.body.gender,
+        status: req.body.status,
+        maritalStatus: req.body.maritalStatus,
+        department: req.body.department,
+        phoneNumber: req.body.phoneNumber,
+        where: {
+          profileId: id,
+        },
+      })
+      .catch((error) => {
+        return res.status(400).send({ message: "error2", error });
+      });
+
+    await addressModel
+      .update(req.body, {
+        country: req.body.country,
+        city: req.body.city,
+        street: req.body.street,
+        where: {
+          addressId: addressId,
+        },
+      })
+      .then((data) => {
+        return res.status(200).send({
+          message: "User profile updated successfully!",
+          data,
+        });
+      })
+      .catch((err) => {
+        return res.status(400).send({
+          message:
+            "An error occured while updating User profile! The role or category assigned might be unavailable.",
+          err,
+        });
+      });
   } catch (error) {
-    return res.status(500).send({
-      message: `${error}`,
+    res.status(500).send({
+      error: `${error}`,
     });
   }
 };

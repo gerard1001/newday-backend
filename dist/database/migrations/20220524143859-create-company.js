@@ -14,11 +14,12 @@ module.exports = {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return queryInterface.createTable("Reviews", {
-                reviewId: {
+              return queryInterface.createTable("Companies", {
+                companyId: {
                   type: Sequelize.UUID,
                   primaryKey: true,
-                  defaultValue: Sequelize.UUIDV4
+                  defaultValue: Sequelize.UUIDV4,
+                  allowNull: false
                 },
                 userId: {
                   type: Sequelize.UUID,
@@ -27,16 +28,22 @@ module.exports = {
                   references: {
                     model: "Users",
                     key: "userId",
-                    as: "User"
+                    as: "Owner"
                   }
                 },
-                review: {
-                  type: Sequelize.TEXT,
-                  allowNull: false
+                companyName: {
+                  type: Sequelize.STRING
                 },
-                rate: {
-                  type: Sequelize.INTEGER,
-                  allowNull: false
+                companyLogo: {
+                  type: Sequelize.STRING,
+                  defaultValue: "https://www.pngkit.com/png/detail/87-873983_huffington-post-logo-tv-logo-png.png",
+                  allowNull: true
+                },
+                description: {
+                  type: Sequelize.TEXT
+                },
+                address: {
+                  type: Sequelize.STRING
                 },
                 createdAt: {
                   allowNull: false,
@@ -63,7 +70,7 @@ module.exports = {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return queryInterface.dropTable("Reviews");
+              return queryInterface.dropTable("Companies");
 
             case 2:
             case "end":

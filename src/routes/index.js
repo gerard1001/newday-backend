@@ -17,6 +17,7 @@ import category_classRoutes from "./api/assignClassToCategory.js";
 import class_productRoutes from "./api/assignProductToClass.js";
 import companyRoutes from "./api/companyRoutes";
 import comodityRoutes from "./api/comodityRoutes";
+import profileRoutes from "./api/profileRoutes.js";
 
 const router = express.Router();
 
@@ -27,6 +28,8 @@ router.use("/class", classRoutes);
 router.use("/products", productRoutes);
 
 router.use("/users", userRoutes);
+
+router.use("/profile", profileRoutes);
 
 router.use("/company", companyRoutes);
 

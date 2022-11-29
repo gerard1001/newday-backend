@@ -35,7 +35,7 @@ module.exports = function (sequelize, DataTypes) {
       value: function associate(models) {
         this.hasOne(models.Address, {
           foreignKey: "profileId",
-          as: "Addresses",
+          as: "Address",
           onDelete: "CASCADE"
         }), this.belongsTo(models.User, {
           foreignKey: {
@@ -43,7 +43,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true
           },
           onDelete: "CASCADE",
-          as: "Users"
+          as: "User"
         });
       }
     }]);
@@ -76,6 +76,18 @@ module.exports = function (sequelize, DataTypes) {
     phoneNumber: {
       type: DataTypes.BIGINT,
       allowNull: false
+    },
+    status: {
+      type: DataTypes.ENUM("full-time", "part-time"),
+      allowNull: true
+    },
+    maritalStatus: {
+      type: DataTypes.ENUM("single", "married", "divorced", "widowed"),
+      allowNull: true
+    },
+    department: {
+      type: DataTypes.STRING,
+      allowNull: true
     },
     createdAt: {
       allowNull: false,

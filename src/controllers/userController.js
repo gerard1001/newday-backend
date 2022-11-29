@@ -45,9 +45,7 @@ const registerWorker = async (req, res) => {
               },
             })
             .catch((err) => {
-              return res
-                .status(400)
-                .send({ error: `Fill all missing fields correctly`, err });
+              return res.status(400).send({ error: `${err}` });
             });
           const token = generateToken({ id: createdUser.userId }, "30d");
           const gender = req.body.gender;
@@ -76,15 +74,13 @@ const registerWorker = async (req, res) => {
               phoneNumber: req.body.phoneNumber,
             })
             .catch((error) => {
-              return res.status(400).send({ message: "error2", error });
+              return res.status(400).send({ error: `${error}` });
             });
 
           await addressModel
             .create({
               profileId: createdProfile.profileId,
               country: req.body.country,
-              province: req.body.province,
-              district: req.body.district,
               city: req.body.city,
               street: req.body.street,
             })
@@ -107,7 +103,7 @@ const registerWorker = async (req, res) => {
         }
       });
   } catch (error) {
-    return res.send({
+    return res.status(400).send({
       error: `Fill all missing fields correctly.`,
     });
   }
@@ -498,7 +494,7 @@ const deleteOneUser = async (req, res) => {
       .then((data) => {
         if (data == 1) {
           return res.status(200).send({
-            message: "success",
+            message: "User has been deleted successfully",
           });
         }
         return res.status(400).send({

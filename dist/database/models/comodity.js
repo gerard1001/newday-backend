@@ -20,48 +20,48 @@ var _require = require("sequelize"),
     Model = _require.Model;
 
 module.exports = function (sequelize, DataTypes) {
-  var Class = /*#__PURE__*/function (_Model) {
-    (0, _inherits2["default"])(Class, _Model);
+  var Comodity = /*#__PURE__*/function (_Model) {
+    (0, _inherits2["default"])(Comodity, _Model);
 
-    var _super = _createSuper(Class);
+    var _super = _createSuper(Comodity);
 
-    function Class() {
-      (0, _classCallCheck2["default"])(this, Class);
+    function Comodity() {
+      (0, _classCallCheck2["default"])(this, Comodity);
       return _super.apply(this, arguments);
     }
 
-    (0, _createClass2["default"])(Class, null, [{
+    (0, _createClass2["default"])(Comodity, null, [{
       key: "associate",
       value: function associate(models) {
         this.belongsToMany(models.Category, {
-          foreignKey: "classId",
-          through: "Category_Class"
+          foreignKey: "comodityId",
+          through: "Comodity_Category"
         });
-        this.belongsToMany(models.Product, {
-          foreignKey: "classId",
-          through: "Class_Product"
+        this.belongsToMany(models.Company, {
+          foreignKey: "comodityId",
+          through: "Comodity_Company"
         });
       }
     }]);
-    return Class;
+    return Comodity;
   }(Model);
 
-  Class.init({
-    classId: {
+  Comodity.init({
+    comodityId: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
-    className: {
+    comodityName: {
       type: DataTypes.STRING
     },
-    coverImage: {
-      type: DataTypes.STRING
+    description: {
+      type: DataTypes.TEXT
     }
   }, {
     sequelize: sequelize,
-    modelName: "Class"
+    modelName: "Comodity"
   });
-  return Class;
+  return Comodity;
 };

@@ -26,7 +26,8 @@ module.exports = {
                   onUpdate: "CASCADE",
                   references: {
                     model: "Users",
-                    key: "userId"
+                    key: "userId",
+                    as: "User"
                   }
                 },
                 title: {

@@ -24,6 +24,9 @@ module.exports = {
                 className: {
                   type: Sequelize.STRING
                 },
+                coverImage: {
+                  type: Sequelize.STRING
+                },
                 createdAt: {
                   allowNull: false,
                   type: Sequelize.DATE

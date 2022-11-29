@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getArticles = exports.createArticle = void 0;
+exports.getCompanies = exports.deleteCompanies = exports.createCompany = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -19,9 +19,9 @@ var _userHelper = require("../helpers/userHelper");
 
 var _fileUpload = require("../helpers/fileUpload");
 
-var articleModel = _models["default"].UserArticle;
+var companyModel = _models["default"].Company;
 
-var createArticle = /*#__PURE__*/function () {
+var createCompany = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
     var token, decode;
     return _regenerator["default"].wrap(function _callee$(_context) {
@@ -41,25 +41,38 @@ var createArticle = /*#__PURE__*/function () {
             return (0, _fileUpload.fileUpload)(req);
 
           case 6:
-            req.body.image = _context.sent;
+            req.body.companyLogo = _context.sent;
             _context.next = 10;
             break;
 
           case 9:
-            req.body.image = "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png";
+            req.body.companyLogo = "https://www.pngkit.com/png/detail/87-873983_huffington-post-logo-tv-logo-png.png";
 
           case 10:
             _context.next = 12;
-            return articleModel.create({
+            return companyModel.findOrCreate({
               userId: decode.userId,
-              image: req.body.image,
-              title: req.body.title,
-              article: req.body.article
+              companyName: req.body.companyName,
+              companyLogo: req.body.companyLogo,
+              description: req.body.description,
+              address: req.body.address,
+              where: {
+                userId: decode.userId,
+                companyName: req.body.companyName,
+                description: req.body.description,
+                address: req.body.address
+              }
             }).then(function (data) {
-              return res.status(201).send({
-                message: "success!!!",
-                data: data
-              });
+              if (data[1]) {
+                return res.status(201).send({
+                  message: "You have successully registered your company!!!",
+                  data: data
+                });
+              } else {
+                return res.status(409).send({
+                  error: "This company name is already taken!"
+                });
+              }
             })["catch"](function (err) {
               return res.status(400).send(err);
             });
@@ -83,14 +96,14 @@ var createArticle = /*#__PURE__*/function () {
     }, _callee, null, [[0, 14]]);
   }));
 
-  return function createArticle(_x, _x2) {
+  return function createCompany(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
 
-exports.createArticle = createArticle;
+exports.createCompany = createCompany;
 
-var getArticles = /*#__PURE__*/function () {
+var getCompanies = /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res) {
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -98,11 +111,10 @@ var getArticles = /*#__PURE__*/function () {
           case 0:
             _context2.prev = 0;
             _context2.next = 3;
-            return articleModel.findAll({
+            return companyModel.findAll({
               include: [{
                 model: _models["default"].User,
-                as: "User",
-                attributes: ["email"]
+                as: "owner"
               }]
             }).then(function (data) {
               return res.send({
@@ -134,9 +146,62 @@ var getArticles = /*#__PURE__*/function () {
     }, _callee2, null, [[0, 5]]);
   }));
 
-  return function getArticles(_x3, _x4) {
+  return function getCompanies(_x3, _x4) {
     return _ref2.apply(this, arguments);
   };
 }();
 
-exports.getArticles = getArticles;
+exports.getCompanies = getCompanies;
+
+var deleteCompanies = /*#__PURE__*/function () {
+  var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res) {
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            _context3.next = 3;
+            return companyModel.destroy({
+              where: {},
+              truncate: false
+            }).then(function (data) {
+              if (data === 1) {
+                return res.status(200).send({
+                  message: "Deleted ".concat(data, " company successfully!")
+                });
+              } else {
+                return res.status(200).send({
+                  message: "Deleted ".concat(data, " companies successfully!")
+                });
+              }
+            })["catch"](function (err) {
+              return res.status(403).send({
+                error: "An error occured while deleting company!"
+              });
+            });
+
+          case 3:
+            _context3.next = 8;
+            break;
+
+          case 5:
+            _context3.prev = 5;
+            _context3.t0 = _context3["catch"](0);
+            return _context3.abrupt("return", res.status(500).send({
+              error: "".concat(_context3.t0)
+            }));
+
+          case 8:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[0, 5]]);
+  }));
+
+  return function deleteCompanies(_x5, _x6) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+exports.deleteCompanies = deleteCompanies;

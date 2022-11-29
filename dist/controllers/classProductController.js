@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getOneAssignment = exports.getAssignments = exports.assignClass = void 0;
+exports.getOneAssignment = exports.getAssignments = exports.deleteOneAssignment = exports.deleteAllAssignments = exports.assignProduct = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -13,54 +13,54 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _models = _interopRequireDefault(require("../database/models"));
 
-var ccModel = _models["default"].Category_Class;
-var categoryModel = _models["default"].Category;
+var cpModel = _models["default"].Class_Product;
 var classModel = _models["default"].Class;
+var productModel = _models["default"].Product;
 
-var assignClass = /*#__PURE__*/function () {
+var assignProduct = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var existingClass, existingCategory, existingRelation;
+    var existingProduct, existingClass, existingRelation;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
             _context.next = 3;
+            return productModel.findOne({
+              where: {
+                productId: req.body.productId
+              }
+            });
+
+          case 3:
+            existingProduct = _context.sent;
+            _context.next = 6;
             return classModel.findOne({
               where: {
                 classId: req.body.classId
               }
             });
 
-          case 3:
-            existingClass = _context.sent;
-            _context.next = 6;
-            return categoryModel.findOne({
-              where: {
-                categoryId: req.body.categoryId
-              }
-            });
-
           case 6:
-            existingCategory = _context.sent;
+            existingClass = _context.sent;
             _context.next = 9;
-            return ccModel.findOne({
+            return cpModel.findOne({
               where: {
                 classId: req.body.classId,
-                categoryId: req.body.categoryId
+                productId: req.body.productId
               }
             });
 
           case 9:
             existingRelation = _context.sent;
 
-            if (!(!existingCategory || !existingClass)) {
+            if (!(!existingClass || !existingProduct)) {
               _context.next = 12;
               break;
             }
 
             return _context.abrupt("return", res.status(404).send({
-              message: "The category or Class you are trying assign no longer exists."
+              error: "The product or Class you are trying assign don't exist."
             }));
 
           case 12:
@@ -75,16 +75,16 @@ var assignClass = /*#__PURE__*/function () {
 
           case 14:
             _context.next = 16;
-            return ccModel.create({
+            return cpModel.create({
               classId: req.body.classId,
-              categoryId: req.body.categoryId,
+              productId: req.body.productId,
               where: {
                 classId: req.body.classId,
-                categoryId: req.body.categoryId
+                productId: req.body.productId
               }
             }).then(function (data) {
               return res.status(200).send({
-                message: "Success. Link made btn the class and category.",
+                message: "Link made between the class and product successfully.",
                 data: data
               });
             })["catch"](function (err) {
@@ -92,17 +92,18 @@ var assignClass = /*#__PURE__*/function () {
             });
 
           case 16:
-            _context.next = 21;
+            _context.next = 22;
             break;
 
           case 18:
             _context.prev = 18;
             _context.t0 = _context["catch"](0);
-            return _context.abrupt("return", res.status(500).send({
-              message: "".concat(_context.t0)
+            console.log(_context.t0);
+            return _context.abrupt("return", res.status(400).send({
+              error: "Fill all the fields."
             }));
 
-          case 21:
+          case 22:
           case "end":
             return _context.stop();
         }
@@ -110,12 +111,12 @@ var assignClass = /*#__PURE__*/function () {
     }, _callee, null, [[0, 18]]);
   }));
 
-  return function assignClass(_x, _x2) {
+  return function assignProduct(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
 
-exports.assignClass = assignClass;
+exports.assignProduct = assignProduct;
 
 var getAssignments = /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res) {
@@ -125,14 +126,14 @@ var getAssignments = /*#__PURE__*/function () {
           case 0:
             _context2.prev = 0;
             _context2.next = 3;
-            return ccModel.findAndCountAll({}).then(function (data) {
+            return cpModel.findAndCountAll({}).then(function (data) {
               return res.status(200).send({
-                message: "Fetched all the assigned classes and categories.",
+                message: "Fetched all the assigned classes and products!!!",
                 body: data.rows
               });
             })["catch"](function (err) {
               return res.status(400).send({
-                message: "ERR",
+                error: "ERR",
                 err: err
               });
             });
@@ -173,18 +174,18 @@ var getOneAssignment = /*#__PURE__*/function () {
             _context3.prev = 0;
             id = req.params.id;
             _context3.next = 4;
-            return ccModel.findOne({
+            return cpModel.findOne({
               where: {
-                categoryClassId: id
+                classProductId: id
               }
             }).then(function (data) {
               return res.status(200).send({
-                message: "Fetched one assignment.",
+                message: "Fetched one assignment!!!",
                 data: data
               });
             })["catch"](function (err) {
               return res.status(400).send({
-                message: "ERR",
+                error: "ERR",
                 err: err
               });
             });
@@ -197,7 +198,7 @@ var getOneAssignment = /*#__PURE__*/function () {
             _context3.prev = 6;
             _context3.t0 = _context3["catch"](0);
             return _context3.abrupt("return", res.status(500).send({
-              message: "".concat(_context3.t0)
+              error: "".concat(_context3.t0)
             }));
 
           case 9:
@@ -214,3 +215,103 @@ var getOneAssignment = /*#__PURE__*/function () {
 }();
 
 exports.getOneAssignment = getOneAssignment;
+
+var deleteOneAssignment = /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
+    var id;
+    return _regenerator["default"].wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            id = req.params.id;
+            _context4.next = 4;
+            return cpModel.destroy({
+              where: {
+                categoryClassId: id
+              }
+            }).then(function (data) {
+              return res.status(200).send({
+                message: "Deleted one assignment!!!",
+                data: data
+              });
+            })["catch"](function (err) {
+              return res.status(400).send({
+                message: "ERR",
+                err: err
+              });
+            });
+
+          case 4:
+            _context4.next = 9;
+            break;
+
+          case 6:
+            _context4.prev = 6;
+            _context4.t0 = _context4["catch"](0);
+            return _context4.abrupt("return", res.status(500).send({
+              message: "".concat(_context4.t0)
+            }));
+
+          case 9:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, null, [[0, 6]]);
+  }));
+
+  return function deleteOneAssignment(_x7, _x8) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
+exports.deleteOneAssignment = deleteOneAssignment;
+
+var deleteAllAssignments = /*#__PURE__*/function () {
+  var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res) {
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.prev = 0;
+            _context5.next = 3;
+            return cpModel.destroy({
+              where: {}
+            }).then(function (data) {
+              return res.status(200).send({
+                message: "Deleted all assignments!!!",
+                data: data
+              });
+            })["catch"](function (err) {
+              return res.status(400).send({
+                message: "ERR",
+                err: err
+              });
+            });
+
+          case 3:
+            _context5.next = 8;
+            break;
+
+          case 5:
+            _context5.prev = 5;
+            _context5.t0 = _context5["catch"](0);
+            return _context5.abrupt("return", res.status(500).send({
+              message: "".concat(_context5.t0)
+            }));
+
+          case 8:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5, null, [[0, 5]]);
+  }));
+
+  return function deleteAllAssignments(_x9, _x10) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+
+exports.deleteAllAssignments = deleteAllAssignments;

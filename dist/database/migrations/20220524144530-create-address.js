@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
@@ -27,19 +27,14 @@ module.exports = {
                   onUpdate: "CASCADE",
                   references: {
                     model: "Profiles",
-                    key: "profileId"
+                    key: "profileId",
+                    as: "Profile"
                   }
                 },
                 country: {
                   type: Sequelize.STRING
                 },
-                province: {
-                  type: Sequelize.STRING
-                },
-                district: {
-                  type: Sequelize.STRING
-                },
-                sector: {
+                city: {
                   type: Sequelize.STRING
                 },
                 street: {
@@ -70,7 +65,7 @@ module.exports = {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return queryInterface.dropTable('Addresses');
+              return queryInterface.dropTable("Addresses");
 
             case 2:
             case "end":

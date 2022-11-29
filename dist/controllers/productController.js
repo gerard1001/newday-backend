@@ -51,7 +51,7 @@ var createProduct = /*#__PURE__*/function () {
             }
 
             return _context.abrupt("return", res.status(400).send({
-              message: "Please make sure you include the product name and price!"
+              error: "Please make sure you include the product name and price!"
             }));
 
           case 13:
@@ -62,7 +62,7 @@ var createProduct = /*#__PURE__*/function () {
             }).then(function (exist) {
               if (exist) {
                 return res.status(409).send({
-                  message: "this product already exists"
+                  error: "this product already exists"
                 });
               } else {
                 return productModel.create({
@@ -93,7 +93,7 @@ var createProduct = /*#__PURE__*/function () {
                   });
                 })["catch"](function (err) {
                   return res.status(400).send({
-                    message: "ERR",
+                    error: "".concat(err.message),
                     err: err
                   });
                 });
@@ -108,7 +108,7 @@ var createProduct = /*#__PURE__*/function () {
             _context.prev = 16;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return", res.status(500).send({
-              message: "".concat(_context.t0)
+              error: "".concat(_context.t0.message)
             }));
 
           case 19:
@@ -142,7 +142,7 @@ var getProduct = /*#__PURE__*/function () {
               page = pageAsNbr;
             }
 
-            size = 50;
+            size = 100;
 
             if (!Number.isNaN(sizeASNbr) && sizeASNbr > 0 && size < 100) {
               size = sizeASNbr;
@@ -278,7 +278,7 @@ var updateProduct = /*#__PURE__*/function () {
             return (0, _fileUpload.fileUpload)(req);
 
           case 5:
-            req.body.picture = _context4.sent;
+            req.body.productImage = _context4.sent;
 
           case 6:
             _context4.next = 8;

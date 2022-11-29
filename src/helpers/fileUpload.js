@@ -8,6 +8,7 @@ export const fileUpload = async (req) => {
     { folder: "newday_api/products" },
     async (err, image) => {
       if (err) {
+        console.log(err, "********");
         throw new Error(err);
       }
       imageUrl = image.url;
@@ -23,6 +24,7 @@ export const imageUpload = async (req) => {
     { folder: "newday_api/profile" },
     async (err, image) => {
       if (err) {
+        console.log(err, "********");
         throw new Error(err);
       }
       imageUrl = image.url;

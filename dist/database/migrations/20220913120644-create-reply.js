@@ -26,7 +26,8 @@ module.exports = {
                   onUpdate: "CASCADE",
                   references: {
                     model: "Users",
-                    key: "userId"
+                    key: "userId",
+                    as: "User"
                   }
                 },
                 commentId: {
@@ -35,7 +36,8 @@ module.exports = {
                   onUpdate: "CASCADE",
                   references: {
                     model: "UserComments",
-                    key: "commentId"
+                    key: "commentId",
+                    as: "UserComment"
                   }
                 },
                 reply: {

@@ -28,7 +28,8 @@ module.exports = {
                   onUpdate: "CASCADE",
                   references: {
                     model: "Users",
-                    key: "userId"
+                    key: "userId",
+                    as: "User"
                   }
                 },
                 picture: {
@@ -47,6 +48,21 @@ module.exports = {
                 phoneNumber: {
                   type: Sequelize.BIGINT,
                   allowNull: false
+                },
+                status: {
+                  type: Sequelize.ENUM("full-time", "part-time"),
+                  allowNull: true,
+                  defaultValue: "full-time"
+                },
+                maritalStatus: {
+                  type: Sequelize.ENUM("single", "married", "divorced", "widowed"),
+                  allowNull: true,
+                  defaultValue: "single"
+                },
+                department: {
+                  type: Sequelize.STRING,
+                  allowNull: true,
+                  defaultValue: "anonymous"
                 },
                 createdAt: {
                   allowNull: false,

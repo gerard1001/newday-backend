@@ -54,7 +54,55 @@ export const updateAuth = async (req, res, next) => {
     const newUser = await userModel.findByPk(decode.userId, {});
     // console.log("```````````ID <||> TOKEN``````````", id.id == newUser.userId);
 
-    if (id.id !== newUser.userId && newUser.roleId !== 1) {
+    if (
+      id.id !== newUser.userId &&
+      newUser.roleId !== 1 &&
+      newUser.roleId !== 2 &&
+      newUser.roleId !== 3
+    ) {
+      return res
+        .status(401)
+        .send({ message: "You can not update someone else's data." });
+    }
+
+    next();
+  } catch (error) {
+    return res.status(500).send({
+      message: `${error}`,
+    });
+  }
+};
+
+export const updateProfileAuth = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const user_id = req.params.user_id;
+    const token = checkToken(req);
+
+    if (!token) {
+      return res.status(401).send({ message: "you are not logged in!!" });
+    }
+
+    const decode = decodeToken(token);
+
+    const newUser = await userModel.findByPk(decode.userId, {});
+    console.log(
+      "```````````ID <||> TOKEN``````````",
+      // user_id.id == newUser.userId,
+      user_id
+    );
+    console.log(
+      "```````````ID <||> TOKEN``````````",
+      // user_id.id == newUser.userId,
+      newUser.userId == user_id
+    );
+
+    if (
+      user_id !== newUser.userId &&
+      newUser.roleId !== 1 &&
+      newUser.roleId !== 2 &&
+      newUser.roleId !== 3
+    ) {
       return res
         .status(401)
         .send({ message: "You can not update someone else's data." });

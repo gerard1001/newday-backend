@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
@@ -14,7 +14,7 @@ module.exports = {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return queryInterface.createTable('Roles', {
+              return queryInterface.createTable("Roles", {
                 roleId: {
                   type: Sequelize.INTEGER,
                   primaryKey: true,
@@ -22,7 +22,7 @@ module.exports = {
                   allowNull: false
                 },
                 role: {
-                  type: Sequelize.ENUM('admin', 'manager', 'worker', 'client'),
+                  type: Sequelize.ENUM("super-admin", "owner", "admin", "manager", "worker", "client"),
                   allowNull: false
                 },
                 createdAt: {
@@ -50,7 +50,7 @@ module.exports = {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return queryInterface.dropTable('Roles');
+              return queryInterface.dropTable("Roles");
 
             case 2:
             case "end":
