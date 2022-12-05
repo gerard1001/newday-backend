@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
+      this.hasMany(models.ProductImage, {
+        foreignKey: "productId",
+        as: "ProductImages",
+        onDelete: "CASCADE",
+      });
+
       this.belongsToMany(models.Class, {
         foreignKey: "productId",
         through: "Class_Product",
@@ -33,23 +39,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
       },
       size: {
-        type: DataTypes.INTEGER,
-      },
-      productImage: {
-        allowNull: true,
         type: DataTypes.STRING,
       },
-      productFile: {
-        type: DataTypes.STRING,
-      },
-      author: {
+      brand: {
         type: DataTypes.STRING,
       },
       ISBN: {
         type: DataTypes.BIGINT,
-      },
-      edition: {
-        type: DataTypes.STRING,
       },
       releaseDate: {
         type: DataTypes.DATE,

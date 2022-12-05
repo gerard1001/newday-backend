@@ -7,13 +7,6 @@ const createProduct = async (req, res) => {
   try {
     const { productName, price } = req.body;
 
-    if (req.file) {
-      req.body.productImage = await fileUpload(req);
-    } else {
-      req.body.productImage =
-        "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png";
-    }
-
     if (!productName && !price) {
       return res.status(400).send({
         error: "Please make sure you include the product name and price!",
@@ -37,20 +30,16 @@ const createProduct = async (req, res) => {
                 price: req.body.price,
                 description: req.body.description,
                 size: req.body.size,
-                productImage: req.body.productImage,
-                author: req.body.author,
+                brand: req.body.brand,
                 ISBN: req.body.ISBN,
-                edition: req.body.edition,
                 releaseDate: req.body.releaseDate,
                 where: {
                   productName: req.body.productName,
                   price: req.body.price,
                   description: req.body.description,
                   size: req.body.size,
-                  productImage: req.body.productImage,
-                  author: req.body.author,
+                  brand: req.body.brand,
                   ISBN: req.body.ISBN,
-                  edition: req.body.edition,
                   releaseDate: req.body.releaseDate,
                 },
               })
@@ -99,9 +88,8 @@ const getProduct = async (req, res) => {
         offset: page * size,
         include: [
           {
-            model: model.ProductComment,
-            as: "ProductComments",
-            // attributes: ["comment"],
+            model: model.ProductImage,
+            as: "ProductImages",
           },
           {
             model: model.Class,
@@ -141,6 +129,12 @@ const getOneProduct = async (req, res) => {
     const id = req.params.id;
     await productModel
       .findOne({
+        include: [
+          {
+            model: model.ProductImage,
+            as: "ProductImages",
+          },
+        ],
         where: { productId: id },
       })
       .then((data) => {
@@ -166,10 +160,6 @@ const getOneProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const id = req.params.id;
-
-    if (req.file) {
-      req.body.productImage = await fileUpload(req);
-    }
 
     await productModel
       .update(req.body, {

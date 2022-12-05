@@ -18,24 +18,13 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       size: {
-        type: Sequelize.INTEGER,
-      },
-      productImage: {
-        type: Sequelize.STRING,
-        defaultValue:
-          "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png",
-      },
-      productFile: {
         type: Sequelize.STRING,
       },
-      author: {
+      brand: {
         type: Sequelize.STRING,
       },
       ISBN: {
         type: Sequelize.BIGINT,
-      },
-      edition: {
-        type: Sequelize.STRING,
       },
       releaseDate: {
         type: Sequelize.DATE,

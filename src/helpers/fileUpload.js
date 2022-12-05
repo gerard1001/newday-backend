@@ -14,6 +14,7 @@ export const fileUpload = async (req) => {
       imageUrl = image.url;
     }
   );
+  console.log(imageUrl, "******");
   return imageUrl;
 };
 

@@ -1,6 +1,7 @@
 import express from "express";
 import categoryRoutes from "./api/categoryRoutes.js";
 import productRoutes from "./api/productRoutes";
+import productImagesRoutes from "./api/productImagesRoutes.js";
 import classRoutes from "./api/classRoutes";
 import userRoutes from "./api/userRoutes";
 import roleRoutes from "./api/roleRoutes";
@@ -26,6 +27,8 @@ router.use("/categories", categoryRoutes);
 router.use("/class", classRoutes);
 
 router.use("/products", productRoutes);
+
+router.use("/images", productImagesRoutes);
 
 router.use("/users", userRoutes);
 
