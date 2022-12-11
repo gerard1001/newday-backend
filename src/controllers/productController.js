@@ -5,7 +5,7 @@ const productModel = model.Product;
 
 const createProduct = async (req, res) => {
   try {
-    const { productName, price } = req.body;
+    const { productName, price } = req.data;
 
     if (!productName && !price) {
       return res.status(400).send({
@@ -26,21 +26,27 @@ const createProduct = async (req, res) => {
           } else {
             return productModel
               .create({
-                productName: req.body.productName,
-                price: req.body.price,
-                description: req.body.description,
-                size: req.body.size,
-                brand: req.body.brand,
-                ISBN: req.body.ISBN,
-                releaseDate: req.body.releaseDate,
+                productName: req.data.productName,
+                price: req.data.price,
+                full_price: req.data.full_price,
+                description: req.data.description,
+                size: req.data.size,
+                images: req.data.images,
+                imagesId: req.data.imagesId,
+                brand: req.data.brand,
+                ISBN: req.data.ISBN,
+                releaseDate: req.data.releaseDate,
                 where: {
-                  productName: req.body.productName,
-                  price: req.body.price,
-                  description: req.body.description,
-                  size: req.body.size,
-                  brand: req.body.brand,
-                  ISBN: req.body.ISBN,
-                  releaseDate: req.body.releaseDate,
+                  productName: req.data.productName,
+                  price: req.data.price,
+                  full_price: req.data.full_price,
+                  description: req.data.description,
+                  images: req.data.images,
+                  imagesId: req.data.imagesId,
+                  size: req.data.size,
+                  brand: req.data.brand,
+                  ISBN: req.data.ISBN,
+                  releaseDate: req.data.releaseDate,
                 },
               })
               .then((data) => {
@@ -162,7 +168,7 @@ const updateProduct = async (req, res) => {
     const id = req.params.id;
 
     await productModel
-      .update(req.body, {
+      .update(req.data, {
         where: {
           productId: id,
         },

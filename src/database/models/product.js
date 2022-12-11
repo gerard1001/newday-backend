@@ -35,6 +35,15 @@ module.exports = (sequelize, DataTypes) => {
       price: {
         type: DataTypes.DECIMAL(8, 2),
       },
+      full_price: {
+        type: DataTypes.DECIMAL(8, 2),
+      },
+      images: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+      },
+      imagesId: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+      },
       description: {
         type: DataTypes.TEXT,
       },

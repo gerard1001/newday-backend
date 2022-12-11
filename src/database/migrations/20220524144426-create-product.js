@@ -14,11 +14,20 @@ module.exports = {
       price: {
         type: Sequelize.DECIMAL(8, 2),
       },
+      full_price: {
+        type: Sequelize.DECIMAL(8, 2),
+      },
       description: {
         type: Sequelize.TEXT,
       },
       size: {
         type: Sequelize.STRING,
+      },
+      images: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+      },
+      imagesId: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
       },
       brand: {
         type: Sequelize.STRING,
