@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         as: "owner",
       });
+
+      this.hasMany(models.Product, {
+        foreignKey: "companyId",
+        as: "Products",
+        onDelete: "CASCADE",
+      });
     }
   }
   Company.init(
@@ -34,6 +40,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       description: {
         type: DataTypes.TEXT,
+      },
+      companyProducts: {
+        type: DataTypes.STRING,
       },
       address: {
         type: DataTypes.STRING,

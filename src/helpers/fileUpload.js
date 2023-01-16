@@ -77,8 +77,8 @@ export const updateImageArrayUpload = async (req, res, next) => {
   const availableImages = await productModel.findOne({
     where: { productId: id },
   });
-  console.log(req.body.images?.type, "*****");
-  if (!req.body.images || req.body.images?.type == null) {
+  console.log(req.body.images, "*****");
+  if (!req.body.images) {
     console.log("FIRST CASE");
     const urls = availableImages.dataValues.images;
     const imageId = availableImages.dataValues.imagesId;
@@ -124,4 +124,40 @@ export const updateImageArrayUpload = async (req, res, next) => {
   }
   // req.data = req.body;
   // next();
+};
+export const uploadCompanyLogo = async (req, res, next) => {
+  /* istanbul ignore next */
+  try {
+    if (req.body.companyLogo) {
+      const uploadFile = await cloudinary.uploader.upload(
+        req.body.companyLogo.path
+      );
+      /* istanbul ignore next */
+      req.body.companyLogo = uploadFile.url;
+      console.log(req.body, "******");
+      req.data = req.body; //Send something to the next step.
+      next();
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+export const uploadClassImage = async (req, res, next) => {
+  /* istanbul ignore next */
+  try {
+    if (req.body.coverImage) {
+      const uploadFile = await cloudinary.uploader.upload(
+        req.body.coverImage.path
+      );
+      /* istanbul ignore next */
+      req.body.coverImage = uploadFile.url;
+      console.log(req.body, "******");
+      req.data = req.body; //Send something to the next step.
+      next();
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
 };

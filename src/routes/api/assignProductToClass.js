@@ -10,7 +10,7 @@ import { Auth } from "../../middlewares/userMiddleware";
 
 const router = express.Router();
 
-router.post("/", Auth, assignProduct);
+router.post("/", assignProduct);
 router.get("/", getAssignments);
 router.get("/:id", getOneAssignment);
 router.delete("/:id", deleteOneAssignment);

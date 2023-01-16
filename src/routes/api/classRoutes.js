@@ -10,10 +10,17 @@ import {
 } from "../../controllers/classController";
 import { getCategoryClasses } from "../../controllers/categoryController";
 import { Auth } from "../../middlewares/productMiddleware";
+import { uploadClassImage } from "../../helpers/fileUpload";
 
 const router = express.Router();
 
-router.post("/", Auth, upload.single("coverImage"), createClass);
+router.post(
+  "/",
+  Auth,
+  uploadClassImage,
+  upload.single("coverImage"),
+  createClass
+);
 router.get("/", getClasses);
 router.get("/:id/", getOneClass);
 router.patch("/:id/", upload.single("coverImage"), updateClass);

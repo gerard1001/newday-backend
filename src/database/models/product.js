@@ -19,6 +19,15 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "productId",
         through: "Class_Product",
       });
+
+      this.belongsTo(models.Company, {
+        foreignKey: {
+          name: "companyId",
+          allowNull: true,
+        },
+        onDelete: "CASCADE",
+        as: "Company",
+      });
     }
   }
   Product.init(
@@ -27,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+      },
+      companyId: {
+        type: DataTypes.UUID,
         allowNull: false,
       },
       productName: {

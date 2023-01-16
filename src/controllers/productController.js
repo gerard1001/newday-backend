@@ -2,10 +2,31 @@ import model from "../database/models";
 import { fileUpload } from "../helpers/fileUpload";
 
 const productModel = model.Product;
+const companyModel = model.Company;
 
 const createProduct = async (req, res) => {
   try {
-    const { productName, price } = req.data;
+    const { productName, price, companyId } = req.data;
+
+    const existCompany = await companyModel
+      .findOne({
+        where: { companyId },
+      })
+      .catch((err) => {
+        console.log(err, "**");
+        return res.send({
+          error: `${err}`,
+        });
+      });
+
+    console.log(existCompany, "&&");
+
+    if (!existCompany) {
+      console.log("You can't do this!");
+      return res.status(400).send({
+        error: "This company you are trying to use is note registered!",
+      });
+    }
 
     if (!productName && !price) {
       return res.status(400).send({
@@ -27,6 +48,7 @@ const createProduct = async (req, res) => {
             return productModel
               .create({
                 productName: req.data.productName,
+                companyId: req.data.companyId,
                 price: req.data.price,
                 full_price: req.data.full_price,
                 description: req.data.description,
@@ -38,6 +60,7 @@ const createProduct = async (req, res) => {
                 releaseDate: req.data.releaseDate,
                 where: {
                   productName: req.data.productName,
+                  companyId: req.data.companyId,
                   price: req.data.price,
                   full_price: req.data.full_price,
                   description: req.data.description,
@@ -107,6 +130,7 @@ const getProduct = async (req, res) => {
               },
             ],
           },
+          { model: model.Company, as: "Company" },
         ],
       })
       .then((data) => {

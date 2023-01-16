@@ -5,14 +5,14 @@ const classModel = model.Class;
 
 const createClass = async (req, res) => {
   try {
-    const { className } = req.body;
+    const { className } = req.data;
 
-    if (req.file) {
-      req.body.coverImage = await fileUpload(req);
-    } else {
-      req.body.coverImage =
-        "https://www.pngkit.com/png/detail/5-56812_lineart-by-frankes-line-art-books-on-openclipart.png";
-    }
+    // if (req.file) {
+    //   req.data.coverImage = await fileUpload(req);
+    // } else {
+    //   req.data.coverImage =
+    //     "https://www.pngkit.com/png/detail/5-56812_lineart-by-frankes-line-art-books-on-openclipart.png";
+    // }
 
     if (!className) {
       return res.status(400).send({
@@ -22,7 +22,8 @@ const createClass = async (req, res) => {
     await classModel
       .findOrCreate({
         where: {
-          className: req.body.className,
+          className: req.data.className,
+          coverImage: req.data.coverImage,
         },
       })
       .then((data) => {

@@ -103,8 +103,9 @@ const registerWorker = async (req, res) => {
         }
       });
   } catch (error) {
+    console.log(req.body.firstName);
     return res.status(400).send({
-      error: `Fill all missing fields correctly.`,
+      error: `Fill all missing fields correctly. ${error}`,
     });
   }
 };
