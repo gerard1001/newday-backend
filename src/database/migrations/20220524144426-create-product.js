@@ -48,6 +48,9 @@ module.exports = {
       releaseDate: {
         type: Sequelize.DATE,
       },
+      countInStock: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

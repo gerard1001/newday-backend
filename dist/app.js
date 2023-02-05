@@ -12,6 +12,8 @@ var _routes = _interopRequireDefault(require("./routes"));
 
 var _cors = _interopRequireDefault(require("cors"));
 
+var _expressFormData = _interopRequireDefault(require("express-form-data"));
+
 var port = process.env.PORT;
 var app = (0, _express["default"])();
 app.use((0, _cors["default"])());
@@ -19,14 +21,16 @@ app.use(_express["default"].urlencoded({
   extended: true
 }));
 app.use(_express["default"].json());
+app.use(_expressFormData["default"].parse());
+app.use(_expressFormData["default"].union());
 app.use(_bodyParser["default"].urlencoded({
   extended: false
 }));
 app.use(_bodyParser["default"].json());
-app.use('/api/v2/', _routes["default"]);
+app.use("/api/v2/", _routes["default"]);
 
 _models["default"].sequelize.sync().then(function () {
   app.listen(port, function () {
-    console.log("listening on: http://localhost:".concat(port, " \uD83D\uDE80\uD83D\uDE80\uD83D\uDE80"));
+    console.log("listening on: http://localhost:".concat(port));
   });
 });

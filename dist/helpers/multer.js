@@ -16,8 +16,6 @@ var storage = _multer["default"].diskStorage({
 });
 
 var fileFilter = function fileFilter(req, file, cb) {
-  console.log("`````````````````MULTER```````````````````", req.body);
-
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/webp") {
     cb(null, true);
   } else {
@@ -30,7 +28,7 @@ var fileFilter = function fileFilter(req, file, cb) {
 var upload = (0, _multer["default"])({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024
+    fileSize: 2 * 1024 * 1024
   },
   fileFilter: fileFilter
 });

@@ -45,8 +45,8 @@ module.exports = {
               _context.t8 = {
                 userId: "4e3320b7-8d51-41ec-b946-b18ae2ec1fe7",
                 firstName: "Ruta",
-                lastName: "Gerard",
-                email: "ruta@gmail.com",
+                lastName: "gerard",
+                email: "gerard@gmail.com",
                 roleId: 2,
                 password: _context.t5,
                 userVerified: true,
@@ -61,7 +61,7 @@ module.exports = {
               _context.t10 = new Date();
               _context.t11 = new Date();
               _context.t12 = {
-                userId: "1d6ca114-9a21-49ef-8e04-e733b357153c",
+                userId: "42b130fd-41f7-45db-ad2f-50e3eec363d3",
                 firstName: "TY",
                 lastName: "Patrick",
                 email: "patrick@gmail.com",
@@ -79,7 +79,7 @@ module.exports = {
               _context.t14 = new Date();
               _context.t15 = new Date();
               _context.t16 = {
-                userId: "49710ec2-a533-42ba-b190-247fd023e98c",
+                userId: "74f21682-2ba4-4818-b838-7f5dcf35d2ff",
                 firstName: "Shema",
                 lastName: "Alain",
                 email: "alain@gmail.com",
@@ -89,12 +89,48 @@ module.exports = {
                 createdAt: _context.t14,
                 updatedAt: _context.t15
               };
-              _context.t17 = [_context.t4, _context.t8, _context.t12, _context.t16];
-              _context.t18 = {};
-              _context.next = 29;
-              return _context.t0.bulkInsert.call(_context.t0, "Users", _context.t17, _context.t18);
+              _context.next = 27;
+              return _bcryptjs["default"].hash("ruta1001", 12);
 
-            case 29:
+            case 27:
+              _context.t17 = _context.sent;
+              _context.t18 = new Date();
+              _context.t19 = new Date();
+              _context.t20 = {
+                userId: "1d6ca114-9a21-49ef-8e04-e733b357153c",
+                firstName: "Kamana",
+                lastName: "Deo",
+                email: "deo@gmail.com",
+                roleId: 5,
+                password: _context.t17,
+                userVerified: true,
+                createdAt: _context.t18,
+                updatedAt: _context.t19
+              };
+              _context.next = 33;
+              return _bcryptjs["default"].hash("ruta1001", 12);
+
+            case 33:
+              _context.t21 = _context.sent;
+              _context.t22 = new Date();
+              _context.t23 = new Date();
+              _context.t24 = {
+                userId: "49710ec2-a533-42ba-b190-247fd023e98c",
+                firstName: "Miss",
+                lastName: "Adele",
+                email: "adele@gmail.com",
+                roleId: 6,
+                password: _context.t21,
+                userVerified: true,
+                createdAt: _context.t22,
+                updatedAt: _context.t23
+              };
+              _context.t25 = [_context.t4, _context.t8, _context.t12, _context.t16, _context.t20, _context.t24];
+              _context.t26 = {};
+              _context.next = 41;
+              return _context.t0.bulkInsert.call(_context.t0, "Users", _context.t25, _context.t26);
+
+            case 41:
             case "end":
               return _context.stop();
           }

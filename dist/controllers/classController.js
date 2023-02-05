@@ -25,27 +25,15 @@ var createClass = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            className = req.body.className;
+            className = req.data.className; // if (req.file) {
+            //   req.data.coverImage = await fileUpload(req);
+            // } else {
+            //   req.data.coverImage =
+            //     "https://www.pngkit.com/png/detail/5-56812_lineart-by-frankes-line-art-books-on-openclipart.png";
+            // }
 
-            if (!req.file) {
-              _context.next = 8;
-              break;
-            }
-
-            _context.next = 5;
-            return (0, _fileUpload.fileUpload)(req);
-
-          case 5:
-            req.body.coverImage = _context.sent;
-            _context.next = 9;
-            break;
-
-          case 8:
-            req.body.coverImage = "https://www.pngkit.com/png/detail/5-56812_lineart-by-frankes-line-art-books-on-openclipart.png";
-
-          case 9:
             if (className) {
-              _context.next = 11;
+              _context.next = 4;
               break;
             }
 
@@ -53,11 +41,12 @@ var createClass = /*#__PURE__*/function () {
               error: "Please make sure you include the className."
             }));
 
-          case 11:
-            _context.next = 13;
+          case 4:
+            _context.next = 6;
             return classModel.findOrCreate({
               where: {
-                className: req.body.className
+                className: req.data.className,
+                coverImage: req.data.coverImage
               }
             }).then(function (data) {
               if (data[1]) {
@@ -77,23 +66,23 @@ var createClass = /*#__PURE__*/function () {
               return res.status(403).send(err);
             });
 
-          case 13:
-            _context.next = 18;
+          case 6:
+            _context.next = 11;
             break;
 
-          case 15:
-            _context.prev = 15;
+          case 8:
+            _context.prev = 8;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return", res.status(500).send({
               error: "".concat(_context.t0)
             }));
 
-          case 18:
+          case 11:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 15]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function createClass(_x, _x2) {

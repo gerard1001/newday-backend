@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
@@ -14,24 +14,34 @@ module.exports = {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return queryInterface.bulkInsert('Roles', [{
+              return queryInterface.bulkInsert("Roles", [{
                 roleId: 1,
-                role: 'admin',
+                role: "super-admin",
                 createdAt: new Date(),
                 updatedAt: new Date()
               }, {
                 roleId: 2,
-                role: 'manager',
+                role: "owner",
                 createdAt: new Date(),
                 updatedAt: new Date()
               }, {
                 roleId: 3,
-                role: 'worker',
+                role: "admin",
                 createdAt: new Date(),
                 updatedAt: new Date()
               }, {
                 roleId: 4,
-                role: 'client',
+                role: "manager",
+                createdAt: new Date(),
+                updatedAt: new Date()
+              }, {
+                roleId: 5,
+                role: "worker",
+                createdAt: new Date(),
+                updatedAt: new Date()
+              }, {
+                roleId: 6,
+                role: "client",
                 createdAt: new Date(),
                 updatedAt: new Date()
               }], {});
@@ -51,7 +61,7 @@ module.exports = {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return queryInterface.bulkDelete('Roles', null, {});
+              return queryInterface.bulkDelete("Roles", null, {});
 
             case 2:
             case "end":

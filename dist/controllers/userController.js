@@ -78,8 +78,7 @@ var registerWorker = /*#__PURE__*/function () {
                           }
                         })["catch"](function (err) {
                           return res.status(400).send({
-                            error: "Fill all missing fields correctly",
-                            err: err
+                            error: "".concat(err)
                           });
                         });
 
@@ -123,8 +122,7 @@ var registerWorker = /*#__PURE__*/function () {
                           phoneNumber: req.body.phoneNumber
                         })["catch"](function (error) {
                           return res.status(400).send({
-                            message: "error2",
-                            error: error
+                            error: "".concat(error)
                           });
                         });
 
@@ -162,17 +160,18 @@ var registerWorker = /*#__PURE__*/function () {
             }());
 
           case 4:
-            _context2.next = 9;
+            _context2.next = 10;
             break;
 
           case 6:
             _context2.prev = 6;
             _context2.t0 = _context2["catch"](0);
-            return _context2.abrupt("return", res.send({
-              error: "Fill all missing fields correctly."
+            console.log(req.body.firstName);
+            return _context2.abrupt("return", res.status(400).send({
+              error: "Fill all missing fields correctly. ".concat(_context2.t0)
             }));
 
-          case 9:
+          case 10:
           case "end":
             return _context2.stop();
         }
@@ -769,7 +768,7 @@ var deleteOneUser = /*#__PURE__*/function () {
             }).then(function (data) {
               if (data == 1) {
                 return res.status(200).send({
-                  message: "success"
+                  message: "User has been deleted successfully"
                 });
               }
 

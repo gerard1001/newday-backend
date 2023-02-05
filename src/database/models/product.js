@@ -72,6 +72,9 @@ module.exports = (sequelize, DataTypes) => {
       releaseDate: {
         type: DataTypes.DATE,
       },
+      // countInStock: {
+      //   type: DataTypes.INTEGER,
+      // },
     },
     {
       sequelize,

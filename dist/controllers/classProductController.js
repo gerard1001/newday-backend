@@ -19,70 +19,131 @@ var productModel = _models["default"].Product;
 
 var assignProduct = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var existingProduct, existingClass, existingRelation;
+    var existingClass, myTuts, checker, makeup, i, existingProduct, existingRelation, getBulkArr;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
             _context.next = 3;
-            return productModel.findOne({
-              where: {
-                productId: req.body.productId
-              }
-            });
-
-          case 3:
-            existingProduct = _context.sent;
-            _context.next = 6;
             return classModel.findOne({
               where: {
                 classId: req.body.classId
               }
             });
 
-          case 6:
+          case 3:
             existingClass = _context.sent;
-            _context.next = 9;
-            return cpModel.findOne({
-              where: {
-                classId: req.body.classId,
-                productId: req.body.productId
-              }
-            });
 
-          case 9:
-            existingRelation = _context.sent;
-
-            if (!(!existingClass || !existingProduct)) {
-              _context.next = 12;
+            if (existingClass) {
+              _context.next = 6;
               break;
             }
 
             return _context.abrupt("return", res.status(404).send({
-              error: "The product or Class you are trying assign don't exist."
+              error: "The Class you are trying assign doesn't exist."
             }));
 
-          case 12:
-            if (!existingRelation) {
-              _context.next = 14;
+          case 6:
+            myTuts = req.body.productId.split(", ");
+            checker = [];
+            makeup = [];
+            i = 0;
+
+          case 10:
+            if (!(i < myTuts.length)) {
+              _context.next = 23;
               break;
             }
 
-            return _context.abrupt("return", res.status(409).send({
-              error: "This relation has aready been established."
-            }));
+            _context.next = 13;
+            return productModel.findOne({
+              where: {
+                productId: myTuts[i]
+              }
+            });
 
-          case 14:
+          case 13:
+            existingProduct = _context.sent;
             _context.next = 16;
-            return cpModel.create({
-              classId: req.body.classId,
-              productId: req.body.productId,
+            return cpModel.findOne({
               where: {
                 classId: req.body.classId,
-                productId: req.body.productId
+                productId: myTuts[i]
               }
-            }).then(function (data) {
+            })["catch"](function (err) {
+              console.log("".concat(err));
+            });
+
+          case 16:
+            existingRelation = _context.sent;
+            console.log(existingRelation, "*11111111111111*");
+
+            if (!existingRelation && existingProduct) {
+              makeup.push(i);
+            }
+
+            checker.push(existingRelation);
+
+          case 20:
+            i++;
+            _context.next = 10;
+            break;
+
+          case 23:
+            console.log(checker, "*CHECKER*");
+            console.log(makeup, "*MAKEUP*");
+
+            if (!(makeup == "")) {
+              _context.next = 27;
+              break;
+            }
+
+            return _context.abrupt("return", res.status(404).send({
+              error: "All these relations have already been made."
+            }));
+
+          case 27:
+            // console.log(checkIfRelationExists(myTuts), "*22222222222*");
+            // if (existingRelation) {
+            //   return res.status(409).send({
+            //     error: "This relation has aready been established.",
+            //   });
+            // }
+            getBulkArr = function getBulkArr(myTuts) {
+              var arr = [];
+              var newArr = [];
+
+              for (var _i = 0; _i < myTuts.length; _i++) {
+                var obj = {};
+                obj["classId"] = req.body.classId;
+                obj["productId"] = myTuts[_i];
+                arr.push(obj);
+              }
+
+              console.log(arr, "*2222222222222*");
+
+              for (var _i2 = 0; _i2 < arr.length; _i2++) {
+                if (makeup.includes(_i2)) {
+                  newArr.push(arr[_i2]);
+                }
+              }
+
+              console.log(newArr, "*252525*");
+              return newArr;
+            };
+
+            console.log(getBulkArr(myTuts), "*333333333333333*");
+            _context.next = 31;
+            return cpModel.bulkCreate( //   {
+            //   classId: req.body.classId,
+            //   productId: req.body.productId,
+            //   where: {
+            //     classId: req.body.classId,
+            //     productId: req.body.productId,
+            //   },
+            // }
+            getBulkArr(myTuts)).then(function (data) {
               return res.status(200).send({
                 message: "Link made between the class and product successfully.",
                 data: data
@@ -91,24 +152,25 @@ var assignProduct = /*#__PURE__*/function () {
               return res.status(400).send(err);
             });
 
-          case 16:
-            _context.next = 22;
+          case 31:
+            _context.next = 38;
             break;
 
-          case 18:
-            _context.prev = 18;
+          case 33:
+            _context.prev = 33;
             _context.t0 = _context["catch"](0);
             console.log(_context.t0);
+            console.log(req.body, "&&&&&&&");
             return _context.abrupt("return", res.status(400).send({
-              error: "Fill all the fields."
+              error: "Fill all the fields ".concat(_context.t0, ".")
             }));
 
-          case 22:
+          case 38:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 18]]);
+    }, _callee, null, [[0, 33]]);
   }));
 
   return function assignProduct(_x, _x2) {

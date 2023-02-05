@@ -38,9 +38,22 @@ module.exports = function (sequelize, DataTypes) {
           as: "ProductComments",
           onDelete: "CASCADE"
         });
+        this.hasMany(models.ProductImage, {
+          foreignKey: "productId",
+          as: "ProductImages",
+          onDelete: "CASCADE"
+        });
         this.belongsToMany(models.Class, {
           foreignKey: "productId",
           through: "Class_Product"
+        });
+        this.belongsTo(models.Company, {
+          foreignKey: {
+            name: "companyId",
+            allowNull: true
+          },
+          onDelete: "CASCADE",
+          as: "Company"
         });
       }
     }]);
@@ -54,37 +67,43 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
+    companyId: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
     productName: {
       type: DataTypes.STRING
     },
     price: {
       type: DataTypes.DECIMAL(8, 2)
     },
+    full_price: {
+      type: DataTypes.DECIMAL(8, 2)
+    },
+    images: {
+      type: DataTypes.ARRAY(DataTypes.STRING)
+    },
+    imagesId: {
+      type: DataTypes.ARRAY(DataTypes.STRING)
+    },
     description: {
       type: DataTypes.TEXT
     },
     size: {
-      type: DataTypes.INTEGER
-    },
-    productImage: {
-      allowNull: true,
       type: DataTypes.STRING
     },
-    productFile: {
-      type: DataTypes.STRING
-    },
-    author: {
+    brand: {
       type: DataTypes.STRING
     },
     ISBN: {
       type: DataTypes.BIGINT
     },
-    edition: {
-      type: DataTypes.STRING
-    },
     releaseDate: {
       type: DataTypes.DATE
-    }
+    } // countInStock: {
+    //   type: DataTypes.INTEGER,
+    // },
+
   }, {
     sequelize: sequelize,
     modelName: "Product"

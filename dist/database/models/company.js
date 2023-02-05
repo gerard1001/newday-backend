@@ -45,6 +45,11 @@ module.exports = function (sequelize, DataTypes) {
           onDelete: "CASCADE",
           as: "owner"
         });
+        this.hasMany(models.Product, {
+          foreignKey: "companyId",
+          as: "Products",
+          onDelete: "CASCADE"
+        });
       }
     }]);
     return Company;
@@ -65,6 +70,9 @@ module.exports = function (sequelize, DataTypes) {
     },
     description: {
       type: DataTypes.TEXT
+    },
+    companyProducts: {
+      type: DataTypes.STRING
     },
     address: {
       type: DataTypes.STRING

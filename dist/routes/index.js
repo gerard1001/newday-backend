@@ -13,6 +13,8 @@ var _categoryRoutes = _interopRequireDefault(require("./api/categoryRoutes.js"))
 
 var _productRoutes = _interopRequireDefault(require("./api/productRoutes"));
 
+var _productImagesRoutes = _interopRequireDefault(require("./api/productImagesRoutes.js"));
+
 var _classRoutes = _interopRequireDefault(require("./api/classRoutes"));
 
 var _userRoutes = _interopRequireDefault(require("./api/userRoutes"));
@@ -39,16 +41,29 @@ var _rateRoutes = _interopRequireDefault(require("./api/rateRoutes.js"));
 
 var _assignClassToCategory = _interopRequireDefault(require("./api/assignClassToCategory.js"));
 
+var _assignProductToClass = _interopRequireDefault(require("./api/assignProductToClass.js"));
+
+var _companyRoutes = _interopRequireDefault(require("./api/companyRoutes"));
+
+var _comodityRoutes = _interopRequireDefault(require("./api/comodityRoutes"));
+
+var _profileRoutes = _interopRequireDefault(require("./api/profileRoutes.js"));
+
 var router = _express["default"].Router();
 
 router.use("/categories", _categoryRoutes["default"]);
 router.use("/class", _classRoutes["default"]);
 router.use("/products", _productRoutes["default"]);
+router.use("/images", _productImagesRoutes["default"]);
 router.use("/users", _userRoutes["default"]);
+router.use("/profile", _profileRoutes["default"]);
+router.use("/company", _companyRoutes["default"]);
+router.use("/comodities", _comodityRoutes["default"]);
 router.use("/subscribe", _subscribeRoutes["default"]);
 router.use("/roles", _roleRoutes["default"]);
 router.use("/user_category", _assignUserToCategory["default"]);
 router.use("/category_class", _assignClassToCategory["default"]);
+router.use("/class_product", _assignProductToClass["default"]);
 router.use("/comment", _commentRoutes["default"]);
 router.use("/reply", _replyRoutes["default"]);
 router.use("/article", _articleRoutes["default"]);

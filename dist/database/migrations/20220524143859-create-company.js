@@ -42,6 +42,9 @@ module.exports = {
                 description: {
                   type: Sequelize.TEXT
                 },
+                companyProducts: {
+                  type: Sequelize.STRING
+                },
                 address: {
                   type: Sequelize.STRING
                 },

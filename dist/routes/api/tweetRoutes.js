@@ -11,13 +11,13 @@ var _express = _interopRequireDefault(require("express"));
 
 var _tweetController = require("../../controllers/tweetController.js");
 
-var _productMiddleware = _interopRequireDefault(require("../../middlewares/productMiddleware.js"));
+var _productMiddleware = require("../../middlewares/productMiddleware.js");
 
 var _multer = _interopRequireDefault(require("../../helpers/multer.js"));
 
 var router = _express["default"].Router();
 
-router.post("/", _multer["default"].single("image"), _productMiddleware["default"], _tweetController.createTweet);
+router.post("/", _multer["default"].single("image"), _productMiddleware.Auth, _tweetController.createTweet);
 router.get("/", _tweetController.getTweets);
 router["delete"]("/", _tweetController.deleteTweets);
 var _default = router;

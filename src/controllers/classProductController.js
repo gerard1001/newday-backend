@@ -110,8 +110,9 @@ export const assignProduct = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    console.log(req.body, "&&&&&&&");
     return res.status(400).send({
-      error: `Fill all the fields.`,
+      error: `Fill all the fields ${error}.`,
     });
   }
 };

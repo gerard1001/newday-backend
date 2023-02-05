@@ -173,7 +173,7 @@ var updateProfile = /*#__PURE__*/function () {
 
           case 8:
             profileUser = _context3.sent;
-            /////////////////////////
+            //////////////////////////////////////////////////
             addressId = profileUser.Address.addressId;
             _context3.next = 12;
             return profileModel.update(req.body, {
@@ -222,9 +222,9 @@ var updateProfile = /*#__PURE__*/function () {
           case 16:
             _context3.prev = 16;
             _context3.t0 = _context3["catch"](0);
-            return _context3.abrupt("return", res.status(500).send({
-              message: "".concat(_context3.t0)
-            }));
+            res.status(500).send({
+              error: "".concat(_context3.t0)
+            });
 
           case 19:
           case "end":

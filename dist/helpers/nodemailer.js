@@ -32,7 +32,10 @@ var sendEmail = /*#__PURE__*/function () {
               }
             });
             mailOptions = {
-              from: process.env.SENDER_EMAIL,
+              from: {
+                name: "New Day",
+                address: process.env.SENDER_EMAIL
+              },
               to: toEmail,
               subject: "NEWDAY REGISTRATION",
               html: message
@@ -79,7 +82,10 @@ var sendTweet = /*#__PURE__*/function () {
               }
             });
             mailOptions = {
-              from: process.env.SENDER_EMAIL,
+              from: {
+                name: "New Day",
+                address: process.env.SENDER_EMAIL
+              },
               to: toEmail,
               subject: "TWEET FROM NEWDAY.",
               html: message

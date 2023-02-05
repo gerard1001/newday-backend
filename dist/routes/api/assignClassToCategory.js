@@ -11,11 +11,11 @@ var _express = _interopRequireDefault(require("express"));
 
 var _categoryClassController = require("../../controllers/categoryClassController.js");
 
-var _userMiddleware = require("../../middlewares/userMiddleware");
+var _productMiddleware = require("../../middlewares/productMiddleware");
 
 var router = _express["default"].Router();
 
-router.post("/", _userMiddleware.Auth, _categoryClassController.assignClass);
+router.post("/", _productMiddleware.Auth, _categoryClassController.assignClass);
 router.get("/", _categoryClassController.getAssignments);
 router.get("/:id", _categoryClassController.getOneAssignment);
 var _default = router;

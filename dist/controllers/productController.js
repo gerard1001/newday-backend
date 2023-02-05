@@ -16,33 +16,43 @@ var _models = _interopRequireDefault(require("../database/models"));
 var _fileUpload = require("../helpers/fileUpload");
 
 var productModel = _models["default"].Product;
+var companyModel = _models["default"].Company;
 
 var createProduct = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var _req$body, productName, price;
+    var _req$data, productName, price, companyId, existCompany;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            _req$body = req.body, productName = _req$body.productName, price = _req$body.price;
+            _req$data = req.data, productName = _req$data.productName, price = _req$data.price, companyId = _req$data.companyId;
+            _context.next = 4;
+            return companyModel.findOne({
+              where: {
+                companyId: companyId
+              }
+            })["catch"](function (err) {
+              console.log(err, "**");
+              return res.send({
+                error: "".concat(err)
+              });
+            });
 
-            if (!req.file) {
-              _context.next = 8;
+          case 4:
+            existCompany = _context.sent;
+            console.log(existCompany, "&&");
+
+            if (existCompany) {
+              _context.next = 9;
               break;
             }
 
-            _context.next = 5;
-            return (0, _fileUpload.fileUpload)(req);
-
-          case 5:
-            req.body.productImage = _context.sent;
-            _context.next = 9;
-            break;
-
-          case 8:
-            req.body.productImage = "https://www.pngkit.com/png/detail/790-7904074_silhouette-at-getdrawings-com-free-for-personal-online.png";
+            console.log("You can't do this!");
+            return _context.abrupt("return", res.status(400).send({
+              error: "This company you are trying to use is note registered!"
+            }));
 
           case 9:
             if (!(!productName && !price)) {
@@ -66,25 +76,29 @@ var createProduct = /*#__PURE__*/function () {
                 });
               } else {
                 return productModel.create({
-                  productName: req.body.productName,
-                  price: req.body.price,
-                  description: req.body.description,
-                  size: req.body.size,
-                  productImage: req.body.productImage,
-                  author: req.body.author,
-                  ISBN: req.body.ISBN,
-                  edition: req.body.edition,
-                  releaseDate: req.body.releaseDate,
+                  productName: req.data.productName,
+                  companyId: req.data.companyId,
+                  price: req.data.price,
+                  full_price: req.data.full_price,
+                  description: req.data.description,
+                  size: req.data.size,
+                  images: req.data.images,
+                  imagesId: req.data.imagesId,
+                  brand: req.data.brand,
+                  ISBN: req.data.ISBN,
+                  releaseDate: req.data.releaseDate,
                   where: {
-                    productName: req.body.productName,
-                    price: req.body.price,
-                    description: req.body.description,
-                    size: req.body.size,
-                    productImage: req.body.productImage,
-                    author: req.body.author,
-                    ISBN: req.body.ISBN,
-                    edition: req.body.edition,
-                    releaseDate: req.body.releaseDate
+                    productName: req.data.productName,
+                    companyId: req.data.companyId,
+                    price: req.data.price,
+                    full_price: req.data.full_price,
+                    description: req.data.description,
+                    images: req.data.images,
+                    imagesId: req.data.imagesId,
+                    size: req.data.size,
+                    brand: req.data.brand,
+                    ISBN: req.data.ISBN,
+                    releaseDate: req.data.releaseDate
                   }
                 }).then(function (data) {
                   return res.status(201).send({
@@ -153,9 +167,8 @@ var getProduct = /*#__PURE__*/function () {
               limit: size,
               offset: page * size,
               include: [{
-                model: _models["default"].ProductComment,
-                as: "ProductComments" // attributes: ["comment"],
-
+                model: _models["default"].ProductImage,
+                as: "ProductImages"
               }, {
                 model: _models["default"].Class,
                 as: "Classes",
@@ -163,6 +176,9 @@ var getProduct = /*#__PURE__*/function () {
                   model: _models["default"].Category,
                   as: "Categories"
                 }]
+              }, {
+                model: _models["default"].Company,
+                as: "Company"
               }]
             }).then(function (data) {
               return res.status(200).send({
@@ -215,6 +231,10 @@ var getOneProduct = /*#__PURE__*/function () {
             id = req.params.id;
             _context3.next = 4;
             return productModel.findOne({
+              include: [{
+                model: _models["default"].ProductImage,
+                as: "ProductImages"
+              }],
               where: {
                 productId: id
               }
@@ -268,21 +288,8 @@ var updateProduct = /*#__PURE__*/function () {
           case 0:
             _context4.prev = 0;
             id = req.params.id;
-
-            if (!req.file) {
-              _context4.next = 6;
-              break;
-            }
-
-            _context4.next = 5;
-            return (0, _fileUpload.fileUpload)(req);
-
-          case 5:
-            req.body.productImage = _context4.sent;
-
-          case 6:
-            _context4.next = 8;
-            return productModel.update(req.body, {
+            _context4.next = 4;
+            return productModel.update(req.data, {
               where: {
                 productId: id
               }
@@ -304,23 +311,23 @@ var updateProduct = /*#__PURE__*/function () {
               });
             });
 
-          case 8:
-            _context4.next = 13;
+          case 4:
+            _context4.next = 9;
             break;
 
-          case 10:
-            _context4.prev = 10;
+          case 6:
+            _context4.prev = 6;
             _context4.t0 = _context4["catch"](0);
             return _context4.abrupt("return", res.status(500).send({
               message: "".concat(_context4.t0)
             }));
 
-          case 13:
+          case 9:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, null, [[0, 10]]);
+    }, _callee4, null, [[0, 6]]);
   }));
 
   return function updateProduct(_x7, _x8) {
