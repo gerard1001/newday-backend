@@ -2,7 +2,7 @@
   "name": "new-day",
   "version": "1.0.0",
   "description": "New day selling shop",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "better-npm-run test",
     "dev": "better-npm-run dev",
@@ -22,7 +22,7 @@
       }
     },
     "prod": {
-      "command": "node ./dist/server",
+      "command": "node ./dist/app",
       "env": {
         "NODE_ENV": "production",
         "PORT": 8000
@@ -36,7 +36,7 @@
       }
     }
   },
-  "author": "Jean Eric",
+  "author": "Gerard",
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.17.6",
