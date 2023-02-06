@@ -1,29 +1,12 @@
 {
   "presets": ["@babel/preset-env"],
-  "env": {
-    "development": {
-      "plugins": ["istanbul"]
-    },
-    "test": {
-      "plugins": ["istanbul"]
-    }
-  },
-  // "plugins": [
-  //   [
-  //     "@babel/transform-runtime",
-  //     {
-  //       "regenerator": true
-  //     }
-  //   ],
-  //   ["@babel/plugin-proposal-class-properties"]
-  // ]
   "plugins": [
-    "@babel/plugin-transform-runtime",
     [
-      "module-resolver",
+      "@babel/transform-runtime",
       {
-        "root": ["./src"]
+        "regenerator": true
       }
-    ]
+    ],
+    ["@babel/plugin-proposal-class-properties"]
   ]
 }
