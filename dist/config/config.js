@@ -21,6 +21,12 @@ module.exports = {
     JWT_SECRET: process.env.JWT_SECRET,
     url: process.env.PROD_URL,
     dialect: "postgres",
-    port: process.env.DB_PORT
+    port: process.env.DB_PORT,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
   }
 };

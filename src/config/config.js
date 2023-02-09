@@ -22,11 +22,11 @@ module.exports = {
     url: process.env.PROD_URL,
     dialect: "postgres",
     port: process.env.DB_PORT,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    },
+    // dialectOptions: {
+    //   ssl: {
+    //     require: true,
+    //     rejectUnauthorized: false,
+    //   },
+    // },
   },
 };
