@@ -6,7 +6,7 @@
   "scripts": {
     "test": "better-npm-run test",
     "dev": "better-npm-run dev",
-    "start": "yarn run migrate && yarn run seed && better-npm-run prod",
+    "start": "better-npm-run prod",
     "migrate": "npx sequelize-cli db:migrate",
     "undo-migrate": "npx sequelize-cli db:migrate:undo:all",
     "migrate-all": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate",
