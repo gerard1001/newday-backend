@@ -8,19 +8,25 @@ module.exports = {
     JWT_SECRET: process.env.JWT_SECRET,
     url: process.env.DEV_URL,
     dialect: "postgres",
-    port: process.env.PORT,
+    port: process.env.DB_PORT,
     logging: false,
   },
   test: {
     JWT_SECRET: process.env.JWT_SECRET,
     url: process.env.TEST_URL,
     dialect: "postgres",
-    port: process.env.PORT,
+    port: process.env.DB_PORT,
   },
   production: {
     JWT_SECRET: process.env.JWT_SECRET,
     url: process.env.PROD_URL,
     dialect: "postgres",
-    port: process.env.PORT,
+    port: process.env.DB_PORT,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
   },
 };

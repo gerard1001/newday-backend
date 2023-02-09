@@ -23,9 +23,9 @@ if (config.url) {
   });
 } else {
   sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
+    // config.database,
+    // config.username,
+    // config.password,
     config
   );
 }
@@ -56,6 +56,8 @@ db.Sequelize = Sequelize;
 sequelize
   .authenticate()
   .then(() => {
+    console.log(config, "***");
+    console.log(sequelize, "^^^");
     console.log("DATABASE CONNECTED SUCCESSFULLY! 👍");
   })
   .catch((err) => {
